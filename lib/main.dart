@@ -54,7 +54,7 @@ class _MyHomePageState extends State<MyHomePage> {
         body: TabBarView(children: [_qrCodeScreen(), _functionalitiesScreen()]),
         floatingActionButton: FloatingActionButton(
           onPressed: () async {
-            PDFHandler().generatePDF();
+            await PDFHandler().openBracelet();
           },
           child: Icon(Icons.add),
         ),
@@ -84,6 +84,7 @@ class _MyHomePageState extends State<MyHomePage> {
     );
   }
 
+//prova
   Center _qrCodeScreen() {
     return Center(
       child: Column(
