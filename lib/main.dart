@@ -1,16 +1,11 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_downloader/flutter_downloader.dart';
-import 'package:thesis/pdf_handler.dart';
-import 'package:thesis/qr_code_handler.dart';
+import 'package:thesis/constants.dart';
+import 'package:thesis/services/pdf_handler.dart';
+import 'package:thesis/services/qr_code_handler.dart';
 import 'package:thesis/widgets/function_button.dart';
-import 'package:thesis/widgets/function_icon.dart';
+import 'package:thesis/widgets/function_card.dart';
 
-Future<void> main() async {
-  WidgetsFlutterBinding.ensureInitialized();
-  await FlutterDownloader.initialize(
-      debug: false // optional: set false to disable printing logs to console
-      );
-
+main() {
   runApp(MyApp());
 }
 
@@ -19,7 +14,7 @@ class MyApp extends StatelessWidget {
   Widget build(BuildContext context) {
     return MaterialApp(
       theme: ThemeData(
-        primarySwatch: Colors.blue,
+        primarySwatch: Colors.teal,
       ),
       home: MyHomePage(title: 'Thesis'),
     );
@@ -54,7 +49,7 @@ class _MyHomePageState extends State<MyHomePage> {
         body: TabBarView(children: [_qrCodeScreen(), _functionalitiesScreen()]),
         floatingActionButton: FloatingActionButton(
           onPressed: () async {
-            await PDFHandler().openBracelet();
+            await PDFHandler(data).openBracelet();
           },
           child: Icon(Icons.add),
         ),
@@ -64,21 +59,12 @@ class _MyHomePageState extends State<MyHomePage> {
 
   Widget _functionalitiesScreen() {
     return Center(
-      child: GridView.count(
-        crossAxisCount: 2,
+      child: ListView(
         children: [
-          FunctionIcon(
-            icon: Icon(Icons.qr_code),
-          ),
-          FunctionIcon(
-            icon: Icon(Icons.qr_code),
-          ),
-          FunctionIcon(
-            icon: Icon(Icons.qr_code),
-          ),
-          FunctionIcon(
-            icon: Icon(Icons.qr_code),
-          )
+          FunctionCard(icons[0], functionalities[0], descriptions[0]),
+          FunctionCard(icons[1], functionalities[1], descriptions[1]),
+          FunctionCard(icons[2], functionalities[2], descriptions[2]),
+          FunctionCard(icons[3], functionalities[3], descriptions[3]),
         ],
       ),
     );
@@ -91,12 +77,9 @@ class _MyHomePageState extends State<MyHomePage> {
         mainAxisAlignment: MainAxisAlignment.center,
         children: <Widget>[
           QRCodeHandler().generateQRCode(data),
+          FunctionButton(openQRCode, Icon(Icons.image), "Apri"),
           FunctionButton(
-              onPressed: openQRCode, icon: Icon(Icons.image), label: "Apri"),
-          FunctionButton(
-              onPressed: saveQRCodeToGallery,
-              icon: Icon(Icons.save),
-              label: "Salva in Galleria"),
+              saveQRCodeToGallery, Icon(Icons.save), "Salva in Galleria"),
         ],
       ),
     );

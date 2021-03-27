@@ -5,8 +5,7 @@ class FunctionButton extends StatelessWidget {
   final onPressed;
   final Icon icon;
   final String label;
-  const FunctionButton({Key key, this.onPressed, this.icon, this.label})
-      : super(key: key);
+  const FunctionButton(this.onPressed, this.icon, this.label);
 
   @override
   Widget build(BuildContext context) {
