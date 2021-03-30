@@ -5,7 +5,10 @@ class FunctionCard extends StatelessWidget {
   final Icon icon;
   final String title;
   final String description;
-  const FunctionCard(this.icon, this.title, this.description);
+  final openFunction;
+  final downloadFunction;
+  const FunctionCard(this.icon, this.title, this.description, this.openFunction,
+      this.downloadFunction);
 
   @override
   Widget build(BuildContext context) {
@@ -16,7 +19,7 @@ class FunctionCard extends StatelessWidget {
           ListTile(
             leading: icon,
             title: Text(title),
-            subtitle: Text('Music by Julie Gable. Lyrics by Sidney Stein.'),
+            subtitle: Text('Subtitle prova'),
           ),
           Padding(
             padding: const EdgeInsets.fromLTRB(16, 8, 16, 8),
@@ -32,17 +35,13 @@ class FunctionCard extends StatelessWidget {
               alignment: MainAxisAlignment.start,
               children: <Widget>[
                 FunctionButton(
-                    printSomething, Icon(Icons.picture_as_pdf), "Apri"),
-                FunctionButton(printSomething, Icon(Icons.save), "Salva"),
+                    openFunction, Icon(Icons.picture_as_pdf), "Apri"),
+                FunctionButton(downloadFunction, Icon(Icons.save), "Salva"),
               ],
             ),
           ),
         ],
       ),
     );
-  }
-
-  printSomething() {
-    print("Something");
   }
 }

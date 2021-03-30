@@ -7,6 +7,8 @@ import 'package:open_file/open_file.dart';
 import 'package:path_provider/path_provider.dart';
 import 'package:pdf/pdf.dart';
 import 'package:pdf/widgets.dart';
+import 'package:permission_handler/permission_handler.dart';
+import 'package:thesis/constants.dart';
 
 class PDFHandler {
   final String data = "dati";
@@ -26,11 +28,22 @@ class PDFHandler {
     _openPDF(data);
   }
 
+  downloadData() async {
+    await _createData();
+    await _downloadPDF(data);
+  }
+
   _createData() {
     pdf.addPage(Page(
         pageFormat: PdfPageFormat.a4,
         build: (Context context) {
-          return Row(children: [Text("Profilo sanitario sintetico")]);
+          return Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Text("Profilo sanitario sintetico".toUpperCase()),
+                Text(aCapo),
+                Text("Nome: Andrea Calici")
+              ]);
         }));
   }
 
@@ -47,11 +60,11 @@ class PDFHandler {
   }
 
   _createBracelet() async {
-    final municipio_tre =
+    final municipioTre =
         (await rootBundle.load('assets/logos/municipio_tre.png'))
             .buffer
             .asUint8List();
-    final comune_milano =
+    final comuneMilano =
         (await rootBundle.load('assets/logos/comune_milano.png'))
             .buffer
             .asUint8List();
@@ -68,8 +81,8 @@ class PDFHandler {
         margin: EdgeInsets.all(0),
         build: (Context context) {
           return Row(children: [
-            _braceletLogo(municipio_tre),
-            _braceletLogo(comune_milano),
+            _braceletLogo(municipioTre),
+            _braceletLogo(comuneMilano),
             _braceletLogo(mvi),
             _braceletLogo(polimi),
             Container(
@@ -102,16 +115,43 @@ class PDFHandler {
     _openPDF(badge);
   }
 
-  _createBadge() {}
+  downloadBadge() async {
+    await _createBadge();
+    await _downloadPDF(badge);
+  }
+
+  _createBadge() {
+    pdf.addPage(Page(
+        pageFormat: PdfPageFormat.a4,
+        margin: EdgeInsets.all(0),
+        build: (Context context) {
+          return _blockFour();
+        }));
+  }
 
   //cis
   openCIS() async {
-    _createCIS();
+    await _createCIS();
     _savePDF(cis);
     _openPDF(cis);
   }
 
+  downloadCIS() async {
+    await _createCIS();
+    await _downloadPDF(cis);
+  }
+
   _createCIS() async {
+    final centodiciotto =
+        (await rootBundle.load('assets/logos/118.jpg')).buffer.asUint8List();
+    final centododici =
+        (await rootBundle.load('assets/logos/112.jpg')).buffer.asUint8List();
+    final comuneMilano =
+        (await rootBundle.load('assets/logos/comune_milano.png'))
+            .buffer
+            .asUint8List();
+    final mvi =
+        (await rootBundle.load('assets/logos/mvi.png')).buffer.asUint8List();
     pdf.addPage(Page(
         pageFormat: PdfPageFormat.a4,
         margin: EdgeInsets.all(0),
@@ -121,15 +161,116 @@ class PDFHandler {
               childAspectRatio:
                   (PdfPageFormat.a4.height / 2) / (PdfPageFormat.a4.width / 2),
               children: [
-                _blockOne(),
-                _blockTwo(),
+                _blockOne(centodiciotto, centododici),
+                _blockTwo(comuneMilano, mvi),
                 _blockThree(),
                 _blockFour(),
               ]);
         }));
   }
 
-  Container _blockOne() {
+  Container _blockOne(centodiciotto, centododici) {
+    return Container(
+        width: PdfPageFormat.a4.width / 2,
+        height: PdfPageFormat.a4.height / 2,
+        child: Column(children: [
+          Container(
+              height: PdfPageFormat.a4.height / 10,
+              child: Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceAround,
+                  children: [
+                    Container(
+                        width: (PdfPageFormat.a4.width / 2) / 5,
+                        child: Image(MemoryImage(centodiciotto),
+                            fit: BoxFit.cover)),
+                    Container(
+                        width: (PdfPageFormat.a4.width / 2) / 5,
+                        child:
+                            Image(MemoryImage(centododici), fit: BoxFit.cover)),
+                  ])),
+          Container(
+              height: (PdfPageFormat.a4.height / 10) * 3,
+              child: Padding(
+                  padding: EdgeInsets.fromLTRB(24, 0, 24, 0),
+                  child: Column(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: [
+                        Text(
+                            "-la CIS contiene tutte le informazioni/dati che sono stati inseriti nella SAPP*"),
+                        Text(
+                            "-la CIS è fornita gratuitamente all'utilizzatore e senza alcuna garanzia esplicita o implicita"),
+                        Text(
+                            "-la responsabilità della correttezza e validità delle informazioni/dati non può essere ascritta all'autore della SAPP"),
+                        Text(
+                            "-le informazioni ed i dati inseriti vengono memorizzati in forma anonima e per meri fini statistici"),
+                        Text(
+                            "-è cura dell'interessato ripresentarsi ogniqualvolta ci sia una variazione dei dati e comunque ogni SEI MESI"),
+                      ]))),
+          Container(
+              height: PdfPageFormat.a4.height / 10,
+              child:
+                  Column(mainAxisAlignment: MainAxisAlignment.end, children: [
+                Text("*SAPP (Social APPlication)"),
+                Text("www.iltelefoninoiltuosalvavita.org"),
+                Row(
+                    mainAxisAlignment: MainAxisAlignment.end,
+                    children: [Text("Empowered by G7 Soluzioni Informatiche")]),
+              ]))
+        ]));
+  }
+
+  Container _blockTwo(comuneMilano, mvi) {
+    return Container(
+        width: PdfPageFormat.a4.width / 2,
+        height: PdfPageFormat.a4.height / 2,
+        child: Column(children: [
+          Container(
+              height: PdfPageFormat.a4.height / 10,
+              child: Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceAround,
+                  children: [
+                    Container(
+                        width: (PdfPageFormat.a4.width / 2) / 5,
+                        child: Image(MemoryImage(comuneMilano),
+                            fit: BoxFit.cover)),
+                    Container(
+                        width: (PdfPageFormat.a4.width / 2) / 5,
+                        child: Image(MemoryImage(mvi), fit: BoxFit.cover)),
+                  ])),
+          Container(
+              height: (PdfPageFormat.a4.height / 10) * 3,
+              child: Padding(
+                  padding: EdgeInsets.fromLTRB(24, 0, 24, 0),
+                  child: Column(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: [
+                        Text("Progetto".toUpperCase()),
+                        Text("Cittadini".toUpperCase()),
+                        Text("Più coinvolti & più sicuri".toUpperCase()),
+                        Text("C.I.S.".toUpperCase()),
+                        Text("Carta d'Identità Salvavita"),
+                      ]))),
+          Container(
+              height: PdfPageFormat.a4.height / 10,
+              child:
+                  Column(mainAxisAlignment: MainAxisAlignment.end, children: [
+                Text("*SAPP (Social APPlication)"),
+                Text("www.iltelefoninoiltuosalvavita.org"),
+                Row(
+                    mainAxisAlignment: MainAxisAlignment.end,
+                    children: [Text("Empowered by G7 Soluzioni Informatiche")]),
+              ]))
+        ]));
+  }
+
+  Container _blockThree() {
+    return Container(
+      width: PdfPageFormat.a4.width / 2,
+      height: PdfPageFormat.a4.height / 2,
+    );
+  }
+
+  Container _blockFour() {
     return Container(
         width: PdfPageFormat.a4.width / 2,
         height: PdfPageFormat.a4.height / 2,
@@ -138,28 +279,21 @@ class PDFHandler {
               color: PdfColors.black,
               height: PdfPageFormat.a4.height / 10,
               child: Row(children: [Text("Prova"), Text("Prova")])),
+          Container(
+              color: PdfColors.white,
+              height: PdfPageFormat.a4.height / 10,
+              child: Row(children: [Text("Prova"), Text("Prova")])),
+          Container(
+              height: (PdfPageFormat.a4.height / 10) * 3,
+              child: Row(mainAxisAlignment: MainAxisAlignment.end, children: [
+                BarcodeWidget(
+                  data: qrData,
+                  width: (PdfPageFormat.a4.width / 10) * 2,
+                  height: (PdfPageFormat.a4.height / 10) * 2,
+                  barcode: Barcode.qrCode(),
+                )
+              ])),
         ]));
-  }
-
-  Container _blockTwo() {
-    return Container(
-        width: PdfPageFormat.a4.width / 2,
-        height: PdfPageFormat.a4.height / 2,
-        color: PdfColors.black);
-  }
-
-  Container _blockThree() {
-    return Container(
-        width: PdfPageFormat.a4.width / 2,
-        height: PdfPageFormat.a4.height / 2,
-        color: PdfColors.black);
-  }
-
-  Container _blockFour() {
-    return Container(
-        width: PdfPageFormat.a4.width / 2,
-        height: PdfPageFormat.a4.height / 2,
-        color: PdfColors.amber);
   }
 
   //general
@@ -178,9 +312,16 @@ class PDFHandler {
   }
 
   _downloadPDF(String name) async {
+    var status = await Permission.phone.status;
+    if (!status.isGranted) {
+      await Permission.storage.request();
+    }
     Directory downloadsDirectory =
         await DownloadsPathProvider.downloadsDirectory;
+    Directory prova = await getExternalStorageDirectory();
     String downloadPath = downloadsDirectory.path;
+    print("Download" + downloadPath);
+    print("Path" + prova.path);
     File file = File("$downloadPath/$name.pdf");
     file.writeAsBytesSync(await pdf.save());
     Fluttertoast.showToast(msg: "Downloaded!");

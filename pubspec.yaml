@@ -35,6 +35,10 @@ dependencies:
   fluttertoast: ^7.1.6 # per mostrare toast
   open_file: ^3.1.0 # per aprire i files in maniera nativa
   downloads_path_provider: ^0.1.0 # per scaricare files nella cartella Download
+  permission_handler: ^6.1.1 # per gestire permessi di download
+  flutter_barcode_scanner: ^1.0.2 # per effettuare scan di QR Code
+  url_launcher: ^6.0.3 # per aprire contatti di emergenza
+  humanitarian_icons: ^0.1.0
 
 dev_dependencies:
   flutter_test:

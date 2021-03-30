@@ -7,6 +7,7 @@ import 'package:fluttertoast/fluttertoast.dart';
 import 'package:image_gallery_saver/image_gallery_saver.dart';
 import 'package:open_file/open_file.dart';
 import 'package:path_provider/path_provider.dart';
+import 'package:permission_handler/permission_handler.dart';
 import 'package:qr_flutter/qr_flutter.dart';
 
 class QRCodeHandler {
@@ -14,23 +15,24 @@ class QRCodeHandler {
     return QrImage(
       data: data,
       version: QrVersions.auto,
-      size: 200.0,
+      size: 250.0,
     );
   }
 
   openQRCode(String data) async {
     String path = await _createImage(data);
     if (path != "Error") {
-      final result = await OpenFile.open(path);
-      Fluttertoast.showToast(msg: "$result");
+      await OpenFile.open(path);
     }
   }
 
   saveQRCodeToGallery(String data) async {
     String path = await _createImage(data);
-    if (path != "Error") {
-      final result = await ImageGallerySaver.saveFile(path);
-      Fluttertoast.showToast(msg: "$result");
+    if (await Permission.storage.request().isGranted) {
+      await ImageGallerySaver.saveFile(path);
+      Fluttertoast.showToast(msg: "Downloaded!");
+    } else {
+      Fluttertoast.showToast(msg: "Permission not granted!");
     }
   }
 
