@@ -42,7 +42,7 @@ Patient createPatient() {
       444,
       ["Patologia1", "Patologia2"],
       "Graminacee",
-      "Nessuna informazione");
+      "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Ut ac molestie lorem, eget semper odio. In purus lacus, scelerisque quis nisl ac, maximus cursus orci. Vestibulum vitae libero erat.");
 }
 
 String createLifeSavingInformation(Patient patient) {

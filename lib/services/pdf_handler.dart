@@ -110,7 +110,7 @@ class PDFHandler {
 
   //badge
   openBadge() async {
-    _createBadge();
+    await _createBadge();
     _savePDF(badge);
     _openPDF(badge);
   }
@@ -120,12 +120,17 @@ class PDFHandler {
     await _downloadPDF(badge);
   }
 
-  _createBadge() {
+  _createBadge() async {
+    final mvi =
+        (await rootBundle.load('assets/logos/mvi.png')).buffer.asUint8List();
+    final profile = (await rootBundle.load('assets/images/profile.jpeg'))
+        .buffer
+        .asUint8List();
     pdf.addPage(Page(
         pageFormat: PdfPageFormat.a4,
         margin: EdgeInsets.all(0),
         build: (Context context) {
-          return _blockFour();
+          return _blockFour(mvi, profile);
         }));
   }
 
@@ -152,6 +157,9 @@ class PDFHandler {
             .asUint8List();
     final mvi =
         (await rootBundle.load('assets/logos/mvi.png')).buffer.asUint8List();
+    final profile = (await rootBundle.load('assets/images/profile.jpeg'))
+        .buffer
+        .asUint8List();
     pdf.addPage(Page(
         pageFormat: PdfPageFormat.a4,
         margin: EdgeInsets.all(0),
@@ -164,7 +172,7 @@ class PDFHandler {
                 _blockOne(centodiciotto, centododici),
                 _blockTwo(comuneMilano, mvi),
                 _blockThree(),
-                _blockFour(),
+                _blockFour(mvi, profile),
               ]);
         }));
   }
@@ -265,12 +273,29 @@ class PDFHandler {
 
   Container _blockThree() {
     return Container(
-      width: PdfPageFormat.a4.width / 2,
-      height: PdfPageFormat.a4.height / 2,
-    );
+        width: PdfPageFormat.a4.width / 2,
+        height: PdfPageFormat.a4.height / 2,
+        child: Column(children: [
+          Container(
+            height: (PdfPageFormat.a4.height / 10) * 4,
+          ),
+          Container(
+              height: PdfPageFormat.a4.height / 10,
+              child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Text("Documenti e codici utilizzati:".toUpperCase()),
+                    Text("C.I.N° AB123456, Emesso da: Milano, il: 31/12/2020"),
+                    Text("CRS N° 321654987; C.F.:MRRRSS54XABF123"),
+                    Text("Codici ATS: Assistito: ; Esenzioni: "),
+                    Text(
+                        "Informazioni mediche Salvavita condivide son SIMEU a novembre 2015"),
+                    Text("cdm10021501903"),
+                  ]))
+        ]));
   }
 
-  Container _blockFour() {
+  Container _blockFour(mvi, profile) {
     return Container(
         width: PdfPageFormat.a4.width / 2,
         height: PdfPageFormat.a4.height / 2,
@@ -278,11 +303,38 @@ class PDFHandler {
           Container(
               color: PdfColors.black,
               height: PdfPageFormat.a4.height / 10,
-              child: Row(children: [Text("Prova"), Text("Prova")])),
+              child: Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceAround,
+                  children: [
+                    Container(
+                        width: (PdfPageFormat.a4.width / 2) / 6,
+                        child: Image(MemoryImage(mvi), fit: BoxFit.cover)),
+                    Column(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        children: [
+                          Text("In caso".toUpperCase()),
+                          Text("di"),
+                          Text("Emergenza".toUpperCase())
+                        ]),
+                    Container(
+                        width: (PdfPageFormat.a4.width / 2) / 6,
+                        child: Image(MemoryImage(mvi), fit: BoxFit.cover)),
+                  ])),
           Container(
               color: PdfColors.white,
               height: PdfPageFormat.a4.height / 10,
-              child: Row(children: [Text("Prova"), Text("Prova")])),
+              child: Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: [
+                    Column(children: [
+                      Text("ICE1: 3927713177"),
+                      Text("ICE2: 3927713177")
+                    ]),
+                    Container(
+                        height: (PdfPageFormat.a4.height / 10),
+                        width: (PdfPageFormat.a4.width / 10),
+                        child: Image(MemoryImage(profile), fit: BoxFit.cover)),
+                  ])),
           Container(
               height: (PdfPageFormat.a4.height / 10) * 3,
               child: Row(mainAxisAlignment: MainAxisAlignment.end, children: [

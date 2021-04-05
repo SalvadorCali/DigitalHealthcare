@@ -1,43 +1,79 @@
 import 'package:flutter/material.dart';
 import 'package:thesis/constants.dart';
-import 'package:thesis/screens/emergency_numbers.dart';
-import 'package:thesis/screens/qr_code_scanner.dart';
+import 'package:thesis/model/patient.dart';
+import 'package:thesis/services/database_service.dart';
 import 'package:thesis/services/pdf_handler.dart';
 import 'package:thesis/services/qr_code_handler.dart';
 import 'package:thesis/widgets/appbar_button.dart';
 import 'package:thesis/widgets/function_button.dart';
 import 'package:thesis/widgets/function_card.dart';
-import 'package:thesis/model/patient.dart';
 
 class Homepage extends StatefulWidget {
+  final openQRCodeScanner;
+  final openEmergencyNumbers;
+  final changeScreen;
+  Homepage(
+      this.openQRCodeScanner, this.openEmergencyNumbers, this.changeScreen);
+
   @override
   _HomepageState createState() => _HomepageState();
 }
 
 class _HomepageState extends State<Homepage> {
+  // 1) ottengo dati da Firebase
+  // 2) creo Patient
+  // 3) passo Patient per usarne dati
   final String qrCodeData = createLifeSavingInformation(createPatient());
 
   @override
   Widget build(BuildContext context) {
     return DefaultTabController(
-      length: 2,
-      child: Scaffold(
-        appBar: AppBar(
-          title: Text("Thesis"),
-          actions: [
-            AppBarButton(
-                Icon(Icons.contact_phone_outlined), openEmergencyNumbers),
-            AppBarButton(Icon(Icons.qr_code_scanner), openQRCodeScanner),
-            AppBarButton(Icon(Icons.logout), openCIS),
-          ],
-          bottom: TabBar(
-            tabs: [
-              Tab(icon: Icon(Icons.qr_code)),
-              Tab(icon: Icon(Icons.menu)),
+        length: 2,
+        child: Scaffold(
+          appBar: AppBar(
+            title: Text("Thesis"),
+            actions: [
+              AppBarButton(Icon(Icons.contact_phone_outlined),
+                  widget.openEmergencyNumbers),
+              AppBarButton(
+                  Icon(Icons.qr_code_scanner), widget.openQRCodeScanner),
+              AppBarButton(Icon(Icons.logout), widget.changeScreen),
+            ],
+            bottom: TabBar(
+              tabs: [
+                Tab(icon: Icon(Icons.qr_code)),
+                Tab(icon: Icon(Icons.menu)),
+              ],
+            ),
+          ),
+          body: FutureBuilder<String>(
+              future: DatabaseService().getProva(),
+              builder: (context, snapshot) {
+                if (snapshot.hasData) {
+                  print(snapshot.data);
+                  return TabBarView(
+                      children: [_qrCodeScreen(), _functionalitiesScreen()]);
+                } else {
+                  return Center(child: CircularProgressIndicator());
+                }
+              }),
+        ));
+  }
+
+  Center _qrCodeScreen() {
+    return Center(
+      child: Column(
+        mainAxisAlignment: MainAxisAlignment.center,
+        children: <Widget>[
+          QRCodeHandler().generateQRCode(qrCodeData),
+          ButtonBar(
+            alignment: MainAxisAlignment.center,
+            children: [
+              FunctionButton(openQRCode, Icon(Icons.image), "Apri"),
+              FunctionButton(saveQRCodeToGallery, Icon(Icons.save), "Salva"),
             ],
           ),
-        ),
-        body: TabBarView(children: [_qrCodeScreen(), _functionalitiesScreen()]),
+        ],
       ),
     );
   }
@@ -54,24 +90,6 @@ class _HomepageState extends State<Homepage> {
               downloadCIS),
           FunctionCard(icons[3], functionalities[3], descriptions[3],
               openBracelet, downloadBracelet),
-        ],
-      ),
-    );
-  }
-
-  Center _qrCodeScreen() {
-    return Center(
-      child: Column(
-        mainAxisAlignment: MainAxisAlignment.center,
-        children: <Widget>[
-          QRCodeHandler().generateQRCode(qrCodeData),
-          ButtonBar(
-            alignment: MainAxisAlignment.center,
-            children: [
-              FunctionButton(openQRCode, Icon(Icons.image), "Apri"),
-              FunctionButton(saveQRCodeToGallery, Icon(Icons.save), "Salva"),
-            ],
-          ),
         ],
       ),
     );
@@ -116,19 +134,5 @@ class _HomepageState extends State<Homepage> {
 
   downloadCIS() {
     PDFHandler(qrCodeData).downloadCIS();
-  }
-
-  openQRCodeScanner() {
-    Navigator.push(
-      context,
-      MaterialPageRoute(builder: (context) => QRCodeScanner()),
-    );
-  }
-
-  openEmergencyNumbers() {
-    Navigator.push(
-      context,
-      MaterialPageRoute(builder: (context) => EmergencyNumbers()),
-    );
   }
 }

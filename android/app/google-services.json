@@ -1,0 +1,39 @@
+{
+  "project_info": {
+    "project_number": "841019972984",
+    "project_id": "psscis",
+    "storage_bucket": "psscis.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:841019972984:android:90798167459a3d860c7c8d",
+        "android_client_info": {
+          "package_name": "com.psscis.app"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "841019972984-oodcetb78t2ch0rpfpcjp4qtcd54t1du.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBGXgrYoCro4g6ZMmrFHNURLGas3JR9NCY"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "841019972984-oodcetb78t2ch0rpfpcjp4qtcd54t1du.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
