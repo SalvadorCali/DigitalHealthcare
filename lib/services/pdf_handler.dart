@@ -605,10 +605,18 @@ class PDFHandler {
   }
 
   _openPDF(String name) async {
-    Directory documentDirectory = await getApplicationDocumentsDirectory();
-    String documentPath = documentDirectory.path;
-    File file = File("$documentPath/$name.pdf");
-    await OpenFile.open(file.path, type: "application/pdf");
+    try {
+      var status = await Permission.storage.status;
+      if (!status.isGranted) {
+        await Permission.storage.request();
+      }
+      Directory documentDirectory = await getApplicationDocumentsDirectory();
+      String documentPath = documentDirectory.path;
+      File file = File("$documentPath/$name.pdf");
+      await OpenFile.open(file.path, type: "application/pdf");
+    } catch (e) {
+      Fluttertoast.showToast(msg: e.toString());
+    }
   }
 
   openOnlinePDF(String name) async {
@@ -617,7 +625,7 @@ class PDFHandler {
 
   _downloadPDF(String name) async {
     //cancellare se già esiste il file
-    var status = await Permission.phone.status;
+    var status = await Permission.storage.status;
     if (!status.isGranted) {
       await Permission.storage.request();
     }
