@@ -145,6 +145,7 @@ class PDFHandler {
   }
 
   _createBadge() async {
+    Fluttertoast.showToast(msg: "prima immagini");
     final mvi =
         (await rootBundle.load('assets/logos/mvi.png')).buffer.asUint8List();
     final ice =
@@ -152,10 +153,12 @@ class PDFHandler {
     final profile = (await rootBundle.load('assets/images/profile.jpeg'))
         .buffer
         .asUint8List();
+    Fluttertoast.showToast(msg: "dopo immagini");
     pdf.addPage(Page(
         pageFormat: PdfPageFormat.a4,
         margin: EdgeInsets.all(0),
         build: (Context context) {
+          Fluttertoast.showToast(msg: "pre creazione");
           return _blockFour(mvi, ice, profile);
         }));
   }
