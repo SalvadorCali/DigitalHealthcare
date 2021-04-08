@@ -608,11 +608,14 @@ class PDFHandler {
     try {
       var status = await Permission.storage.status;
       if (!status.isGranted) {
+        Fluttertoast.showToast(msg: "sono qui");
         await Permission.storage.request();
       }
       Directory documentDirectory = await getApplicationDocumentsDirectory();
+      //Fluttertoast.showToast(msg: "ora qui");
       String documentPath = documentDirectory.path;
       File file = File("$documentPath/$name.pdf");
+      //Fluttertoast.showToast(msg: "qui");
       await OpenFile.open(file.path, type: "application/pdf");
     } catch (e) {
       Fluttertoast.showToast(msg: e.toString());

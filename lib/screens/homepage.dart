@@ -124,43 +124,43 @@ class _HomepageState extends State<Homepage> {
   }
 
   //callback functions
-  openQRCode() {
-    QRCodeHandler().openQRCode(qrCodeData);
+  openQRCode() async {
+    await QRCodeHandler().openQRCode(qrCodeData);
   }
 
-  saveQRCodeToGallery() {
-    QRCodeHandler().saveQRCodeToGallery(qrCodeData);
+  saveQRCodeToGallery() async {
+    await QRCodeHandler().saveQRCodeToGallery(qrCodeData);
   }
 
-  openData() {
-    PDFHandler(qrData: qrCodeData, patient: patient).openData();
+  openData() async {
+    await PDFHandler(qrData: qrCodeData, patient: patient).openData();
   }
 
-  downloadData() {
-    PDFHandler(qrData: qrCodeData, patient: patient).downloadData();
+  downloadData() async {
+    await PDFHandler(qrData: qrCodeData, patient: patient).downloadData();
   }
 
-  openBracelet() {
-    PDFHandler(qrData: qrCodeData).openBracelet();
+  openBracelet() async {
+    await PDFHandler(qrData: qrCodeData).openBracelet();
   }
 
-  downloadBracelet() {
-    PDFHandler(qrData: qrCodeData).downloadBracelet();
+  downloadBracelet() async {
+    await PDFHandler(qrData: qrCodeData).downloadBracelet();
   }
 
-  openBadge() {
-    PDFHandler(qrData: qrCodeData).openBadge();
+  openBadge() async {
+    await PDFHandler(qrData: qrCodeData).openBadge();
   }
 
-  downloadBadge() {
-    PDFHandler(qrData: qrCodeData).downloadBadge();
+  downloadBadge() async {
+    await PDFHandler(qrData: qrCodeData).downloadBadge();
   }
 
-  openCIS() {
-    PDFHandler(qrData: qrCodeData, patient: patient).openCIS();
+  openCIS() async {
+    await PDFHandler(qrData: qrCodeData, patient: patient).openCIS();
   }
 
-  downloadCIS() {
-    PDFHandler(qrData: qrCodeData, patient: patient).downloadCIS();
+  downloadCIS() async {
+    await PDFHandler(qrData: qrCodeData, patient: patient).downloadCIS();
   }
 }
