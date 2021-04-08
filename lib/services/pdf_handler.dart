@@ -27,9 +27,9 @@ class PDFHandler {
 
   //dati
   openData() async {
-    _createData();
-    _savePDF(data);
-    _openPDF(data);
+    await _createData();
+    await _savePDF(data);
+    await _openPDF(data);
   }
 
   downloadData() async {
@@ -135,8 +135,8 @@ class PDFHandler {
   //badge
   openBadge() async {
     await _createBadge();
-    _savePDF(badge);
-    _openPDF(badge);
+    await _savePDF(badge);
+    await _openPDF(badge);
   }
 
   downloadBadge() async {
@@ -163,8 +163,8 @@ class PDFHandler {
   //cis
   openCIS() async {
     await _createCIS();
-    _savePDF(cis);
-    _openPDF(cis);
+    await _savePDF(cis);
+    await _openPDF(cis);
   }
 
   downloadCIS() async {
@@ -616,16 +616,14 @@ class PDFHandler {
   }
 
   _downloadPDF(String name) async {
+    //cancellare se già esiste il file
     var status = await Permission.phone.status;
     if (!status.isGranted) {
       await Permission.storage.request();
     }
     Directory downloadsDirectory =
         await DownloadsPathProvider.downloadsDirectory;
-    Directory prova = await getExternalStorageDirectory();
     String downloadPath = downloadsDirectory.path;
-    print("Download" + downloadPath);
-    print("Path" + prova.path);
     File file = File("$downloadPath/$name.pdf");
     file.writeAsBytesSync(await pdf.save());
     Fluttertoast.showToast(msg: "Downloaded!");

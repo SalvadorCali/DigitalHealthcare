@@ -112,7 +112,8 @@ class _HomepageState extends State<Homepage> {
     return Center(
       child: ListView(
         children: [
-          CovidTile("Tampone", DateTime.now(), "https://andreacalici.com/"),
+          CovidTile("Tampone", DateTime.now(),
+              "https://andreacalici.files.wordpress.com/2021/03/aamas.pdf"),
           CovidTile("Tampone", DateTime.now(),
               "https://andreacalici.files.wordpress.com/2021/03/aamas.pdf"),
           CovidTile("Tampone", DateTime.now(),
