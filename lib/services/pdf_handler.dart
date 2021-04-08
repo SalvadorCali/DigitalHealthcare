@@ -644,11 +644,12 @@ class PDFHandler {
     Directory prova = await getTemporaryDirectory();
     String path = prova.path;
     print(path);
-    File file = File("$path/$name.pdf");
+    File file = File("$downloadPath/$name.pdf");
     Fluttertoast.showToast(msg: "$path");
     //file.writeAsBytesSync(await pdf.save());
-    file.writeAsBytes(await pdf.save(), mode: FileMode.append);
-    Printing.sharePdf(bytes: await pdf.save());
+    var filePDF = await pdf.save();
+    file.writeAsBytes(filePDF, mode: FileMode.append);
+    Printing.sharePdf(bytes: filePDF);
     Fluttertoast.showToast(msg: "Downloaded!");
   }
 }
