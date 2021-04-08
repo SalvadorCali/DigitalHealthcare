@@ -641,7 +641,7 @@ class PDFHandler {
         await DownloadsPathProvider.downloadsDirectory;
     String downloadPath = downloadsDirectory.path;
     File file = File("$downloadPath/$name.pdf");
-    Fluttertoast.showToast(msg: "Sono qui!");
+    Fluttertoast.showToast(msg: "$downloadPath");
     file.writeAsBytesSync(await pdf.save());
     Fluttertoast.showToast(msg: "Downloaded!");
   }
