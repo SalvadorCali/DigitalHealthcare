@@ -27,6 +27,63 @@ class Patient {
       this.pathologies,
       this.allergies,
       this.information);
+
+  Map<String, dynamic> toMap() {
+    return {
+      'name': name,
+      'surname': surname,
+      'birthday': birthday,
+      'bloodGroup': bloodGroup,
+      'bloodFactor': bloodFactor,
+      'contactOne': contactOne,
+      'phoneNumberOne': phoneNumberOne,
+      'contactTwo': contactTwo,
+      'phoneNumberTwo': phoneNumberTwo,
+      'pathologies': pathologies,
+      'allergies': allergies,
+      'information': information
+    };
+  }
+
+  Map<String, dynamic> toMapIta() {
+    return {
+      'Nome': name + " " + surname,
+      'Data di nascita': birthday,
+      'Gruppo sanguigno': bloodGroup + bloodFactor,
+      'Contatto ICE1': contactOne + "-" + phoneNumberOne.toString(),
+      'Contatto ICE2': contactTwo + "-" + phoneNumberTwo.toString(),
+      'Patologie': pathologies,
+      'Allergie': allergies,
+      'Informazioni': information
+    };
+  }
+
+  String getLifeSavingInformation() {
+    return name +
+        space +
+        surname +
+        aCapo +
+        birthday +
+        aCapo +
+        bloodGroup +
+        bloodFactor +
+        aCapo +
+        contactOne +
+        colon +
+        phoneNumberOne.toString() +
+        aCapo +
+        contactTwo +
+        colon +
+        phoneNumberTwo.toString() +
+        aCapo +
+        pathologies[0] +
+        aCapo +
+        pathologies[1] +
+        aCapo +
+        allergies +
+        aCapo +
+        information;
+  }
 }
 
 Patient createPatient() {
@@ -43,31 +100,4 @@ Patient createPatient() {
       ["Patologia1", "Patologia2"],
       "Graminacee",
       "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Ut ac molestie lorem, eget semper odio. In purus lacus, scelerisque quis nisl ac, maximus cursus orci. Vestibulum vitae libero erat.");
-}
-
-String createLifeSavingInformation(Patient patient) {
-  return patient.name +
-      space +
-      patient.surname +
-      aCapo +
-      patient.birthday +
-      aCapo +
-      patient.bloodGroup +
-      patient.bloodFactor +
-      aCapo +
-      patient.contactOne +
-      colon +
-      patient.phoneNumberOne.toString() +
-      aCapo +
-      patient.contactTwo +
-      colon +
-      patient.phoneNumberTwo.toString() +
-      aCapo +
-      patient.pathologies[0] +
-      aCapo +
-      patient.pathologies[1] +
-      aCapo +
-      patient.allergies +
-      aCapo +
-      patient.information;
 }

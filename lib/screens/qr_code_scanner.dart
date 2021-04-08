@@ -11,7 +11,7 @@ class QRCodeScanner extends StatefulWidget {
 
 class _QRCodeScannerState extends State<QRCodeScanner> {
   String qrCodeData = "";
-  final String qrCodeDataFake = createLifeSavingInformation(createPatient());
+  String qrCodeDataFake;
   List<String> information = [
     "Nome",
     "Data di Nascita",
@@ -26,6 +26,8 @@ class _QRCodeScannerState extends State<QRCodeScanner> {
 
   @override
   Widget build(BuildContext context) {
+    Patient patient = createPatient();
+    qrCodeDataFake = patient.getLifeSavingInformation();
     return Scaffold(
       appBar: AppBar(
         automaticallyImplyLeading: true,

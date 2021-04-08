@@ -10,7 +10,7 @@ class Wrapper extends StatefulWidget {
 }
 
 class _WrapperState extends State<Wrapper> {
-  bool logged = false;
+  bool logged = true;
   @override
   Widget build(BuildContext context) {
     return logged

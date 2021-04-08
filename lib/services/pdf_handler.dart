@@ -9,17 +9,21 @@ import 'package:pdf/pdf.dart';
 import 'package:pdf/widgets.dart';
 import 'package:permission_handler/permission_handler.dart';
 import 'package:thesis/constants.dart';
+import 'package:thesis/model/patient.dart';
+import 'package:url_launcher/url_launcher.dart';
 
 class PDFHandler {
+  //A4: 297mm x 210mm
   final String data = "dati";
   final String bracelet = "braccialetto";
   final String cis = "cis";
   final String badge = "badge";
 
   final pdf = Document();
+  final Patient patient;
   final String qrData;
 
-  PDFHandler(this.qrData);
+  PDFHandler({this.patient, this.qrData});
 
   //dati
   openData() async {
@@ -42,9 +46,17 @@ class PDFHandler {
               children: [
                 Text("Profilo sanitario sintetico".toUpperCase()),
                 Text(aCapo),
-                Text("Nome: Andrea Calici")
+                ..._createPSS(),
               ]);
         }));
+  }
+
+  List<Widget> _createPSS() {
+    List<Widget> widgets = [];
+    patient.toMapIta().forEach((key, value) {
+      widgets.add(Text("$key: $value"));
+    });
+    return widgets;
   }
 
   //braccialetto
@@ -60,6 +72,7 @@ class PDFHandler {
   }
 
   _createBracelet() async {
+    //21.7mm x 114.5mm
     final municipioTre =
         (await rootBundle.load('assets/logos/municipio_tre.png'))
             .buffer
@@ -70,8 +83,9 @@ class PDFHandler {
             .asUint8List();
     final mvi =
         (await rootBundle.load('assets/logos/mvi.png')).buffer.asUint8List();
-    final polimi =
-        (await rootBundle.load('assets/logos/polimi.png')).buffer.asUint8List();
+    final polimi = (await rootBundle.load('assets/logos/polimi2.png'))
+        .buffer
+        .asUint8List();
     final areu =
         (await rootBundle.load('assets/logos/areu2.jpg')).buffer.asUint8List();
     final centodiciotto =
@@ -81,31 +95,41 @@ class PDFHandler {
         margin: EdgeInsets.all(0),
         build: (Context context) {
           return Row(children: [
-            _braceletLogo(municipioTre),
-            _braceletLogo(comuneMilano),
-            _braceletLogo(mvi),
-            _braceletLogo(polimi),
             Container(
-                width: PdfPageFormat.a4.width / 7,
-                height: PdfPageFormat.a4.height / 10,
-                child: BarcodeWidget(
-                  data: qrData,
-                  width: PdfPageFormat.a4.width / 7 - 10,
-                  height: PdfPageFormat.a4.height / 10 - 10,
-                  barcode: Barcode.qrCode(),
-                )),
-            _braceletLogo(areu),
-            _braceletLogo(centodiciotto),
+                decoration:
+                    BoxDecoration(border: Border.all(color: PdfColors.black)),
+                child: Row(children: [
+                  _braceletLogo(municipioTre),
+                  _braceletLogo(comuneMilano),
+                  _braceletLogo(mvi),
+                  _braceletLogo(polimi),
+                  Container(
+                    width: (PdfPageFormat.a4.width / 1.83) / 7,
+                    height: PdfPageFormat.a4.height / 13.68,
+                    child: Padding(
+                        padding: EdgeInsets.all(2),
+                        child: BarcodeWidget(
+                          data: qrData,
+                          width: (PdfPageFormat.a4.width / 1.83) / 7,
+                          height: PdfPageFormat.a4.height / 13.68,
+                          barcode: Barcode.qrCode(),
+                        )),
+                  ),
+                  _braceletLogo(areu),
+                  _braceletLogo(centodiciotto),
+                ])),
           ]);
         }));
   }
 
   Container _braceletLogo(image) {
     return Container(
-      width: PdfPageFormat.a4.width / 7,
-      height: PdfPageFormat.a4.height / 10,
-      child: Image(MemoryImage(image), fit: BoxFit.cover),
-    );
+        width: (PdfPageFormat.a4.width / 1.83) / 7,
+        height: PdfPageFormat.a4.height / 13.68,
+        child: Padding(
+          padding: EdgeInsets.all(2),
+          child: Image(MemoryImage(image), fit: BoxFit.fitWidth),
+        ));
   }
 
   //badge
@@ -123,6 +147,8 @@ class PDFHandler {
   _createBadge() async {
     final mvi =
         (await rootBundle.load('assets/logos/mvi.png')).buffer.asUint8List();
+    final ice =
+        (await rootBundle.load('assets/logos/ice.png')).buffer.asUint8List();
     final profile = (await rootBundle.load('assets/images/profile.jpeg'))
         .buffer
         .asUint8List();
@@ -130,7 +156,7 @@ class PDFHandler {
         pageFormat: PdfPageFormat.a4,
         margin: EdgeInsets.all(0),
         build: (Context context) {
-          return _blockFour(mvi, profile);
+          return _blockFour(mvi, ice, profile);
         }));
   }
 
@@ -150,16 +176,25 @@ class PDFHandler {
     final centodiciotto =
         (await rootBundle.load('assets/logos/118.jpg')).buffer.asUint8List();
     final centododici =
-        (await rootBundle.load('assets/logos/112.jpg')).buffer.asUint8List();
+        (await rootBundle.load('assets/logos/112.png')).buffer.asUint8List();
     final comuneMilano =
-        (await rootBundle.load('assets/logos/comune_milano.png'))
+        (await rootBundle.load('assets/logos/comune_milano2.png'))
             .buffer
             .asUint8List();
     final mvi =
         (await rootBundle.load('assets/logos/mvi.png')).buffer.asUint8List();
+    final areu =
+        (await rootBundle.load('assets/logos/areu2.jpg')).buffer.asUint8List();
+    final simeu =
+        (await rootBundle.load('assets/logos/simeu.png')).buffer.asUint8List();
+    final omceo =
+        (await rootBundle.load('assets/logos/omceo.jpg')).buffer.asUint8List();
+    final ice =
+        (await rootBundle.load('assets/logos/ice.png')).buffer.asUint8List();
     final profile = (await rootBundle.load('assets/images/profile.jpeg'))
         .buffer
         .asUint8List();
+
     pdf.addPage(Page(
         pageFormat: PdfPageFormat.a4,
         margin: EdgeInsets.all(0),
@@ -170,9 +205,9 @@ class PDFHandler {
                   (PdfPageFormat.a4.height / 2) / (PdfPageFormat.a4.width / 2),
               children: [
                 _blockOne(centodiciotto, centododici),
-                _blockTwo(comuneMilano, mvi),
+                _blockTwo(comuneMilano, mvi, areu, simeu, omceo),
                 _blockThree(),
-                _blockFour(mvi, profile),
+                _blockFour(mvi, ice, profile),
               ]);
         }));
   }
@@ -188,13 +223,13 @@ class PDFHandler {
                   mainAxisAlignment: MainAxisAlignment.spaceAround,
                   children: [
                     Container(
-                        width: (PdfPageFormat.a4.width / 2) / 5,
+                        width: (PdfPageFormat.a4.width / 2) / 3,
                         child: Image(MemoryImage(centodiciotto),
-                            fit: BoxFit.cover)),
+                            fit: BoxFit.fitWidth)),
                     Container(
-                        width: (PdfPageFormat.a4.width / 2) / 5,
-                        child:
-                            Image(MemoryImage(centododici), fit: BoxFit.cover)),
+                        width: (PdfPageFormat.a4.width / 2) / 3,
+                        child: Image(MemoryImage(centododici),
+                            fit: BoxFit.fitWidth)),
                   ])),
           Container(
               height: (PdfPageFormat.a4.height / 10) * 3,
@@ -205,69 +240,170 @@ class PDFHandler {
                       children: [
                         Text(
                             "-la CIS contiene tutte le informazioni/dati che sono stati inseriti nella SAPP*"),
-                        Text(
-                            "-la CIS è fornita gratuitamente all'utilizzatore e senza alcuna garanzia esplicita o implicita"),
+                        RichText(
+                          text: TextSpan(
+                              text: 'la CIS è fornita ',
+                              style: TextStyle(fontWeight: FontWeight.normal),
+                              children: <TextSpan>[
+                                TextSpan(
+                                    text: 'gratuitamente',
+                                    style:
+                                        TextStyle(fontWeight: FontWeight.bold),
+                                    children: <TextSpan>[
+                                      TextSpan(
+                                          text: " all'utilizzatore e ",
+                                          style: TextStyle(
+                                              fontWeight: FontWeight.normal),
+                                          children: <TextSpan>[
+                                            TextSpan(
+                                              text:
+                                                  'senza alcuna garanzia esplicita o implicita.',
+                                              style: TextStyle(
+                                                  fontWeight: FontWeight.bold),
+                                            ),
+                                          ]),
+                                    ]),
+                              ]),
+                        ),
                         Text(
                             "-la responsabilità della correttezza e validità delle informazioni/dati non può essere ascritta all'autore della SAPP"),
                         Text(
                             "-le informazioni ed i dati inseriti vengono memorizzati in forma anonima e per meri fini statistici"),
                         Text(
-                            "-è cura dell'interessato ripresentarsi ogniqualvolta ci sia una variazione dei dati e comunque ogni SEI MESI"),
+                            "-è cura dell'interessato ripresentarsi ogniqualvolta ci sia una variazione dei dati e comunque ogni SEI MESI",
+                            style: TextStyle(fontWeight: FontWeight.bold)),
                       ]))),
           Container(
               height: PdfPageFormat.a4.height / 10,
-              child:
-                  Column(mainAxisAlignment: MainAxisAlignment.end, children: [
-                Text("*SAPP (Social APPlication)"),
-                Text("www.iltelefoninoiltuosalvavita.org"),
-                Row(
-                    mainAxisAlignment: MainAxisAlignment.end,
-                    children: [Text("Empowered by G7 Soluzioni Informatiche")]),
-              ]))
+              child: Padding(
+                  padding: EdgeInsets.all(5),
+                  child: Column(
+                      mainAxisAlignment: MainAxisAlignment.end,
+                      children: [
+                        Text("*SAPP (Social APPlication)"),
+                        Text("www.iltelefoninoiltuosalvavita.org"),
+                        SizedBox(height: 20),
+                        Row(
+                            mainAxisAlignment: MainAxisAlignment.end,
+                            children: [
+                              Text("Empowered by G7 Soluzioni Informatiche")
+                            ]),
+                      ])))
         ]));
   }
 
-  Container _blockTwo(comuneMilano, mvi) {
+  Container _blockTwo(comuneMilano, mvi, areu, simeu, omceo) {
     return Container(
         width: PdfPageFormat.a4.width / 2,
         height: PdfPageFormat.a4.height / 2,
         child: Column(children: [
+          Container(
+            decoration:
+                BoxDecoration(border: Border.all(color: PdfColors.black)),
+            height: PdfPageFormat.a4.height / 10,
+            child: Padding(
+                padding: EdgeInsets.symmetric(vertical: 5),
+                child: Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceAround,
+                    children: [
+                      Container(
+                          width: (PdfPageFormat.a4.width / 2) / 2,
+                          child: Image(MemoryImage(comuneMilano),
+                              fit: BoxFit.fitWidth)),
+                      Container(
+                          width: (PdfPageFormat.a4.width / 2) / 4,
+                          child: Image(MemoryImage(mvi), fit: BoxFit.fitWidth)),
+                    ])),
+          ),
+          Container(
+              height: (PdfPageFormat.a4.height / 10) * 3,
+              child: Padding(
+                  padding: EdgeInsets.fromLTRB(24, 0, 24, 0),
+                  child: Column(
+                      mainAxisAlignment: MainAxisAlignment.start,
+                      children: [
+                        SizedBox(height: 20),
+                        Text("PROGETTO",
+                            style: TextStyle(color: PdfColors.red)),
+                        Text("CITTADINI",
+                            style: TextStyle(color: PdfColors.red)),
+                        Text("Più coinvolti & più sicuri".toUpperCase(),
+                            style: TextStyle(color: PdfColors.red)),
+                        SizedBox(height: 20),
+                        Text("C.I.S.",
+                            style:
+                                TextStyle(fontSize: 35, color: PdfColors.red)),
+                        SizedBox(height: 20),
+                        RichText(
+                          text: TextSpan(
+                              text: 'C',
+                              style: TextStyle(
+                                  fontSize: 18,
+                                  fontWeight: FontWeight.bold,
+                                  color: PdfColors.red),
+                              children: <TextSpan>[
+                                TextSpan(
+                                    text: "arta d'",
+                                    style: TextStyle(
+                                        fontSize: 18,
+                                        fontWeight: FontWeight.normal,
+                                        color: PdfColors.red),
+                                    children: <TextSpan>[
+                                      TextSpan(
+                                          text: 'I',
+                                          style: TextStyle(
+                                              fontSize: 18,
+                                              fontWeight: FontWeight.bold,
+                                              color: PdfColors.red),
+                                          children: <TextSpan>[
+                                            TextSpan(
+                                                text: 'dentità ',
+                                                style: TextStyle(
+                                                    fontSize: 18,
+                                                    fontWeight:
+                                                        FontWeight.normal,
+                                                    color: PdfColors.red),
+                                                children: <TextSpan>[
+                                                  TextSpan(
+                                                      text: 'S',
+                                                      style: TextStyle(
+                                                          fontSize: 18,
+                                                          fontWeight:
+                                                              FontWeight.bold,
+                                                          color: PdfColors.red),
+                                                      children: <TextSpan>[
+                                                        TextSpan(
+                                                          text: 'alvavita',
+                                                          style: TextStyle(
+                                                              fontSize: 18,
+                                                              fontWeight:
+                                                                  FontWeight
+                                                                      .normal,
+                                                              color: PdfColors
+                                                                  .red),
+                                                        ),
+                                                      ]),
+                                                ]),
+                                          ]),
+                                    ]),
+                              ]),
+                        ),
+                      ]))),
           Container(
               height: PdfPageFormat.a4.height / 10,
               child: Row(
                   mainAxisAlignment: MainAxisAlignment.spaceAround,
                   children: [
                     Container(
-                        width: (PdfPageFormat.a4.width / 2) / 5,
-                        child: Image(MemoryImage(comuneMilano),
-                            fit: BoxFit.cover)),
+                        width: (PdfPageFormat.a4.width / 2) / 3,
+                        child: Image(MemoryImage(areu), fit: BoxFit.fitWidth)),
                     Container(
-                        width: (PdfPageFormat.a4.width / 2) / 5,
-                        child: Image(MemoryImage(mvi), fit: BoxFit.cover)),
-                  ])),
-          Container(
-              height: (PdfPageFormat.a4.height / 10) * 3,
-              child: Padding(
-                  padding: EdgeInsets.fromLTRB(24, 0, 24, 0),
-                  child: Column(
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      children: [
-                        Text("Progetto".toUpperCase()),
-                        Text("Cittadini".toUpperCase()),
-                        Text("Più coinvolti & più sicuri".toUpperCase()),
-                        Text("C.I.S.".toUpperCase()),
-                        Text("Carta d'Identità Salvavita"),
-                      ]))),
-          Container(
-              height: PdfPageFormat.a4.height / 10,
-              child:
-                  Column(mainAxisAlignment: MainAxisAlignment.end, children: [
-                Text("*SAPP (Social APPlication)"),
-                Text("www.iltelefoninoiltuosalvavita.org"),
-                Row(
-                    mainAxisAlignment: MainAxisAlignment.end,
-                    children: [Text("Empowered by G7 Soluzioni Informatiche")]),
-              ]))
+                        width: (PdfPageFormat.a4.width / 2) / 3,
+                        child: Image(MemoryImage(simeu), fit: BoxFit.fitWidth)),
+                    Container(
+                        width: (PdfPageFormat.a4.width / 2) / 4,
+                        child: Image(MemoryImage(omceo), fit: BoxFit.fitWidth)),
+                  ]))
         ]));
   }
 
@@ -277,26 +413,66 @@ class PDFHandler {
         height: PdfPageFormat.a4.height / 2,
         child: Column(children: [
           Container(
+            width: PdfPageFormat.a4.width / 2,
             height: (PdfPageFormat.a4.height / 10) * 4,
+            child: Column(children: [
+              Padding(
+                padding: EdgeInsets.symmetric(vertical: 10),
+                child: Text("DATI SALVAVITA",
+                    style: TextStyle(color: PdfColors.red)),
+              ),
+              Padding(
+                  padding: EdgeInsets.symmetric(horizontal: 16),
+                  child: Row(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        Container(
+                          width: PdfPageFormat.a4.width / 4 - 8,
+                          child: Column(
+                              mainAxisAlignment: MainAxisAlignment.start,
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              children: [..._createKeys()]),
+                        ),
+                        Container(
+                          width: PdfPageFormat.a4.width / 4 - 8,
+                          child: Column(
+                              mainAxisAlignment: MainAxisAlignment.start,
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              children: [..._createValues()]),
+                        ),
+                      ])),
+            ]),
           ),
           Container(
+              width: PdfPageFormat.a4.width / 2,
               height: PdfPageFormat.a4.height / 10,
-              child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    Text("Documenti e codici utilizzati:".toUpperCase()),
-                    Text("C.I.N° AB123456, Emesso da: Milano, il: 31/12/2020"),
-                    Text("CRS N° 321654987; C.F.:MRRRSS54XABF123"),
-                    Text("Codici ATS: Assistito: ; Esenzioni: "),
-                    Text(
-                        "Informazioni mediche Salvavita condivide son SIMEU a novembre 2015"),
-                    Text("cdm10021501903"),
-                  ]))
+              child: Padding(
+                  padding: EdgeInsets.all(8),
+                  child: Column(
+                      mainAxisAlignment: MainAxisAlignment.end,
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        Text("Documenti e codici utilizzati:".toUpperCase(),
+                            style: TextStyle(fontSize: 8)),
+                        Text(
+                            "C.I.N° AB123456, Emesso da: Milano, il: 31/12/2020",
+                            style: TextStyle(fontSize: 8)),
+                        Text("CRS N° 321654987; C.F.:MRRRSS54XABF123",
+                            style: TextStyle(fontSize: 8)),
+                        Text("Codici ATS: Assistito: ; Esenzioni: ",
+                            style: TextStyle(fontSize: 8)),
+                        Text(
+                            "Informazioni mediche Salvavita condivide son SIMEU a novembre 2015",
+                            style: TextStyle(fontSize: 8)),
+                        SizedBox(height: 10),
+                        Text("cdm10021501903", style: TextStyle(fontSize: 8)),
+                      ])))
         ]));
   }
 
-  Container _blockFour(mvi, profile) {
+  Container _blockFour(mvi, ice, profile) {
     return Container(
+        decoration: BoxDecoration(border: Border.all(color: PdfColors.black)),
         width: PdfPageFormat.a4.width / 2,
         height: PdfPageFormat.a4.height / 2,
         child: Column(children: [
@@ -307,37 +483,93 @@ class PDFHandler {
                   mainAxisAlignment: MainAxisAlignment.spaceAround,
                   children: [
                     Container(
-                        width: (PdfPageFormat.a4.width / 2) / 6,
-                        child: Image(MemoryImage(mvi), fit: BoxFit.cover)),
+                        width: (PdfPageFormat.a4.width / 2) / 4,
+                        child: Image(MemoryImage(mvi), fit: BoxFit.fitWidth)),
                     Column(
                         mainAxisAlignment: MainAxisAlignment.center,
                         children: [
-                          Text("In caso".toUpperCase()),
-                          Text("di"),
-                          Text("Emergenza".toUpperCase())
+                          RichText(
+                            text: TextSpan(
+                                text: 'I',
+                                style: TextStyle(
+                                    fontSize: 18, color: PdfColors.red),
+                                children: <TextSpan>[
+                                  TextSpan(
+                                      text: 'N',
+                                      style: TextStyle(
+                                          fontSize: 18, color: PdfColors.white),
+                                      children: <TextSpan>[
+                                        TextSpan(
+                                            text: ' C',
+                                            style: TextStyle(
+                                                fontSize: 18,
+                                                color: PdfColors.red),
+                                            children: <TextSpan>[
+                                              TextSpan(
+                                                text: 'ASO',
+                                                style: TextStyle(
+                                                    fontSize: 18,
+                                                    color: PdfColors.white),
+                                              ),
+                                            ]),
+                                      ]),
+                                ]),
+                          ),
+                          Text(
+                            "di",
+                            style:
+                                TextStyle(fontSize: 18, color: PdfColors.white),
+                          ),
+                          RichText(
+                            text: TextSpan(
+                                text: 'E',
+                                style: TextStyle(
+                                    fontSize: 18, color: PdfColors.red),
+                                children: <TextSpan>[
+                                  TextSpan(
+                                    text: 'MERGENZA',
+                                    style: TextStyle(
+                                        fontSize: 18, color: PdfColors.white),
+                                  ),
+                                ]),
+                          ),
                         ]),
                     Container(
-                        width: (PdfPageFormat.a4.width / 2) / 6,
-                        child: Image(MemoryImage(mvi), fit: BoxFit.cover)),
+                        width: (PdfPageFormat.a4.width / 2) / 4,
+                        child: Image(MemoryImage(ice), fit: BoxFit.fitWidth)),
                   ])),
           Container(
-              color: PdfColors.white,
+              decoration:
+                  BoxDecoration(border: Border.all(color: PdfColors.black)),
               height: PdfPageFormat.a4.height / 10,
               child: Row(
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
-                    Column(children: [
-                      Text("ICE1: 3927713177"),
-                      Text("ICE2: 3927713177")
-                    ]),
-                    Container(
-                        height: (PdfPageFormat.a4.height / 10),
-                        width: (PdfPageFormat.a4.width / 10),
-                        child: Image(MemoryImage(profile), fit: BoxFit.cover)),
+                    Padding(
+                        padding: EdgeInsets.symmetric(horizontal: 5),
+                        child: Column(
+                            mainAxisAlignment: MainAxisAlignment.center,
+                            children: [
+                              Text("ICE1: 39239233392",
+                                  style: TextStyle(
+                                      fontSize: 18, color: PdfColors.orange)),
+                              Text("ICE2: 39239233392",
+                                  style: TextStyle(
+                                      fontSize: 18, color: PdfColors.orange))
+                            ])),
+                    Padding(
+                      padding: EdgeInsets.symmetric(horizontal: 5),
+                      child: Container(
+                          height: (PdfPageFormat.a4.height / 10),
+                          width: (PdfPageFormat.a4.width / 10),
+                          child: Image(MemoryImage(profile),
+                              fit: BoxFit.fitWidth)),
+                    )
                   ])),
           Container(
               height: (PdfPageFormat.a4.height / 10) * 3,
-              child: Row(mainAxisAlignment: MainAxisAlignment.end, children: [
+              child:
+                  Row(mainAxisAlignment: MainAxisAlignment.center, children: [
                 BarcodeWidget(
                   data: qrData,
                   width: (PdfPageFormat.a4.width / 10) * 2,
@@ -346,6 +578,22 @@ class PDFHandler {
                 )
               ])),
         ]));
+  }
+
+  List<Widget> _createKeys() {
+    List<Widget> widgets = [];
+    patient.toMapIta().forEach((key, value) {
+      widgets.add(Text("$key", style: TextStyle(fontWeight: FontWeight.bold)));
+    });
+    return widgets;
+  }
+
+  List<Widget> _createValues() {
+    List<Widget> widgets = [];
+    patient.toMapIta().forEach((key, value) {
+      widgets.add(Text("$value"));
+    });
+    return widgets;
   }
 
   //general
@@ -361,6 +609,10 @@ class PDFHandler {
     String documentPath = documentDirectory.path;
     File file = File("$documentPath/$name.pdf");
     await OpenFile.open(file.path, type: "application/pdf");
+  }
+
+  openOnlinePDF(String name) async {
+    await canLaunch(name) ? await launch(name) : throw 'Could not launch';
   }
 
   _downloadPDF(String name) async {

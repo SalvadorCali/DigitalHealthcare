@@ -5,6 +5,7 @@ import 'package:thesis/services/database_service.dart';
 import 'package:thesis/services/pdf_handler.dart';
 import 'package:thesis/services/qr_code_handler.dart';
 import 'package:thesis/widgets/appbar_button.dart';
+import 'package:thesis/widgets/covid_tile.dart';
 import 'package:thesis/widgets/function_button.dart';
 import 'package:thesis/widgets/function_card.dart';
 
@@ -23,12 +24,14 @@ class _HomepageState extends State<Homepage> {
   // 1) ottengo dati da Firebase
   // 2) creo Patient
   // 3) passo Patient per usarne dati
-  final String qrCodeData = createLifeSavingInformation(createPatient());
+  final Patient patient = createPatient();
+  String qrCodeData;
 
   @override
   Widget build(BuildContext context) {
+    _initializePatient();
     return DefaultTabController(
-        length: 2,
+        length: 3,
         child: Scaffold(
           appBar: AppBar(
             title: Text("Thesis"),
@@ -42,7 +45,8 @@ class _HomepageState extends State<Homepage> {
             bottom: TabBar(
               tabs: [
                 Tab(icon: Icon(Icons.qr_code)),
-                Tab(icon: Icon(Icons.menu)),
+                Tab(icon: Icon(Icons.info)),
+                Tab(icon: Icon(Icons.coronavirus)),
               ],
             ),
           ),
@@ -51,8 +55,11 @@ class _HomepageState extends State<Homepage> {
               builder: (context, snapshot) {
                 if (snapshot.hasData) {
                   print(snapshot.data);
-                  return TabBarView(
-                      children: [_qrCodeScreen(), _functionalitiesScreen()]);
+                  return TabBarView(children: [
+                    _qrCodeScreen(),
+                    _functionalitiesScreen(),
+                    _covidScreen()
+                  ]);
                 } else {
                   return Center(child: CircularProgressIndicator());
                 }
@@ -60,7 +67,13 @@ class _HomepageState extends State<Homepage> {
         ));
   }
 
-  Center _qrCodeScreen() {
+  _initializePatient() {
+    setState(() {
+      qrCodeData = patient.getLifeSavingInformation();
+    });
+  }
+
+  Widget _qrCodeScreen() {
     return Center(
       child: Column(
         mainAxisAlignment: MainAxisAlignment.center,
@@ -95,6 +108,20 @@ class _HomepageState extends State<Homepage> {
     );
   }
 
+  Widget _covidScreen() {
+    return Center(
+      child: ListView(
+        children: [
+          CovidTile("Tampone", DateTime.now(), "https://andreacalici.com/"),
+          CovidTile("Tampone", DateTime.now(),
+              "https://andreacalici.files.wordpress.com/2021/03/aamas.pdf"),
+          CovidTile("Tampone", DateTime.now(),
+              "https://andreacalici.files.wordpress.com/2021/03/aamas.pdf"),
+        ],
+      ),
+    );
+  }
+
   //callback functions
   openQRCode() {
     QRCodeHandler().openQRCode(qrCodeData);
@@ -105,34 +132,34 @@ class _HomepageState extends State<Homepage> {
   }
 
   openData() {
-    PDFHandler(qrCodeData).openData();
+    PDFHandler(qrData: qrCodeData, patient: patient).openData();
   }
 
   downloadData() {
-    PDFHandler(qrCodeData).downloadData();
+    PDFHandler(qrData: qrCodeData, patient: patient).downloadData();
   }
 
   openBracelet() {
-    PDFHandler(qrCodeData).openBracelet();
+    PDFHandler(qrData: qrCodeData).openBracelet();
   }
 
   downloadBracelet() {
-    PDFHandler(qrCodeData).downloadBracelet();
+    PDFHandler(qrData: qrCodeData).downloadBracelet();
   }
 
   openBadge() {
-    PDFHandler(qrCodeData).openBadge();
+    PDFHandler(qrData: qrCodeData).openBadge();
   }
 
   downloadBadge() {
-    PDFHandler(qrCodeData).downloadBadge();
+    PDFHandler(qrData: qrCodeData).downloadBadge();
   }
 
   openCIS() {
-    PDFHandler(qrCodeData).openCIS();
+    PDFHandler(qrData: qrCodeData, patient: patient).openCIS();
   }
 
   downloadCIS() {
-    PDFHandler(qrCodeData).downloadCIS();
+    PDFHandler(qrData: qrCodeData, patient: patient).downloadCIS();
   }
 }
