@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:fluttertoast/fluttertoast.dart';
 import 'package:thesis/constants.dart';
 import 'package:thesis/model/patient.dart';
 import 'package:thesis/services/database_service.dart';
@@ -148,8 +149,9 @@ class _HomepageState extends State<Homepage> {
     await PDFHandler(qrData: qrCodeData).downloadBracelet();
   }
 
-  openBadge() async {
-    await PDFHandler(qrData: qrCodeData).openBadge();
+  openBadge() {
+    Fluttertoast.showToast(msg: "Prova");
+    PDFHandler(qrData: qrCodeData).openBadge();
   }
 
   downloadBadge() async {
