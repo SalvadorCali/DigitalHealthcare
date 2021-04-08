@@ -630,7 +630,7 @@ class PDFHandler {
     await canLaunch(name) ? await launch(name) : throw 'Could not launch';
   }
 
-  _downloadPDF(String name) async {
+  Future<void> _downloadPDF(String name) async {
     //cancellare se già esiste il file
     Fluttertoast.showToast(msg: "Qua!");
     var status = await Permission.storage.status;
@@ -643,7 +643,7 @@ class PDFHandler {
     File file = File("$downloadPath/$name.pdf");
     Fluttertoast.showToast(msg: "$downloadPath");
     //file.writeAsBytesSync(await pdf.save());
-    file.writeAsBytes(await pdf.save());
+    file.writeAsBytes(await pdf.save(), mode: FileMode.append);
     Fluttertoast.showToast(msg: "Downloaded!");
   }
 }
