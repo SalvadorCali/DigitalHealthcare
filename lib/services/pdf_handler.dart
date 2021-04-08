@@ -8,6 +8,7 @@ import 'package:path_provider/path_provider.dart';
 import 'package:pdf/pdf.dart';
 import 'package:pdf/widgets.dart';
 import 'package:permission_handler/permission_handler.dart';
+import 'package:printing/printing.dart';
 import 'package:thesis/constants.dart';
 import 'package:thesis/model/patient.dart';
 import 'package:url_launcher/url_launcher.dart';
@@ -640,13 +641,14 @@ class PDFHandler {
     Directory downloadsDirectory =
         await DownloadsPathProvider.downloadsDirectory;
     String downloadPath = downloadsDirectory.path;
-    Directory prova = await getApplicationDocumentsDirectory();
+    Directory prova = await getTemporaryDirectory();
     String path = prova.path;
     print(path);
     File file = File("$path/$name.pdf");
     Fluttertoast.showToast(msg: "$path");
     //file.writeAsBytesSync(await pdf.save());
     file.writeAsBytes(await pdf.save(), mode: FileMode.append);
+    Printing.sharePdf(bytes: await pdf.save());
     Fluttertoast.showToast(msg: "Downloaded!");
   }
 }
