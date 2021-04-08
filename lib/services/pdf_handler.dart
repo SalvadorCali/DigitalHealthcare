@@ -202,6 +202,7 @@ class PDFHandler {
         pageFormat: PdfPageFormat.a4,
         margin: EdgeInsets.all(0),
         build: (Context context) {
+          Fluttertoast.showToast(msg: "Attesa creazione!");
           return GridView(
               crossAxisCount: 2,
               childAspectRatio:
@@ -631,6 +632,7 @@ class PDFHandler {
 
   _downloadPDF(String name) async {
     //cancellare se già esiste il file
+    Fluttertoast.showToast(msg: "Qua!");
     var status = await Permission.storage.status;
     if (!status.isGranted) {
       await Permission.storage.request();
@@ -639,6 +641,7 @@ class PDFHandler {
         await DownloadsPathProvider.downloadsDirectory;
     String downloadPath = downloadsDirectory.path;
     File file = File("$downloadPath/$name.pdf");
+    Fluttertoast.showToast(msg: "Sono qui!");
     file.writeAsBytesSync(await pdf.save());
     Fluttertoast.showToast(msg: "Downloaded!");
   }
