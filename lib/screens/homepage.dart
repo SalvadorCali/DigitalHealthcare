@@ -137,7 +137,7 @@ class _HomepageState extends State<Homepage> {
   }
 
   downloadData() async {
-    await PDFHandler(qrData: qrCodeData, patient: patient).downloadData();
+    await PDFHandler(qrData: qrCodeData, patient: patient).downloadPDF("dati");
   }
 
   shareData() async {

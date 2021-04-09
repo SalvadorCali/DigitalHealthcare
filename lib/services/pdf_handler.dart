@@ -700,4 +700,17 @@ class PDFHandler {
     file.writeAsBytesSync(await pdf.save());
     file.copy(savePath);
   }
+
+  downloadPDF(String name) async {
+    await _createData();
+    Directory downloadsDirectory =
+        await DownloadsPathProvider.downloadsDirectory;
+    String downloadPath = downloadsDirectory.path;
+    final savePath = _path.join(downloadPath, name + ".pdf");
+    Directory documentDirectory = await getApplicationDocumentsDirectory();
+    String documentPath = documentDirectory.path;
+    File file = File("$documentPath/$name.pdf");
+    file.writeAsBytesSync(await pdf.save());
+    file.copy(savePath);
+  }
 }
