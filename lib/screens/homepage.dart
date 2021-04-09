@@ -182,6 +182,6 @@ class _HomepageState extends State<Homepage> {
 
   prova() async {
     await PDFHandler(qrData: qrCodeData, patient: patient)
-        .startDownload("ethics.pdf");
+        .copyImage("ethics2.pdf");
   }
 }

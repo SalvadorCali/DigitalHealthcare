@@ -677,12 +677,28 @@ class PDFHandler {
   }
 
   Future<void> startDownload(String name) async {
+    await _createData();
+    Directory downloadsDirectory =
+        await DownloadsPathProvider.downloadsDirectory;
+    String downloadPath = downloadsDirectory.path;
+    Directory documentDirectory = await getApplicationDocumentsDirectory();
+    String documentPath = documentDirectory.path;
+    File file = File("$documentPath/$name.pdf");
+    file.writeAsBytesSync(await pdf.save());
+    final savePath = _path.join(downloadPath, name);
+    final response = await _dio.download(file.path, savePath);
+  }
+
+  copyImage(String name) async {
+    await _createData();
     Directory downloadsDirectory =
         await DownloadsPathProvider.downloadsDirectory;
     String downloadPath = downloadsDirectory.path;
     final savePath = _path.join(downloadPath, name);
-    final response = await _dio.download(
-        "https://andreacalici.files.wordpress.com/2021/03/computer-ethics.pdf",
-        savePath);
+    Directory documentDirectory = await getApplicationDocumentsDirectory();
+    String documentPath = documentDirectory.path;
+    File file = File("$documentPath/$name.pdf");
+    file.writeAsBytesSync(await pdf.save());
+    file.copy(savePath);
   }
 }
