@@ -1,9 +1,11 @@
 import 'dart:io';
 
+import 'package:dio/dio.dart';
 import 'package:downloads_path_provider/downloads_path_provider.dart';
 import 'package:flutter/services.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:open_file/open_file.dart';
+import 'package:path/path.dart' as _path;
 import 'package:path_provider/path_provider.dart';
 import 'package:pdf/pdf.dart';
 import 'package:pdf/widgets.dart';
@@ -26,6 +28,8 @@ class PDFHandler {
 
   PDFHandler({this.patient, this.qrData});
 
+  final Dio _dio = Dio();
+
   //dati
   openData() async {
     await _createData();
@@ -36,6 +40,11 @@ class PDFHandler {
   downloadData() async {
     await _createData();
     await _downloadPDF(data);
+  }
+
+  shareData() async {
+    await _createData();
+    await _sharePDF(data);
   }
 
   _createData() {
@@ -70,6 +79,11 @@ class PDFHandler {
   downloadBracelet() async {
     await _createBracelet();
     await _downloadPDF(bracelet);
+  }
+
+  shareBracelet() async {
+    await _createBracelet();
+    await _sharePDF(bracelet);
   }
 
   _createBracelet() async {
@@ -145,8 +159,12 @@ class PDFHandler {
     await _downloadPDF(badge);
   }
 
+  shareBadge() async {
+    await _createBadge();
+    await _sharePDF(badge);
+  }
+
   _createBadge() async {
-    Fluttertoast.showToast(msg: "prima immagini");
     final mvi =
         (await rootBundle.load('assets/logos/mvi.png')).buffer.asUint8List();
     final ice =
@@ -154,12 +172,10 @@ class PDFHandler {
     final profile = (await rootBundle.load('assets/images/profile.jpeg'))
         .buffer
         .asUint8List();
-    Fluttertoast.showToast(msg: "dopo immagini");
     pdf.addPage(Page(
         pageFormat: PdfPageFormat.a4,
         margin: EdgeInsets.all(0),
         build: (Context context) {
-          Fluttertoast.showToast(msg: "pre creazione");
           return _blockFour(mvi, ice, profile);
         }));
   }
@@ -174,6 +190,11 @@ class PDFHandler {
   downloadCIS() async {
     await _createCIS();
     await _downloadPDF(cis);
+  }
+
+  shareCIS() async {
+    await _createCIS();
+    await _sharePDF(cis);
   }
 
   _createCIS() async {
@@ -203,7 +224,6 @@ class PDFHandler {
         pageFormat: PdfPageFormat.a4,
         margin: EdgeInsets.all(0),
         build: (Context context) {
-          Fluttertoast.showToast(msg: "Attesa creazione!");
           return GridView(
               crossAxisCount: 2,
               childAspectRatio:
@@ -602,6 +622,10 @@ class PDFHandler {
   }
 
   //general
+  openOnlinePDF(String name) async {
+    await canLaunch(name) ? await launch(name) : throw 'Could not launch';
+  }
+
   Future _savePDF(String name) async {
     Directory documentDirectory = await getApplicationDocumentsDirectory();
     String documentPath = documentDirectory.path;
@@ -613,27 +637,19 @@ class PDFHandler {
     try {
       var status = await Permission.storage.status;
       if (!status.isGranted) {
-        Fluttertoast.showToast(msg: "sono qui");
         await Permission.storage.request();
       }
       Directory documentDirectory = await getApplicationDocumentsDirectory();
-      Fluttertoast.showToast(msg: "ora qui");
       String documentPath = documentDirectory.path;
       File file = File("$documentPath/$name.pdf");
-      Fluttertoast.showToast(msg: "qui");
       await OpenFile.open(file.path, type: "application/pdf");
     } catch (e) {
       Fluttertoast.showToast(msg: e.toString());
     }
   }
 
-  openOnlinePDF(String name) async {
-    await canLaunch(name) ? await launch(name) : throw 'Could not launch';
-  }
-
-  Future<void> _downloadPDF(String name) async {
+  _downloadPDF(String name) async {
     //cancellare se già esiste il file
-    Fluttertoast.showToast(msg: "Qua!");
     var status = await Permission.storage.status;
     if (!status.isGranted) {
       await Permission.storage.request();
@@ -641,15 +657,32 @@ class PDFHandler {
     Directory downloadsDirectory =
         await DownloadsPathProvider.downloadsDirectory;
     String downloadPath = downloadsDirectory.path;
-    Directory prova = await getTemporaryDirectory();
-    String path = prova.path;
-    print(path);
     File file = File("$downloadPath/$name.pdf");
-    Fluttertoast.showToast(msg: "$path");
-    //file.writeAsBytesSync(await pdf.save());
     var filePDF = await pdf.save();
     file.writeAsBytes(filePDF, mode: FileMode.append);
-    Printing.sharePdf(bytes: filePDF);
     Fluttertoast.showToast(msg: "Downloaded!");
+  }
+
+  _sharePDF(String name) async {
+    var status = await Permission.storage.status;
+    if (!status.isGranted) {
+      await Permission.storage.request();
+    }
+    Directory documentDirectory = await getApplicationDocumentsDirectory();
+    String documentPath = documentDirectory.path;
+    File file = File("$documentPath/$name.pdf");
+    var filePDF = await pdf.save();
+    file.writeAsBytesSync(filePDF);
+    Printing.sharePdf(bytes: filePDF, filename: '$name.pdf');
+  }
+
+  Future<void> startDownload(String name) async {
+    Directory downloadsDirectory =
+        await DownloadsPathProvider.downloadsDirectory;
+    String downloadPath = downloadsDirectory.path;
+    final savePath = _path.join(downloadPath, name);
+    final response = await _dio.download(
+        "https://andreacalici.files.wordpress.com/2021/03/computer-ethics.pdf",
+        savePath);
   }
 }

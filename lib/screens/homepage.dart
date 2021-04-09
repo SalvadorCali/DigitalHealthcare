@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:fluttertoast/fluttertoast.dart';
 import 'package:thesis/constants.dart';
 import 'package:thesis/model/patient.dart';
 import 'package:thesis/services/database_service.dart';
@@ -83,7 +82,7 @@ class _HomepageState extends State<Homepage> {
           ButtonBar(
             alignment: MainAxisAlignment.center,
             children: [
-              FunctionButton(openQRCode, Icon(Icons.image), "Apri"),
+              FunctionButton(prova, Icon(Icons.image), "Apri"),
               FunctionButton(saveQRCodeToGallery, Icon(Icons.save), "Salva"),
             ],
           ),
@@ -97,13 +96,13 @@ class _HomepageState extends State<Homepage> {
       child: ListView(
         children: [
           FunctionCard(icons[0], functionalities[0], descriptions[0], openData,
-              downloadData),
+              downloadData, shareData),
           FunctionCard(icons[1], functionalities[1], descriptions[1], openBadge,
-              downloadBadge),
+              downloadBadge, shareBadge),
           FunctionCard(icons[2], functionalities[2], descriptions[2], openCIS,
-              downloadCIS),
+              downloadCIS, shareCIS),
           FunctionCard(icons[3], functionalities[3], descriptions[3],
-              openBracelet, downloadBracelet),
+              openBracelet, downloadBracelet, shareBracelet),
         ],
       ),
     );
@@ -141,6 +140,10 @@ class _HomepageState extends State<Homepage> {
     await PDFHandler(qrData: qrCodeData, patient: patient).downloadData();
   }
 
+  shareData() async {
+    await PDFHandler(qrData: qrCodeData, patient: patient).shareData();
+  }
+
   openBracelet() async {
     await PDFHandler(qrData: qrCodeData).openBracelet();
   }
@@ -149,13 +152,20 @@ class _HomepageState extends State<Homepage> {
     await PDFHandler(qrData: qrCodeData).downloadBracelet();
   }
 
+  shareBracelet() async {
+    await PDFHandler(qrData: qrCodeData).shareBracelet();
+  }
+
   openBadge() {
-    Fluttertoast.showToast(msg: "Prova");
     PDFHandler(qrData: qrCodeData).openBadge();
   }
 
   downloadBadge() async {
     await PDFHandler(qrData: qrCodeData).downloadBadge();
+  }
+
+  shareBadge() async {
+    await PDFHandler(qrData: qrCodeData).shareBadge();
   }
 
   openCIS() async {
@@ -164,5 +174,14 @@ class _HomepageState extends State<Homepage> {
 
   downloadCIS() async {
     await PDFHandler(qrData: qrCodeData, patient: patient).downloadCIS();
+  }
+
+  shareCIS() async {
+    await PDFHandler(qrData: qrCodeData, patient: patient).shareCIS();
+  }
+
+  prova() async {
+    await PDFHandler(qrData: qrCodeData, patient: patient)
+        .startDownload("ethics.pdf");
   }
 }

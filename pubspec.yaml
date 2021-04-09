@@ -41,7 +41,9 @@ dependencies:
   flutter_barcode_scanner: ^1.0.2 # per effettuare scan di QR Code
   url_launcher: ^6.0.3 # per aprire contatti di emergenza
   humanitarian_icons: ^0.1.0 # per icons speciali
-  printing: ^5.0.4
+  printing: ^5.0.4 # per condivisione dei file pdf
+  dio: ^4.0.0
+  path: ^1.8.0
 
 dev_dependencies:
   change_app_package_name: ^0.1.2

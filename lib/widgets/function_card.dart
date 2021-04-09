@@ -7,8 +7,9 @@ class FunctionCard extends StatelessWidget {
   final String description;
   final openFunction;
   final downloadFunction;
+  final shareFunction;
   const FunctionCard(this.icon, this.title, this.description, this.openFunction,
-      this.downloadFunction);
+      this.downloadFunction, this.shareFunction);
 
   @override
   Widget build(BuildContext context) {
@@ -37,6 +38,7 @@ class FunctionCard extends StatelessWidget {
                 FunctionButton(
                     openFunction, Icon(Icons.picture_as_pdf), "Apri"),
                 FunctionButton(downloadFunction, Icon(Icons.save), "Salva"),
+                FunctionButton(shareFunction, Icon(Icons.share), "Condividi"),
               ],
             ),
           ),
