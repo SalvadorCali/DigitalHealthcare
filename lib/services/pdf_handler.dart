@@ -690,15 +690,18 @@ class PDFHandler {
   }
 
   _downloadPDF(String name) async {
+    String nome = DateTime.now().millisecondsSinceEpoch.toString();
     Directory downloadsDirectory =
         await DownloadsPathProvider.downloadsDirectory;
     String downloadPath = downloadsDirectory.path;
-    final savePath = _path.join(downloadPath, name + ".pdf");
+    final savePath = _path.join(downloadPath, nome + ".pdf");
     Directory documentDirectory = await getApplicationDocumentsDirectory();
     String documentPath = documentDirectory.path;
-    File file = File("$documentPath/$name.pdf");
-    file.writeAsBytesSync(await pdf.save());
-    file.copy(savePath);
+    File file = File("$documentPath/$nome.pdf");
+    var filePDF = await pdf.save();
+    file.writeAsBytesSync(filePDF, mode: FileMode.append);
+    await file.copy(savePath);
+    Fluttertoast.showToast(msg: "Downloaded!");
   }
 
   downloadPDF(String name) async {
