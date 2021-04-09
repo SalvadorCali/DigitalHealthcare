@@ -690,10 +690,6 @@ class PDFHandler {
   }
 
   _downloadPDF(String name) async {
-    var status = await Permission.storage.status;
-    if (!status.isGranted) {
-      await Permission.storage.request();
-    }
     Directory downloadsDirectory =
         await DownloadsPathProvider.downloadsDirectory;
     String downloadPath = downloadsDirectory.path;
@@ -703,6 +699,5 @@ class PDFHandler {
     File file = File("$documentPath/$name.pdf");
     file.writeAsBytesSync(await pdf.save());
     file.copy(savePath);
-    Fluttertoast.showToast(msg: "Downloaded!");
   }
 }
