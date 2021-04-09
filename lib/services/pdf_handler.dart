@@ -1,6 +1,5 @@
 import 'dart:io';
 
-import 'package:dio/dio.dart';
 import 'package:downloads_path_provider/downloads_path_provider.dart';
 import 'package:flutter/services.dart';
 import 'package:fluttertoast/fluttertoast.dart';
@@ -27,8 +26,6 @@ class PDFHandler {
   final String qrData;
 
   PDFHandler({this.patient, this.qrData});
-
-  final Dio _dio = Dio();
 
   //dati
   openData() async {
@@ -648,47 +645,6 @@ class PDFHandler {
     }
   }
 
-  /* _downloadPDF(String name) async {
-    //cancellare se già esiste il file
-    var status = await Permission.storage.status;
-    if (!status.isGranted) {
-      await Permission.storage.request();
-    }
-    Directory downloadsDirectory =
-        await DownloadsPathProvider.downloadsDirectory;
-    String downloadPath = downloadsDirectory.path;
-    File file = File("$downloadPath/$name.pdf");
-    var filePDF = await pdf.save();
-    file.writeAsBytes(filePDF, mode: FileMode.append);
-    Fluttertoast.showToast(msg: "Downloaded!");
-  } */
-
-  _sharePDF(String name) async {
-    var status = await Permission.storage.status;
-    if (!status.isGranted) {
-      await Permission.storage.request();
-    }
-    Directory documentDirectory = await getApplicationDocumentsDirectory();
-    String documentPath = documentDirectory.path;
-    File file = File("$documentPath/$name.pdf");
-    var filePDF = await pdf.save();
-    file.writeAsBytesSync(filePDF);
-    Printing.sharePdf(bytes: filePDF, filename: '$name.pdf');
-  }
-
-  Future<void> startDownload(String name) async {
-    await _createData();
-    Directory downloadsDirectory =
-        await DownloadsPathProvider.downloadsDirectory;
-    String downloadPath = downloadsDirectory.path;
-    Directory documentDirectory = await getApplicationDocumentsDirectory();
-    String documentPath = documentDirectory.path;
-    File file = File("$documentPath/$name.pdf");
-    file.writeAsBytesSync(await pdf.save());
-    final savePath = _path.join(downloadPath, name + ".pdf");
-    final response = await _dio.download(file.path, savePath);
-  }
-
   _downloadPDF(String name) async {
     String nome = DateTime.now().millisecondsSinceEpoch.toString();
     Directory downloadsDirectory =
@@ -704,16 +660,16 @@ class PDFHandler {
     Fluttertoast.showToast(msg: "Downloaded!");
   }
 
-  downloadPDF(String name) async {
-    await _createData();
-    Directory downloadsDirectory =
-        await DownloadsPathProvider.downloadsDirectory;
-    String downloadPath = downloadsDirectory.path;
-    final savePath = _path.join(downloadPath, name + ".pdf");
+  _sharePDF(String name) async {
+    var status = await Permission.storage.status;
+    if (!status.isGranted) {
+      await Permission.storage.request();
+    }
     Directory documentDirectory = await getApplicationDocumentsDirectory();
     String documentPath = documentDirectory.path;
     File file = File("$documentPath/$name.pdf");
-    file.writeAsBytesSync(await pdf.save());
-    file.copy(savePath);
+    var filePDF = await pdf.save();
+    file.writeAsBytesSync(filePDF);
+    Printing.sharePdf(bytes: filePDF, filename: '$name.pdf');
   }
 }
