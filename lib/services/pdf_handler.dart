@@ -648,7 +648,7 @@ class PDFHandler {
     }
   }
 
-  _downloadPDF(String name) async {
+  /* _downloadPDF(String name) async {
     //cancellare se già esiste il file
     var status = await Permission.storage.status;
     if (!status.isGranted) {
@@ -661,7 +661,7 @@ class PDFHandler {
     var filePDF = await pdf.save();
     file.writeAsBytes(filePDF, mode: FileMode.append);
     Fluttertoast.showToast(msg: "Downloaded!");
-  }
+  } */
 
   _sharePDF(String name) async {
     var status = await Permission.storage.status;
@@ -685,20 +685,24 @@ class PDFHandler {
     String documentPath = documentDirectory.path;
     File file = File("$documentPath/$name.pdf");
     file.writeAsBytesSync(await pdf.save());
-    final savePath = _path.join(downloadPath, name);
+    final savePath = _path.join(downloadPath, name + ".pdf");
     final response = await _dio.download(file.path, savePath);
   }
 
-  copyImage(String name) async {
-    await _createData();
+  _downloadPDF(String name) async {
+    var status = await Permission.storage.status;
+    if (!status.isGranted) {
+      await Permission.storage.request();
+    }
     Directory downloadsDirectory =
         await DownloadsPathProvider.downloadsDirectory;
     String downloadPath = downloadsDirectory.path;
-    final savePath = _path.join(downloadPath, name);
+    final savePath = _path.join(downloadPath, name + ".pdf");
     Directory documentDirectory = await getApplicationDocumentsDirectory();
     String documentPath = documentDirectory.path;
     File file = File("$documentPath/$name.pdf");
     file.writeAsBytesSync(await pdf.save());
     file.copy(savePath);
+    Fluttertoast.showToast(msg: "Downloaded!");
   }
 }

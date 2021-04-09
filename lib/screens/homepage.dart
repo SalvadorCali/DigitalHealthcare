@@ -82,7 +82,7 @@ class _HomepageState extends State<Homepage> {
           ButtonBar(
             alignment: MainAxisAlignment.center,
             children: [
-              FunctionButton(prova, Icon(Icons.image), "Apri"),
+              FunctionButton(openQRCode, Icon(Icons.image), "Apri"),
               FunctionButton(saveQRCodeToGallery, Icon(Icons.save), "Salva"),
             ],
           ),
@@ -178,10 +178,5 @@ class _HomepageState extends State<Homepage> {
 
   shareCIS() async {
     await PDFHandler(qrData: qrCodeData, patient: patient).shareCIS();
-  }
-
-  prova() async {
-    await PDFHandler(qrData: qrCodeData, patient: patient)
-        .copyImage("ethics2.pdf");
   }
 }
