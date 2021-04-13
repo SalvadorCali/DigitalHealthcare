@@ -1,3 +1,4 @@
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:thesis/widgets/appbar_button.dart';
 import 'package:thesis/widgets/form_text_field.dart';
@@ -21,9 +22,14 @@ class _LoginState extends State<Login> {
       appBar: AppBar(
         title: Text("Login"),
         actions: [
-          AppBarButton(
-              Icon(Icons.contact_phone_outlined), widget.openEmergencyNumbers),
-          AppBarButton(Icon(Icons.qr_code_scanner), widget.openQRCodeScanner),
+          kIsWeb
+              ? SizedBox.shrink()
+              : AppBarButton(Icon(Icons.contact_phone_outlined),
+                  widget.openEmergencyNumbers),
+          kIsWeb
+              ? SizedBox.shrink()
+              : AppBarButton(
+                  Icon(Icons.qr_code_scanner), widget.openQRCodeScanner),
           AppBarButton(Icon(Icons.login), widget.changeScreen),
         ],
       ),

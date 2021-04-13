@@ -1,3 +1,4 @@
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:thesis/constants.dart';
 import 'package:thesis/model/patient.dart';
@@ -36,10 +37,14 @@ class _HomepageState extends State<Homepage> {
           appBar: AppBar(
             title: Text("Thesis"),
             actions: [
-              AppBarButton(Icon(Icons.contact_phone_outlined),
-                  widget.openEmergencyNumbers),
-              AppBarButton(
-                  Icon(Icons.qr_code_scanner), widget.openQRCodeScanner),
+              kIsWeb
+                  ? SizedBox.shrink()
+                  : AppBarButton(Icon(Icons.contact_phone_outlined),
+                      widget.openEmergencyNumbers),
+              kIsWeb
+                  ? SizedBox.shrink()
+                  : AppBarButton(
+                      Icon(Icons.qr_code_scanner), widget.openQRCodeScanner),
               AppBarButton(Icon(Icons.logout), widget.changeScreen),
             ],
             bottom: TabBar(

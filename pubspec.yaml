@@ -42,8 +42,8 @@ dependencies:
   url_launcher: ^6.0.3 # per aprire contatti di emergenza
   humanitarian_icons: ^0.1.0 # per icons speciali
   printing: ^5.0.4 # per condivisione dei file pdf
-  dio: ^4.0.0
-  path: ^1.8.0
+  path: ^1.8.0 # per unire due percorsi
+  universal_html: ^2.0.8 # per gestire pdf via web
 
 dev_dependencies:
   change_app_package_name: ^0.1.2

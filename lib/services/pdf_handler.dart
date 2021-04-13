@@ -1,10 +1,12 @@
 import 'dart:io';
 
 import 'package:downloads_path_provider/downloads_path_provider.dart';
+import 'package:flutter/foundation.dart';
 import 'package:flutter/services.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:open_file/open_file.dart';
 import 'package:path/path.dart' as _path;
+import 'package:universal_html/html.dart' as html;
 import 'package:path_provider/path_provider.dart';
 import 'package:pdf/pdf.dart';
 import 'package:pdf/widgets.dart';
@@ -30,13 +32,21 @@ class PDFHandler {
   //dati
   openData() async {
     await _createData();
-    await _savePDF(data);
-    await _openPDF(data);
+    if (kIsWeb) {
+      await _openPDFWeb(data);
+    } else {
+      await _savePDF(data);
+      await _openPDF(data);
+    }
   }
 
   downloadData() async {
     await _createData();
-    await _downloadPDF(data);
+    if (kIsWeb) {
+      await _downloadPDFWeb(data);
+    } else {
+      await _downloadPDF(data);
+    }
   }
 
   shareData() async {
@@ -645,6 +655,18 @@ class PDFHandler {
     }
   }
 
+  _openPDFWeb(String name) async {
+    try {
+      final bytes = await pdf.save();
+      final blob = html.Blob([bytes], 'application/pdf');
+      final url = html.Url.createObjectUrlFromBlob(blob);
+      html.window.open(url, "_blank");
+      html.Url.revokeObjectUrl(url);
+    } catch (e) {
+      Fluttertoast.showToast(msg: e.toString());
+    }
+  }
+
   _downloadPDF(String name) async {
     String nome = DateTime.now().millisecondsSinceEpoch.toString();
     Directory downloadsDirectory =
@@ -658,6 +680,24 @@ class PDFHandler {
     file.writeAsBytesSync(filePDF, mode: FileMode.append);
     await file.copy(savePath);
     Fluttertoast.showToast(msg: "Downloaded!");
+  }
+
+  _downloadPDFWeb(String name) async {
+    try {
+      final bytes = await pdf.save();
+      final blob = html.Blob([bytes], 'application/pdf');
+      final url = html.Url.createObjectUrlFromBlob(blob);
+      final anchor = html.document.createElement('a') as html.AnchorElement
+        ..href = url
+        ..style.display = 'none'
+        ..download = 'some_name.pdf';
+      html.document.body.children.add(anchor);
+      anchor.click();
+      html.document.body.children.remove(anchor);
+      html.Url.revokeObjectUrl(url);
+    } catch (e) {
+      Fluttertoast.showToast(msg: e.toString());
+    }
   }
 
   _sharePDF(String name) async {
