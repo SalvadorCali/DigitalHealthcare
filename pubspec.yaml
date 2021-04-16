@@ -44,6 +44,7 @@ dependencies:
   printing: ^5.0.4 # per condivisione dei file pdf
   path: ^1.8.0 # per unire due percorsi
   universal_html: ^2.0.8 # per gestire pdf via web
+  material_floating_search_bar: ^0.3.4 # per la barra di ricerca
 
 dev_dependencies:
   change_app_package_name: ^0.1.2

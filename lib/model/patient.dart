@@ -101,3 +101,19 @@ Patient createPatient() {
       "Graminacee",
       "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Ut ac molestie lorem, eget semper odio. In purus lacus, scelerisque quis nisl ac, maximus cursus orci. Vestibulum vitae libero erat.");
 }
+
+Patient createPatientWithName(String name, String surname) {
+  return Patient(
+      name,
+      surname,
+      "19/04/1996",
+      "A",
+      "-",
+      "Mamma",
+      333,
+      "Papà",
+      444,
+      ["Patologia1", "Patologia2"],
+      "Graminacee",
+      "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Ut ac molestie lorem, eget semper odio. In purus lacus, scelerisque quis nisl ac, maximus cursus orci. Vestibulum vitae libero erat.");
+}

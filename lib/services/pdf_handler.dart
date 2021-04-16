@@ -6,6 +6,7 @@ import 'package:flutter/services.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:open_file/open_file.dart';
 import 'package:path/path.dart' as _path;
+//import 'package:printing/printing_web.dart';
 import 'package:universal_html/html.dart' as html;
 import 'package:path_provider/path_provider.dart';
 import 'package:pdf/pdf.dart';
@@ -26,8 +27,9 @@ class PDFHandler {
   final pdf = Document();
   final Patient patient;
   final String qrData;
+  final List<String> qrDataList;
 
-  PDFHandler({this.patient, this.qrData});
+  PDFHandler({this.patient, this.qrData, this.qrDataList});
 
   //dati
   openData() async {
@@ -51,7 +53,16 @@ class PDFHandler {
 
   shareData() async {
     await _createData();
-    await _sharePDF(data);
+    if (kIsWeb) {
+      await _sharePDFWeb(data);
+    } else {
+      await _sharePDF(data);
+    }
+  }
+
+  printData() async {
+    await _createData();
+    await _printPDF(data);
   }
 
   _createData() {
@@ -79,18 +90,45 @@ class PDFHandler {
   //braccialetto
   openBracelet() async {
     await _createBracelet();
-    await _savePDF(bracelet);
-    await _openPDF(bracelet);
+    if (kIsWeb) {
+      await _openPDFWeb(bracelet);
+    } else {
+      await _savePDF(bracelet);
+      await _openPDF(bracelet);
+    }
+  }
+
+  openMultipleBracelet() async {
+    await _createMultipleBracelet();
+    if (kIsWeb) {
+      await _openPDFWeb(bracelet);
+    } else {
+      await _savePDF(bracelet);
+      await _openPDF(bracelet);
+    }
   }
 
   downloadBracelet() async {
     await _createBracelet();
-    await _downloadPDF(bracelet);
+    if (kIsWeb) {
+      await _downloadPDFWeb(bracelet);
+    } else {
+      await _downloadPDF(bracelet);
+    }
   }
 
   shareBracelet() async {
     await _createBracelet();
-    await _sharePDF(bracelet);
+    if (kIsWeb) {
+      await _sharePDFWeb(bracelet);
+    } else {
+      await _sharePDF(bracelet);
+    }
+  }
+
+  printBracelet() async {
+    await _createBracelet();
+    await _printPDF(bracelet);
   }
 
   _createBracelet() async {
@@ -144,6 +182,66 @@ class PDFHandler {
         }));
   }
 
+  _createMultipleBracelet() async {
+    final municipioTre =
+        (await rootBundle.load('assets/logos/municipio_tre.png'))
+            .buffer
+            .asUint8List();
+    final comuneMilano =
+        (await rootBundle.load('assets/logos/comune_milano.png'))
+            .buffer
+            .asUint8List();
+    final mvi =
+        (await rootBundle.load('assets/logos/mvi.png')).buffer.asUint8List();
+    final polimi = (await rootBundle.load('assets/logos/polimi2.png'))
+        .buffer
+        .asUint8List();
+    final areu =
+        (await rootBundle.load('assets/logos/areu2.jpg')).buffer.asUint8List();
+    final centodiciotto =
+        (await rootBundle.load('assets/logos/118.jpg')).buffer.asUint8List();
+    pdf.addPage(MultiPage(
+        pageFormat: PdfPageFormat.a4,
+        margin: EdgeInsets.all(0),
+        build: (Context context) => [
+              ...generateBracelets(
+                  municipioTre, comuneMilano, mvi, polimi, areu, centodiciotto),
+            ]));
+  }
+
+  List<Widget> generateBracelets(
+      municipioTre, comuneMilano, mvi, polimi, areu, centodiciotto) {
+    List<Widget> widgets = [];
+    qrDataList.forEach((element) {
+      widgets.add(Row(children: [
+        Container(
+            decoration:
+                BoxDecoration(border: Border.all(color: PdfColors.black)),
+            child: Row(children: [
+              _braceletLogo(municipioTre),
+              _braceletLogo(comuneMilano),
+              _braceletLogo(mvi),
+              _braceletLogo(polimi),
+              Container(
+                width: (PdfPageFormat.a4.width / 1.83) / 7,
+                height: PdfPageFormat.a4.height / 13.68,
+                child: Padding(
+                    padding: EdgeInsets.all(2),
+                    child: BarcodeWidget(
+                      data: element,
+                      width: (PdfPageFormat.a4.width / 1.83) / 7,
+                      height: PdfPageFormat.a4.height / 13.68,
+                      barcode: Barcode.qrCode(),
+                    )),
+              ),
+              _braceletLogo(areu),
+              _braceletLogo(centodiciotto),
+            ])),
+      ]));
+    });
+    return widgets;
+  }
+
   Container _braceletLogo(image) {
     return Container(
         width: (PdfPageFormat.a4.width / 1.83) / 7,
@@ -157,18 +255,35 @@ class PDFHandler {
   //badge
   openBadge() async {
     await _createBadge();
-    await _savePDF(badge);
-    await _openPDF(badge);
+    if (kIsWeb) {
+      await _openPDFWeb(badge);
+    } else {
+      await _savePDF(badge);
+      await _openPDF(badge);
+    }
   }
 
   downloadBadge() async {
     await _createBadge();
-    await _downloadPDF(badge);
+    if (kIsWeb) {
+      await _downloadPDFWeb(badge);
+    } else {
+      await _downloadPDF(badge);
+    }
   }
 
   shareBadge() async {
     await _createBadge();
-    await _sharePDF(badge);
+    if (kIsWeb) {
+      await _sharePDFWeb(badge);
+    } else {
+      await _sharePDF(badge);
+    }
+  }
+
+  printBadge() async {
+    await _createBadge();
+    await _printPDF(badge);
   }
 
   _createBadge() async {
@@ -190,18 +305,35 @@ class PDFHandler {
   //cis
   openCIS() async {
     await _createCIS();
-    await _savePDF(cis);
-    await _openPDF(cis);
+    if (kIsWeb) {
+      await _openPDFWeb(cis);
+    } else {
+      await _savePDF(cis);
+      await _openPDF(cis);
+    }
   }
 
   downloadCIS() async {
     await _createCIS();
-    await _downloadPDF(cis);
+    if (kIsWeb) {
+      await _downloadPDFWeb(cis);
+    } else {
+      await _downloadPDF(cis);
+    }
   }
 
   shareCIS() async {
     await _createCIS();
-    await _sharePDF(cis);
+    if (kIsWeb) {
+      await _sharePDFWeb(cis);
+    } else {
+      await _sharePDF(cis);
+    }
+  }
+
+  printCIS() async {
+    await _createCIS();
+    await _printPDF(cis);
   }
 
   _createCIS() async {
@@ -690,7 +822,7 @@ class PDFHandler {
       final anchor = html.document.createElement('a') as html.AnchorElement
         ..href = url
         ..style.display = 'none'
-        ..download = 'some_name.pdf';
+        ..download = '$name.pdf';
       html.document.body.children.add(anchor);
       anchor.click();
       html.document.body.children.remove(anchor);
@@ -711,5 +843,17 @@ class PDFHandler {
     var filePDF = await pdf.save();
     file.writeAsBytesSync(filePDF);
     Printing.sharePdf(bytes: filePDF, filename: '$name.pdf');
+  }
+
+  _sharePDFWeb(String name) async {
+    final bytes = await pdf.save();
+    Printing.layoutPdf(onLayout: (_) => bytes);
+    /* await PrintingPlugin().layoutPdf(
+        Printer(url: "default"), (_) => bytes, name, PdfPageFormat.a4, true); */
+  }
+
+  _printPDF(String name) async {
+    final bytes = await pdf.save();
+    Printing.layoutPdf(onLayout: (_) => bytes);
   }
 }

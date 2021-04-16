@@ -7,8 +7,10 @@ import 'package:thesis/widgets/function_button.dart';
 class Login extends StatefulWidget {
   final openQRCodeScanner;
   final openEmergencyNumbers;
-  final changeScreen;
-  Login(this.openQRCodeScanner, this.openEmergencyNumbers, this.changeScreen);
+  final setLogged;
+  final setVolunteer;
+  Login(this.openQRCodeScanner, this.openEmergencyNumbers, this.setLogged,
+      this.setVolunteer);
 
   @override
   _LoginState createState() => _LoginState();
@@ -30,7 +32,8 @@ class _LoginState extends State<Login> {
               ? SizedBox.shrink()
               : AppBarButton(
                   Icon(Icons.qr_code_scanner), widget.openQRCodeScanner),
-          AppBarButton(Icon(Icons.login), widget.changeScreen),
+          AppBarButton(Icon(Icons.login), widget.setLogged),
+          AppBarButton(Icon(Icons.login), widget.setVolunteer),
         ],
       ),
       body: _buildBody(),
@@ -45,13 +48,14 @@ class _LoginState extends State<Login> {
       child: Column(
         mainAxisAlignment: MainAxisAlignment.center,
         children: [
-          Container(
+          //logo
+          /* Container(
             width: MediaQuery.of(context).size.width / 2,
             child: Image.asset(
               "assets/images/logo.png",
               fit: BoxFit.fitWidth,
             ),
-          ),
+          ), */
           Card(
             clipBehavior: Clip.antiAlias,
             child: Container(

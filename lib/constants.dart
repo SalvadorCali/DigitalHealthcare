@@ -22,7 +22,7 @@ List<Icon> icons = [
   Icon(Icons.person),
   Icon(Icons.badge),
   Icon(Icons.portrait),
-  Icon(Icons.qr_code_rounded),
+  Icon(Icons.calendar_view_day),
 ];
 
 String formatDate(DateTime date) {

@@ -9,6 +9,7 @@ import 'package:thesis/widgets/appbar_button.dart';
 import 'package:thesis/widgets/covid_tile.dart';
 import 'package:thesis/widgets/function_button.dart';
 import 'package:thesis/widgets/function_card.dart';
+import 'package:thesis/widgets/processing_indicator.dart';
 
 class Homepage extends StatefulWidget {
   final openQRCodeScanner;
@@ -25,8 +26,10 @@ class _HomepageState extends State<Homepage> {
   // 1) ottengo dati da Firebase
   // 2) creo Patient
   // 3) passo Patient per usarne dati
+
   final Patient patient = createPatient();
   String qrCodeData;
+  bool processing = false;
 
   @override
   Widget build(BuildContext context) {
@@ -35,7 +38,7 @@ class _HomepageState extends State<Homepage> {
         length: 3,
         child: Scaffold(
           appBar: AppBar(
-            title: Text("Thesis"),
+            title: Text("Homepage"),
             actions: [
               kIsWeb
                   ? SizedBox.shrink()
@@ -48,11 +51,17 @@ class _HomepageState extends State<Homepage> {
               AppBarButton(Icon(Icons.logout), widget.changeScreen),
             ],
             bottom: TabBar(
-              tabs: [
-                Tab(icon: Icon(Icons.qr_code)),
-                Tab(icon: Icon(Icons.info)),
-                Tab(icon: Icon(Icons.coronavirus)),
-              ],
+              tabs: kIsWeb
+                  ? [
+                      Tab(icon: Icon(Icons.qr_code), text: "Codice QR"),
+                      Tab(icon: Icon(Icons.info), text: "Informazioni"),
+                      Tab(icon: Icon(Icons.coronavirus), text: "Covid19"),
+                    ]
+                  : [
+                      Tab(icon: Icon(Icons.qr_code)),
+                      Tab(icon: Icon(Icons.info)),
+                      Tab(icon: Icon(Icons.coronavirus)),
+                    ],
             ),
           ),
           body: FutureBuilder<String>(
@@ -97,20 +106,22 @@ class _HomepageState extends State<Homepage> {
   }
 
   Widget _functionalitiesScreen() {
-    return Center(
-      child: ListView(
-        children: [
-          FunctionCard(icons[0], functionalities[0], descriptions[0], openData,
-              downloadData, shareData),
-          FunctionCard(icons[1], functionalities[1], descriptions[1], openBadge,
-              downloadBadge, shareBadge),
-          FunctionCard(icons[2], functionalities[2], descriptions[2], openCIS,
-              downloadCIS, shareCIS),
-          FunctionCard(icons[3], functionalities[3], descriptions[3],
-              openBracelet, downloadBracelet, shareBracelet),
-        ],
-      ),
-    );
+    return processing
+        ? ProcessingIndicator("Prova")
+        : Center(
+            child: ListView(
+              children: [
+                FunctionCard(icons[0], functionalities[0], descriptions[0],
+                    openData, downloadData, shareData),
+                FunctionCard(icons[1], functionalities[1], descriptions[1],
+                    openBadge, downloadBadge, shareBadge),
+                FunctionCard(icons[2], functionalities[2], descriptions[2],
+                    openCIS, downloadCIS, shareCIS),
+                FunctionCard(icons[3], functionalities[3], descriptions[3],
+                    openBracelet, downloadBracelet, shareBracelet),
+              ],
+            ),
+          );
   }
 
   Widget _covidScreen() {
@@ -160,8 +171,10 @@ class _HomepageState extends State<Homepage> {
     await PDFHandler(qrData: qrCodeData).shareBracelet();
   }
 
-  openBadge() {
-    PDFHandler(qrData: qrCodeData).openBadge();
+  openBadge() async {
+    _setProcessing(true);
+    await PDFHandler(qrData: qrCodeData).openBadge();
+    _setProcessing(false);
   }
 
   downloadBadge() async {
@@ -169,7 +182,9 @@ class _HomepageState extends State<Homepage> {
   }
 
   shareBadge() async {
+    _setProcessing(true);
     await PDFHandler(qrData: qrCodeData).shareBadge();
+    _setProcessing(false);
   }
 
   openCIS() async {
@@ -181,6 +196,14 @@ class _HomepageState extends State<Homepage> {
   }
 
   shareCIS() async {
+    _setProcessing(true);
     await PDFHandler(qrData: qrCodeData, patient: patient).shareCIS();
+    _setProcessing(false);
+  }
+
+  _setProcessing(bool status) {
+    setState(() {
+      processing = status;
+    });
   }
 }
