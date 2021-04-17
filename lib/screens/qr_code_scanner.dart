@@ -91,22 +91,6 @@ class _QRCodeScannerState extends State<QRCodeScanner> {
     );
   }
 
-  Widget _createList() {
-    List<String> patientList = qrCodeDataFake.split("\n");
-    return ListView.builder(
-      itemCount: patientList.length,
-      itemBuilder: (context, index) {
-        return Card(
-          clipBehavior: Clip.antiAlias,
-          child: ListTile(
-            title: Text('${patientList[index]}'),
-            trailing: Text(information[index]),
-          ),
-        );
-      },
-    );
-  }
-
   _scanQRCode() async {
     try {
       final qrCode = await FlutterBarcodeScanner.scanBarcode(

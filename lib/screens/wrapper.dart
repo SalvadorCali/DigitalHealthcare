@@ -1,3 +1,4 @@
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:thesis/screens/emergency_numbers.dart';
 import 'package:thesis/screens/homepage.dart';
@@ -11,13 +12,31 @@ class Wrapper extends StatefulWidget {
 }
 
 class _WrapperState extends State<Wrapper> {
-  bool logged = true;
+  bool logged = false;
   bool volunteer = false;
+
+  @override
+  void initState() {
+    FirebaseAuth.instance.authStateChanges().listen((User user) {
+      if (user == null) {
+        setState(() {
+          logged = false;
+        });
+      } else {
+        setState(() {
+          logged = true;
+        });
+      }
+    });
+    super.initState();
+  }
+
   @override
   Widget build(BuildContext context) {
-    if (logged)
+    if (logged) {
+      print("sono in home");
       return Homepage(openQRCodeScanner, openEmergencyNumbers, setLogged);
-    else if (volunteer)
+    } else if (volunteer)
       return Volunteer(setVolunteer);
     else
       return Login(
@@ -38,10 +57,11 @@ class _WrapperState extends State<Wrapper> {
     );
   }
 
-  setLogged() {
-    setState(() {
+  setLogged() async {
+    await FirebaseAuth.instance.signOut();
+    /* setState(() {
       logged = !logged;
-    });
+    }); */
   }
 
   setVolunteer() {

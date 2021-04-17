@@ -114,42 +114,50 @@ class _HomepageState extends State<Homepage> {
                 children: [
                   Row(
                     children: [
-                      FunctionCard(
-                          icons[0],
-                          functionalities[0],
-                          descriptions[0],
-                          openData,
-                          downloadData,
-                          printData,
-                          shareData),
-                      FunctionCard(
-                          icons[1],
-                          functionalities[1],
-                          descriptions[1],
-                          openBadge,
-                          downloadBadge,
-                          printBadge,
-                          shareBadge),
+                      Flexible(
+                        child: FunctionCard(
+                            icons[0],
+                            functionalities[0],
+                            descriptions[0],
+                            openData,
+                            downloadData,
+                            printData,
+                            shareData),
+                      ),
+                      Flexible(
+                        child: FunctionCard(
+                            icons[1],
+                            functionalities[1],
+                            descriptions[1],
+                            openBadge,
+                            downloadBadge,
+                            printBadge,
+                            shareBadge),
+                      ),
                     ],
                   ),
                   Row(
                     children: [
-                      FunctionCard(
-                          icons[2],
-                          functionalities[2],
-                          descriptions[2],
-                          openCIS,
-                          downloadCIS,
-                          printCIS,
-                          shareCIS),
-                      FunctionCard(
-                          icons[3],
-                          functionalities[3],
-                          descriptions[3],
-                          openBracelet,
-                          downloadBracelet,
-                          printBracelet,
-                          shareBracelet),
+                      Flexible(
+                        child: FunctionCard(
+                            icons[2],
+                            functionalities[2],
+                            descriptions[2],
+                            openCIS,
+                            downloadCIS,
+                            printCIS,
+                            shareCIS),
+                      ),
+                      Flexible(
+                        child: FunctionCard(
+                            icons[3],
+                            functionalities[3],
+                            descriptions[3],
+                            openBracelet,
+                            downloadBracelet,
+                            printBracelet,
+                            shareBracelet),
+                      ),
                     ],
                   )
                 ],

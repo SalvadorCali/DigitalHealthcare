@@ -29,6 +29,7 @@ dependencies:
   # Use with the CupertinoIcons class for iOS style icons.
   cupertino_icons: ^1.0.2
   firebase_core: ^1.0.2 # per sincronizzare con Firebase
+  firebase_auth: ^1.1.0 # per gestire autenticazione
   cloud_firestore: ^1.0.3 # per usare database
   path_provider: ^2.0.1 # per ottenere cartelle di sistema
   pdf: ^3.0.1 # per generazione di pdf

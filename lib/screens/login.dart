@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_login/flutter_login.dart';
-import 'package:thesis/screens/login_screen.dart';
+import 'package:thesis/services/auth_service.dart';
 
 class Login extends StatelessWidget {
   final openQRCodeScanner;
@@ -13,7 +13,7 @@ class Login extends StatelessWidget {
   Duration get loginTime => Duration(milliseconds: 2250);
 
   Future<String> _authUser(LoginData data) {
-    setLogged();
+    AuthService().login(data.name, data.password);
     return null;
     /* print('Name: ${data.name}, Password: ${data.password}');
     return Future.delayed(loginTime).then((_) {
@@ -43,11 +43,21 @@ class Login extends StatelessWidget {
   Widget build(BuildContext context) {
     return Center(
       child: FlutterLogin(
-        logo: 'assets/images/logo2.png',
+        //logo: 'assets/images/logo2.png',
+        title: "PSS + CIS",
         onLogin: _authUser,
         onSignup: _authUser,
+        hideSignUpButton: true,
         onSubmitAnimationCompleted: () {},
         onRecoverPassword: _recoverPassword,
+        messages: LoginMessages(
+          goBackButton: "INDIETRO",
+          forgotPasswordButton: "Password dimenticata?",
+          recoverPasswordIntro: "Resetta la tua password qui.",
+          recoverPasswordDescription:
+              "Ti invieeremo un link per il reset della password a questo indirizzo e-mail.",
+          recoverPasswordButton: "RESET",
+        ),
         loginProviders: [
           LoginProvider(
             icon: Icons.person,
