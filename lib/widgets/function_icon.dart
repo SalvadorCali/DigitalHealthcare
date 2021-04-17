@@ -1,13 +1,18 @@
 import 'package:flutter/material.dart';
 
 class FunctionIcon extends StatelessWidget {
+  final onPressed;
   final Icon icon;
-  const FunctionIcon({Key key, this.icon}) : super(key: key);
+  final String tooltip;
+  const FunctionIcon(this.onPressed, this.icon, this.tooltip);
 
   @override
   Widget build(BuildContext context) {
-    return Container(
-      child: icon,
+    return IconButton(
+      color: Theme.of(context).primaryColor,
+      icon: icon,
+      tooltip: tooltip,
+      onPressed: onPressed,
     );
   }
 }

@@ -19,6 +19,7 @@ import 'package:url_launcher/url_launcher.dart';
 
 class PDFHandler {
   //A4: 297mm x 210mm
+  final String qrCode = "qr_code";
   final String data = "dati";
   final String bracelet = "braccialetto";
   final String cis = "cis";
@@ -31,7 +32,27 @@ class PDFHandler {
 
   PDFHandler({this.patient, this.qrData, this.qrDataList});
 
-  //dati
+  printQRCode() async {
+    await _createQRCode();
+    await _printPDF(qrCode);
+  }
+
+  _createQRCode() async {
+    pdf.addPage(Page(
+        pageFormat: PdfPageFormat.a4,
+        margin: EdgeInsets.all(5),
+        build: (Context context) {
+          return Padding(
+              padding: EdgeInsets.all(2),
+              child: BarcodeWidget(
+                data: qrData,
+                width: 150,
+                height: 150,
+                barcode: Barcode.qrCode(),
+              ));
+        }));
+  }
+
   openData() async {
     await _createData();
     if (kIsWeb) {

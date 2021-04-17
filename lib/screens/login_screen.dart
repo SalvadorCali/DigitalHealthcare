@@ -1,21 +1,17 @@
 import 'package:flutter/material.dart';
+import 'package:cupertino_icons/cupertino_icons.dart';
 import 'package:flutter_login/flutter_login.dart';
-import 'package:thesis/screens/login_screen.dart';
 
-class Login extends StatelessWidget {
-  final openQRCodeScanner;
-  final openEmergencyNumbers;
-  final setLogged;
-  final setVolunteer;
-  Login(this.openQRCodeScanner, this.openEmergencyNumbers, this.setLogged,
-      this.setVolunteer);
+const users = const {
+  'dribbble@gmail.com': '12345',
+  'hunter@gmail.com': 'hunter',
+};
 
+class LoginScreen extends StatelessWidget {
   Duration get loginTime => Duration(milliseconds: 2250);
 
   Future<String> _authUser(LoginData data) {
-    setLogged();
-    return null;
-    /* print('Name: ${data.name}, Password: ${data.password}');
+    print('Name: ${data.name}, Password: ${data.password}');
     return Future.delayed(loginTime).then((_) {
       if (!users.containsKey(data.name)) {
         return 'Username not exists';
@@ -24,19 +20,17 @@ class Login extends StatelessWidget {
         return 'Password does not match';
       }
       return null;
-    }); */
+    });
   }
 
   Future<String> _recoverPassword(String name) {
-    setVolunteer();
-    return null;
-    /* print('Name: $name');
+    print('Name: $name');
     return Future.delayed(loginTime).then((_) {
       if (!users.containsKey(name)) {
         return 'Username not exists';
       }
       return null;
-    }); */
+    });
   }
 
   @override
@@ -50,37 +44,29 @@ class Login extends StatelessWidget {
         onRecoverPassword: _recoverPassword,
         loginProviders: [
           LoginProvider(
-            icon: Icons.person,
-            callback: () async {
-              setLogged();
-              return null;
-            },
-          ),
-          LoginProvider(
             icon: Icons.qr_code_scanner,
             callback: () async {
+              print('start google sign in');
               await Future.delayed(loginTime);
-              openQRCodeScanner();
+              print('stop google sign in');
               return null;
             },
           ),
           LoginProvider(
             icon: Icons.contact_phone_outlined,
             callback: () async {
+              print('start google sign in');
               await Future.delayed(loginTime);
-              openEmergencyNumbers();
+              print('stop google sign in');
               return null;
             },
-          ),
-          LoginProvider(
-            icon: Icons.work,
-            callback: () async {
-              setVolunteer();
-              return null;
-            },
-          ),
+          )
         ],
       ),
     );
+  }
+
+  printSomething() {
+    print("Prova");
   }
 }

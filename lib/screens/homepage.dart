@@ -98,6 +98,7 @@ class _HomepageState extends State<Homepage> {
             children: [
               FunctionButton(openQRCode, Icon(Icons.image), "Apri"),
               FunctionButton(saveQRCodeToGallery, Icon(Icons.save), "Salva"),
+              FunctionButton(printQRCode, Icon(Icons.print), "Stampa"),
             ],
           ),
         ],
@@ -108,20 +109,71 @@ class _HomepageState extends State<Homepage> {
   Widget _functionalitiesScreen() {
     return processing
         ? ProcessingIndicator("Prova")
-        : Center(
-            child: ListView(
-              children: [
-                FunctionCard(icons[0], functionalities[0], descriptions[0],
-                    openData, downloadData, shareData),
-                FunctionCard(icons[1], functionalities[1], descriptions[1],
-                    openBadge, downloadBadge, shareBadge),
-                FunctionCard(icons[2], functionalities[2], descriptions[2],
-                    openCIS, downloadCIS, shareCIS),
-                FunctionCard(icons[3], functionalities[3], descriptions[3],
-                    openBracelet, downloadBracelet, shareBracelet),
-              ],
-            ),
-          );
+        : kIsWeb
+            ? Column(
+                children: [
+                  Row(
+                    children: [
+                      FunctionCard(
+                          icons[0],
+                          functionalities[0],
+                          descriptions[0],
+                          openData,
+                          downloadData,
+                          printData,
+                          shareData),
+                      FunctionCard(
+                          icons[1],
+                          functionalities[1],
+                          descriptions[1],
+                          openBadge,
+                          downloadBadge,
+                          printBadge,
+                          shareBadge),
+                    ],
+                  ),
+                  Row(
+                    children: [
+                      FunctionCard(
+                          icons[2],
+                          functionalities[2],
+                          descriptions[2],
+                          openCIS,
+                          downloadCIS,
+                          printCIS,
+                          shareCIS),
+                      FunctionCard(
+                          icons[3],
+                          functionalities[3],
+                          descriptions[3],
+                          openBracelet,
+                          downloadBracelet,
+                          printBracelet,
+                          shareBracelet),
+                    ],
+                  )
+                ],
+              )
+            : Center(
+                child: ListView(
+                  children: [
+                    FunctionCard(icons[0], functionalities[0], descriptions[0],
+                        openData, downloadData, printData, shareData),
+                    FunctionCard(icons[1], functionalities[1], descriptions[1],
+                        openBadge, downloadBadge, printBadge, shareBadge),
+                    FunctionCard(icons[2], functionalities[2], descriptions[2],
+                        openCIS, downloadCIS, printCIS, shareCIS),
+                    FunctionCard(
+                        icons[3],
+                        functionalities[3],
+                        descriptions[3],
+                        openBracelet,
+                        downloadBracelet,
+                        printBracelet,
+                        shareBracelet),
+                  ],
+                ),
+              );
   }
 
   Widget _covidScreen() {
@@ -147,12 +199,20 @@ class _HomepageState extends State<Homepage> {
     await QRCodeHandler().saveQRCodeToGallery(qrCodeData);
   }
 
+  printQRCode() async {
+    await PDFHandler(qrData: qrCodeData, patient: patient).printQRCode();
+  }
+
   openData() async {
     await PDFHandler(qrData: qrCodeData, patient: patient).openData();
   }
 
   downloadData() async {
     await PDFHandler(qrData: qrCodeData, patient: patient).downloadData();
+  }
+
+  printData() async {
+    await PDFHandler(qrData: qrCodeData, patient: patient).printData();
   }
 
   shareData() async {
@@ -165,6 +225,10 @@ class _HomepageState extends State<Homepage> {
 
   downloadBracelet() async {
     await PDFHandler(qrData: qrCodeData).downloadBracelet();
+  }
+
+  printBracelet() async {
+    await PDFHandler(qrData: qrCodeData).printBracelet();
   }
 
   shareBracelet() async {
@@ -181,6 +245,10 @@ class _HomepageState extends State<Homepage> {
     await PDFHandler(qrData: qrCodeData).downloadBadge();
   }
 
+  printBadge() async {
+    await PDFHandler(qrData: qrCodeData).printBadge();
+  }
+
   shareBadge() async {
     _setProcessing(true);
     await PDFHandler(qrData: qrCodeData).shareBadge();
@@ -193,6 +261,10 @@ class _HomepageState extends State<Homepage> {
 
   downloadCIS() async {
     await PDFHandler(qrData: qrCodeData, patient: patient).downloadCIS();
+  }
+
+  printCIS() async {
+    await PDFHandler(qrData: qrCodeData, patient: patient).printCIS();
   }
 
   shareCIS() async {
