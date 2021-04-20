@@ -5,6 +5,7 @@ import 'package:thesis/screens/homepage.dart';
 import 'package:thesis/screens/login.dart';
 import 'package:thesis/screens/qr_code_scanner.dart';
 import 'package:thesis/screens/volunteer.dart';
+import 'package:thesis/services/database_service.dart';
 
 class Wrapper extends StatefulWidget {
   @override
@@ -14,6 +15,7 @@ class Wrapper extends StatefulWidget {
 class _WrapperState extends State<Wrapper> {
   bool logged = false;
   bool volunteer = false;
+  // bool automatic = true;
 
   @override
   void initState() {
@@ -22,11 +24,12 @@ class _WrapperState extends State<Wrapper> {
         setState(() {
           logged = false;
         });
-      } else {
+      }
+      /* else {
         setState(() {
           logged = true;
         });
-      }
+      } */
     });
     super.initState();
   }
@@ -34,13 +37,30 @@ class _WrapperState extends State<Wrapper> {
   @override
   Widget build(BuildContext context) {
     if (logged) {
-      print("sono in home");
-      return Homepage(openQRCodeScanner, openEmergencyNumbers, setLogged);
-    } else if (volunteer)
-      return Volunteer(setVolunteer);
-    else
-      return Login(
-          openQRCodeScanner, openEmergencyNumbers, setLogged, setVolunteer);
+      return FutureBuilder<bool>(
+          future: DatabaseService().isUser(),
+          builder: (context, snapshot) {
+            if (snapshot.hasData) {
+              if (snapshot.data) {
+                return Homepage(
+                    openQRCodeScanner, openEmergencyNumbers, logout);
+              } else {
+                return Volunteer(logout);
+              }
+            } else {
+              print("Sono qui");
+              return Scaffold(body: Center(child: CircularProgressIndicator()));
+            }
+          });
+    } else {
+      return Login(setLogged, openQRCodeScanner, openEmergencyNumbers);
+    }
+  }
+
+  setLogged() {
+    setState(() {
+      logged = true;
+    });
   }
 
   openQRCodeScanner() {
@@ -57,16 +77,7 @@ class _WrapperState extends State<Wrapper> {
     );
   }
 
-  setLogged() async {
+  logout() async {
     await FirebaseAuth.instance.signOut();
-    /* setState(() {
-      logged = !logged;
-    }); */
-  }
-
-  setVolunteer() {
-    setState(() {
-      volunteer = !volunteer;
-    });
   }
 }

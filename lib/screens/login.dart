@@ -1,20 +1,29 @@
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_login/flutter_login.dart';
 import 'package:thesis/services/auth_service.dart';
 
 class Login extends StatelessWidget {
+  String email;
+  String password;
+  final setLogged;
   final openQRCodeScanner;
   final openEmergencyNumbers;
-  final setLogged;
-  final setVolunteer;
-  Login(this.openQRCodeScanner, this.openEmergencyNumbers, this.setLogged,
-      this.setVolunteer);
+  Login(this.setLogged, this.openQRCodeScanner, this.openEmergencyNumbers);
 
-  Duration get loginTime => Duration(milliseconds: 2250);
+  Duration get loginTime => Duration(milliseconds: 1500);
 
   Future<String> _authUser(LoginData data) {
-    AuthService().login(data.name, data.password);
-    return null;
+    email = data.name;
+    password = data.password;
+    return Future.delayed(loginTime).then((_) async {
+      bool result = await AuthService().login(data.name, data.password);
+      if (!result) {
+        return "Wrong user";
+      }
+      return null;
+    });
+
     /* print('Name: ${data.name}, Password: ${data.password}');
     return Future.delayed(loginTime).then((_) {
       if (!users.containsKey(data.name)) {
@@ -28,7 +37,6 @@ class Login extends StatelessWidget {
   }
 
   Future<String> _recoverPassword(String name) {
-    setVolunteer();
     return null;
     /* print('Name: $name');
     return Future.delayed(loginTime).then((_) {
@@ -45,10 +53,19 @@ class Login extends StatelessWidget {
       child: FlutterLogin(
         //logo: 'assets/images/logo2.png',
         title: "PSS + CIS",
+        titleTag: "PSS + CIS",
         onLogin: _authUser,
         onSignup: _authUser,
         hideSignUpButton: true,
-        onSubmitAnimationCompleted: () {},
+        onSubmitAnimationCompleted: () {
+          /*  bool result = await AuthService().login(email, password);
+      if (!result) {
+        return reload();
+      }
+      return null; */
+          print("Prorro");
+          setLogged();
+        },
         onRecoverPassword: _recoverPassword,
         messages: LoginMessages(
           goBackButton: "INDIETRO",
@@ -58,18 +75,15 @@ class Login extends StatelessWidget {
               "Ti invieeremo un link per il reset della password a questo indirizzo e-mail.",
           recoverPasswordButton: "RESET",
         ),
-        loginProviders: [
-          LoginProvider(
-            icon: Icons.person,
-            callback: () async {
-              setLogged();
-              return null;
-            },
-          ),
+        loginProviders:
+            /* kIsWeb
+            ? []
+            :  */
+            [
           LoginProvider(
             icon: Icons.qr_code_scanner,
             callback: () async {
-              await Future.delayed(loginTime);
+              //await Future.delayed(loginTime);
               openQRCodeScanner();
               return null;
             },
@@ -79,13 +93,6 @@ class Login extends StatelessWidget {
             callback: () async {
               await Future.delayed(loginTime);
               openEmergencyNumbers();
-              return null;
-            },
-          ),
-          LoginProvider(
-            icon: Icons.work,
-            callback: () async {
-              setVolunteer();
               return null;
             },
           ),
