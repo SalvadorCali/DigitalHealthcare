@@ -6,6 +6,7 @@ import 'package:thesis/model/searched_patient.dart';
 import 'package:thesis/services/pdf_handler.dart';
 import 'package:thesis/widgets/appbar_button.dart';
 import 'package:thesis/widgets/volunteer_card.dart';
+import 'package:unicorndial/unicorndial.dart';
 
 class Volunteer extends StatefulWidget {
   final changeScreen;
@@ -22,6 +23,7 @@ class _VolunteerState extends State<Volunteer> {
   List<SearchedPatient> patients = [];
   List<SearchedPatient> queryResult = [];
   List<SearchedPatient> bodyPatients = [];
+  bool loading = false;
 
   @override
   void initState() {
@@ -33,8 +35,7 @@ class _VolunteerState extends State<Volunteer> {
   Widget build(BuildContext context) {
     return Scaffold(
         floatingActionButton: bodyPatients.length > 1
-            ? FloatingActionButton(
-                onPressed: generateMultipleBracelet, child: icons[3])
+            ? _buildFloatingButton()
             : SizedBox.shrink(),
         appBar: AppBar(
           title: Text("Homepage"),
@@ -42,7 +43,7 @@ class _VolunteerState extends State<Volunteer> {
             AppBarButton(Icon(Icons.logout), widget.changeScreen),
           ],
         ),
-        body: _searchScreen());
+        body: loading ? LinearProgressIndicator() : _searchScreen());
   }
 
   Widget _searchScreen() {
@@ -173,7 +174,71 @@ class _VolunteerState extends State<Volunteer> {
     });
   }
 
+  Widget _buildFloatingButton() {
+    return UnicornDialer(
+      parentButton: Icon(Icons.print),
+      childButtons: [
+        UnicornButton(
+          currentButton: FloatingActionButton(
+            mini: true,
+            onPressed: generateMultipleBadge,
+            child: icons[1],
+          ),
+        ),
+        UnicornButton(
+          currentButton: FloatingActionButton(
+            mini: true,
+            onPressed: generateMultipleCIS,
+            child: icons[2],
+          ),
+        ),
+        UnicornButton(
+          currentButton: FloatingActionButton(
+            mini: true,
+            onPressed: generateMultipleBracelet,
+            child: icons[3],
+          ),
+        )
+      ],
+    );
+  }
+
+  generateMultipleBadge() {
+    //da rimuovere l'aggiunta in questo punto perché continua ad addare ad ogni click
+    setState(() {
+      loading = true;
+    });
+    bodyPatients.forEach((element) {
+      qrCodeDataList.add(element.patient.getLifeSavingInformation());
+    });
+    PDFHandler(qrDataList: qrCodeDataList).openMultipleBadge().whenComplete(() {
+      setState(() {
+        loading = false;
+      });
+    });
+  }
+
+  generateMultipleCIS() {
+    Future.delayed(Duration(seconds: 1), () async {
+      setState(() {
+        loading = true;
+      });
+      bodyPatients.forEach((element) {
+        qrCodeDataList.add(element.patient.getLifeSavingInformation());
+      });
+      await PDFHandler(qrDataList: qrCodeDataList, patient: patient)
+          .openMultipleCIS()
+          .whenComplete(() {
+        setState(() {
+          loading = false;
+        });
+      });
+    });
+    //da rimuovere l'aggiunta in questo punto perché continua ad addare ad ogni click
+  }
+
   generateMultipleBracelet() async {
+    //da rimuovere l'aggiunta in questo punto perché continua ad addare ad ogni click
     bodyPatients.forEach((element) {
       qrCodeDataList.add(element.patient.getLifeSavingInformation());
     });

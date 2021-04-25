@@ -26,32 +26,43 @@ class _HomepageState extends State<Homepage> {
   // 1) ottengo dati da Firebase
   // 2) creo Patient
   // 3) passo Patient per usarne dati
-
+  Map<String, Patient> dateArchive = Map();
   final Patient patient = createPatient();
+  final Patient patient2 = createPatientWithName("Davide", "Laffi");
+  final Patient patient3 = createPatientWithName("Simona", "Di Nunno");
   String qrCodeData;
   bool processing = false;
+  bool hideQR = false;
+  bool floatingButton = false;
+  String date = "A";
+
+  @override
+  void initState() {
+    _initializePatient();
+    super.initState();
+  }
 
   @override
   Widget build(BuildContext context) {
-    _initializePatient();
     return DefaultTabController(
         length: 3,
         child: Scaffold(
           appBar: AppBar(
+            leading: AppBarButton(Icon(Icons.logout), widget.changeScreen),
             title: Text("Homepage"),
             actions: [
-              kIsWeb
-                  ? SizedBox.shrink()
-                  : AppBarButton(Icon(Icons.contact_phone_outlined),
-                      widget.openEmergencyNumbers),
+              AppBarButton(Icon(Icons.contact_phone_outlined),
+                  widget.openEmergencyNumbers),
               kIsWeb
                   ? SizedBox.shrink()
                   : AppBarButton(
                       Icon(Icons.qr_code_scanner), widget.openQRCodeScanner),
-              AppBarButton(Icon(Icons.logout), widget.changeScreen),
+              _buildDateMenu(),
             ],
             bottom: TabBar(
-              tabs: kIsWeb
+              tabs: (kIsWeb &&
+                      MediaQuery.of(context).size.width >
+                          MediaQuery.of(context).size.height)
                   ? [
                       Tab(icon: Icon(Icons.qr_code), text: "Codice QR"),
                       Tab(icon: Icon(Icons.info), text: "Informazioni"),
@@ -68,9 +79,8 @@ class _HomepageState extends State<Homepage> {
               future: DatabaseService().getProva(),
               builder: (context, snapshot) {
                 if (snapshot.hasData) {
-                  print(snapshot.data);
                   return TabBarView(children: [
-                    _qrCodeScreen(),
+                    _qrCodeScreen(qrCodeData),
                     _functionalitiesScreen(),
                     _covidScreen()
                   ]);
@@ -81,36 +91,70 @@ class _HomepageState extends State<Homepage> {
         ));
   }
 
+  PopupMenuButton _buildDateMenu() {
+    return PopupMenuButton(
+      icon: Icon(Icons.more_vert),
+      initialValue: date,
+      itemBuilder: (BuildContext context) {
+        return dateArchive.keys.map((element) {
+          return PopupMenuItem(
+            value: element,
+            child: Text(element),
+          );
+        }).toList();
+      },
+      onSelected: (value) {
+        setState(() {
+          date = value;
+          qrCodeData = dateArchive[value].getLifeSavingInformation();
+        });
+      },
+    );
+  }
+
   _initializePatient() {
     setState(() {
+      date = "30 aprile";
+      dateArchive = {
+        "30 aprile": patient,
+        "30 marzo": patient2,
+        "30 febbraio": patient3,
+      };
       qrCodeData = patient.getLifeSavingInformation();
     });
   }
 
-  Widget _qrCodeScreen() {
+  Widget _qrCodeScreen(String qrData) {
     return Center(
-      child: Column(
-        mainAxisAlignment: MainAxisAlignment.center,
-        children: <Widget>[
-          QRCodeHandler().generateQRCode(qrCodeData),
-          ButtonBar(
-            alignment: MainAxisAlignment.center,
-            children: [
-              FunctionButton(openQRCode, Icon(Icons.image), "Apri"),
-              FunctionButton(saveQRCodeToGallery, Icon(Icons.save), "Salva"),
-              FunctionButton(printQRCode, Icon(Icons.print), "Stampa"),
-            ],
-          ),
-        ],
+      child: SingleChildScrollView(
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: <Widget>[
+            Padding(
+              padding: const EdgeInsets.all(8.0),
+              child: QRCodeHandler().generateQRCode(qrData),
+            ),
+            ButtonBar(
+              alignment: MainAxisAlignment.center,
+              children: [
+                FunctionButton(openQRCode, Icon(Icons.image), "Apri"),
+                FunctionButton(saveQRCodeToGallery, Icon(Icons.save), "Salva"),
+                FunctionButton(printQRCode, Icon(Icons.print), "Stampa"),
+              ],
+            ),
+          ],
+        ),
       ),
     );
   }
 
   Widget _functionalitiesScreen() {
     return processing
-        ? ProcessingIndicator("Prova")
-        : kIsWeb
-            ? Column(
+        ? ProcessingIndicator("Generazione PDF")
+        : (kIsWeb &&
+                MediaQuery.of(context).size.width >
+                    MediaQuery.of(context).size.height)
+            ? ListView(
                 children: [
                   Row(
                     children: [
@@ -118,6 +162,7 @@ class _HomepageState extends State<Homepage> {
                         child: FunctionCard(
                             icons[0],
                             functionalities[0],
+                            subtitles[0],
                             descriptions[0],
                             openData,
                             downloadData,
@@ -128,6 +173,7 @@ class _HomepageState extends State<Homepage> {
                         child: FunctionCard(
                             icons[1],
                             functionalities[1],
+                            subtitles[1],
                             descriptions[1],
                             openBadge,
                             downloadBadge,
@@ -142,6 +188,7 @@ class _HomepageState extends State<Homepage> {
                         child: FunctionCard(
                             icons[2],
                             functionalities[2],
+                            subtitles[2],
                             descriptions[2],
                             openCIS,
                             downloadCIS,
@@ -152,6 +199,7 @@ class _HomepageState extends State<Homepage> {
                         child: FunctionCard(
                             icons[3],
                             functionalities[3],
+                            subtitles[3],
                             descriptions[3],
                             openBracelet,
                             downloadBracelet,
@@ -163,39 +211,98 @@ class _HomepageState extends State<Homepage> {
                 ],
               )
             : Center(
-                child: ListView(
-                  children: [
-                    FunctionCard(icons[0], functionalities[0], descriptions[0],
-                        openData, downloadData, printData, shareData),
-                    FunctionCard(icons[1], functionalities[1], descriptions[1],
-                        openBadge, downloadBadge, printBadge, shareBadge),
-                    FunctionCard(icons[2], functionalities[2], descriptions[2],
-                        openCIS, downloadCIS, printCIS, shareCIS),
-                    FunctionCard(
-                        icons[3],
-                        functionalities[3],
-                        descriptions[3],
-                        openBracelet,
-                        downloadBracelet,
-                        printBracelet,
-                        shareBracelet),
-                  ],
+                child: Scrollbar(
+                  child: ListView(
+                    children: [
+                      FunctionCard(
+                          icons[0],
+                          functionalities[0],
+                          subtitles[0],
+                          descriptions[0],
+                          openData,
+                          downloadData,
+                          printData,
+                          shareData),
+                      FunctionCard(
+                          icons[1],
+                          functionalities[1],
+                          subtitles[1],
+                          descriptions[1],
+                          openBadge,
+                          downloadBadge,
+                          printBadge,
+                          shareBadge),
+                      FunctionCard(
+                          icons[2],
+                          functionalities[2],
+                          subtitles[2],
+                          descriptions[2],
+                          openCIS,
+                          downloadCIS,
+                          printCIS,
+                          shareCIS),
+                      FunctionCard(
+                          icons[3],
+                          functionalities[3],
+                          subtitles[3],
+                          descriptions[3],
+                          openBracelet,
+                          downloadBracelet,
+                          printBracelet,
+                          shareBracelet),
+                    ],
+                  ),
                 ),
               );
   }
 
   Widget _covidScreen() {
-    return Center(
-      child: ListView(
-        children: [
-          CovidTile("Tampone", DateTime.now(), "https://andreacalici.com/"),
-          CovidTile("Tampone", DateTime.now(),
-              "https://andreacalici.files.wordpress.com/2021/03/aamas.pdf"),
-          CovidTile("Tampone", DateTime.now(),
-              "https://andreacalici.files.wordpress.com/2021/03/aamas.pdf"),
-        ],
-      ),
-    );
+    return (kIsWeb &&
+            MediaQuery.of(context).size.width >
+                MediaQuery.of(context).size.height)
+        ? Row(
+            children: [
+              Container(
+                  width: MediaQuery.of(context).size.width / 2,
+                  child: _qrCodeScreen(qrCodeData)),
+              Flexible(
+                child: Scrollbar(
+                  child: ListView(
+                    children: [
+                      CovidTile("Tampone", DateTime.now(),
+                          "https://andreacalici.com/"),
+                      CovidTile("Tampone", DateTime.now(),
+                          "https://andreacalici.files.wordpress.com/2021/03/aamas.pdf"),
+                      CovidTile("Tampone", DateTime.now(),
+                          "https://andreacalici.files.wordpress.com/2021/03/aamas.pdf"),
+                      CovidTile("Tampone", DateTime.now(),
+                          "https://andreacalici.files.wordpress.com/2021/03/aamas.pdf"),
+                      CovidTile("Tampone", DateTime.now(),
+                          "https://andreacalici.com/"),
+                      CovidTile("Tampone", DateTime.now(),
+                          "https://andreacalici.files.wordpress.com/2021/03/aamas.pdf"),
+                      CovidTile("Tampone", DateTime.now(),
+                          "https://andreacalici.files.wordpress.com/2021/03/aamas.pdf"),
+                      CovidTile("Tampone", DateTime.now(),
+                          "https://andreacalici.files.wordpress.com/2021/03/aamas.pdf"),
+                    ],
+                  ),
+                ),
+              ),
+            ],
+          )
+        : ListView(
+            children: [
+              _qrCodeScreen(qrCodeData),
+              CovidTile("Tampone", DateTime.now(), "https://andreacalici.com/"),
+              CovidTile("Tampone", DateTime.now(),
+                  "https://andreacalici.files.wordpress.com/2021/03/aamas.pdf"),
+              CovidTile("Tampone", DateTime.now(),
+                  "https://andreacalici.files.wordpress.com/2021/03/aamas.pdf"),
+              CovidTile("Tampone", DateTime.now(),
+                  "https://andreacalici.files.wordpress.com/2021/03/aamas.pdf"),
+            ],
+          );
   }
 
   //callback functions
@@ -212,35 +319,51 @@ class _HomepageState extends State<Homepage> {
   }
 
   openData() async {
+    _setProcessing(true);
     await PDFHandler(qrData: qrCodeData, patient: patient).openData();
+    _setProcessing(false);
   }
 
   downloadData() async {
+    _setProcessing(true);
     await PDFHandler(qrData: qrCodeData, patient: patient).downloadData();
+    _setProcessing(false);
   }
 
   printData() async {
+    _setProcessing(true);
     await PDFHandler(qrData: qrCodeData, patient: patient).printData();
+    _setProcessing(false);
   }
 
   shareData() async {
+    _setProcessing(true);
     await PDFHandler(qrData: qrCodeData, patient: patient).shareData();
+    _setProcessing(false);
   }
 
   openBracelet() async {
+    _setProcessing(true);
     await PDFHandler(qrData: qrCodeData).openBracelet();
+    _setProcessing(false);
   }
 
   downloadBracelet() async {
+    _setProcessing(true);
     await PDFHandler(qrData: qrCodeData).downloadBracelet();
+    _setProcessing(false);
   }
 
   printBracelet() async {
+    _setProcessing(true);
     await PDFHandler(qrData: qrCodeData).printBracelet();
+    _setProcessing(false);
   }
 
   shareBracelet() async {
+    _setProcessing(true);
     await PDFHandler(qrData: qrCodeData).shareBracelet();
+    _setProcessing(false);
   }
 
   openBadge() async {
@@ -250,11 +373,15 @@ class _HomepageState extends State<Homepage> {
   }
 
   downloadBadge() async {
+    _setProcessing(true);
     await PDFHandler(qrData: qrCodeData).downloadBadge();
+    _setProcessing(false);
   }
 
   printBadge() async {
+    _setProcessing(true);
     await PDFHandler(qrData: qrCodeData).printBadge();
+    _setProcessing(false);
   }
 
   shareBadge() async {
@@ -264,15 +391,21 @@ class _HomepageState extends State<Homepage> {
   }
 
   openCIS() async {
+    _setProcessing(true);
     await PDFHandler(qrData: qrCodeData, patient: patient).openCIS();
+    _setProcessing(false);
   }
 
   downloadCIS() async {
+    _setProcessing(true);
     await PDFHandler(qrData: qrCodeData, patient: patient).downloadCIS();
+    _setProcessing(false);
   }
 
   printCIS() async {
+    _setProcessing(true);
     await PDFHandler(qrData: qrCodeData, patient: patient).printCIS();
+    _setProcessing(false);
   }
 
   shareCIS() async {

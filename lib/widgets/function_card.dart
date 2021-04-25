@@ -5,13 +5,21 @@ import 'package:thesis/widgets/function_icon.dart';
 class FunctionCard extends StatelessWidget {
   final Icon icon;
   final String title;
+  final String subtitle;
   final String description;
   final openFunction;
   final downloadFunction;
   final printFunction;
   final shareFunction;
-  const FunctionCard(this.icon, this.title, this.description, this.openFunction,
-      this.downloadFunction, this.printFunction, this.shareFunction);
+  const FunctionCard(
+      this.icon,
+      this.title,
+      this.subtitle,
+      this.description,
+      this.openFunction,
+      this.downloadFunction,
+      this.printFunction,
+      this.shareFunction);
 
   @override
   Widget build(BuildContext context) {
@@ -22,7 +30,7 @@ class FunctionCard extends StatelessWidget {
           ListTile(
             leading: icon,
             title: Text(title),
-            subtitle: Text('Subtitle prova'),
+            subtitle: Text(subtitle),
           ),
           Padding(
             padding: const EdgeInsets.fromLTRB(16, 8, 16, 8),
@@ -39,18 +47,22 @@ class FunctionCard extends StatelessWidget {
               alignment: MainAxisAlignment.spaceAround,
               children: kIsWeb
                   ? <Widget>[
+                      FunctionIcon(openFunction, Icon(Icons.picture_as_pdf),
+                          true, "Apri"),
                       FunctionIcon(
-                          openFunction, Icon(Icons.picture_as_pdf), "Apri"),
-                      FunctionIcon(downloadFunction, Icon(Icons.save), "Salva"),
-                      FunctionIcon(printFunction, Icon(Icons.print), "Stampa"),
+                          downloadFunction, Icon(Icons.save), true, "Salva"),
+                      FunctionIcon(
+                          printFunction, Icon(Icons.print), true, "Stampa"),
                     ]
                   : <Widget>[
+                      FunctionIcon(openFunction, Icon(Icons.picture_as_pdf),
+                          true, "Apri"),
                       FunctionIcon(
-                          openFunction, Icon(Icons.picture_as_pdf), "Apri"),
-                      FunctionIcon(downloadFunction, Icon(Icons.save), "Salva"),
-                      FunctionIcon(printFunction, Icon(Icons.print), "Stampa"),
+                          downloadFunction, Icon(Icons.save), true, "Salva"),
                       FunctionIcon(
-                          shareFunction, Icon(Icons.share), "Condividi"),
+                          printFunction, Icon(Icons.print), true, "Stampa"),
+                      FunctionIcon(
+                          shareFunction, Icon(Icons.share), true, "Condividi"),
                     ],
             ),
           ),

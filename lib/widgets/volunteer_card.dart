@@ -16,7 +16,19 @@ class VolunteerCard extends StatelessWidget {
       child: Column(
         children: <Widget>[
           ListTile(
-            trailing: IconButton(icon: Icon(Icons.close), onPressed: remove),
+            trailing: Row(
+              mainAxisSize: MainAxisSize.min,
+              children: [
+                PopupMenuButton(
+                  icon: Icon(Icons.menu),
+                  itemBuilder: (BuildContext context) => <PopupMenuEntry>[
+                    const PopupMenuItem(child: Text('Item A')),
+                    const PopupMenuItem(child: Text('Item B')),
+                  ],
+                ),
+                IconButton(icon: Icon(Icons.close), onPressed: remove),
+              ],
+            ),
             title: Text(patient.name),
             subtitle: Text('CLCNDR96D19A940K'),
           ),
@@ -37,6 +49,24 @@ class VolunteerCard extends StatelessWidget {
             trailing:
                 FunctionButton(printBracelet, Icon(Icons.print), "Stampa"),
           ),
+          Divider(),
+          Padding(
+            padding: const EdgeInsets.fromLTRB(16, 8, 16, 16),
+            child: Row(
+              mainAxisAlignment: MainAxisAlignment.start,
+              children: [
+                Text(
+                  "Ultimo aggiornamento: 21/04/21",
+                  style: Theme.of(context).textTheme.caption,
+                ),
+              ],
+            ),
+          ),
+          /* ListTile(
+            dense: true,
+            subtitle: Text("Ultimo aggiornamento: 21/04/21"),
+            minVerticalPadding: 0,
+          ), */
         ],
       ),
     );

@@ -4,11 +4,13 @@ String space = " ";
 String aCapo = "\n";
 String colon = ":";
 
-List<String> functionalities = [
-  "Dati",
-  "Badge",
+List<String> functionalities = ["Dati", "Badge", "CIS", "Braccialetto"];
+
+List<String> subtitles = [
+  "Profilo Sanitario Sintetico",
+  "Badge Salvavita",
   "Carta d'Identità Salvavita",
-  "Braccialetto"
+  "Braccialetto Salvavita"
 ];
 
 List<String> descriptions = [

@@ -3,25 +3,20 @@ import 'package:firebase_auth/firebase_auth.dart';
 class AuthService {
   FirebaseAuth auth = FirebaseAuth.instance;
 
-  Future<bool> userExists(String email, String password) async {
+  Future<bool> login(String email, String password) async {
     try {
-      List<String> authentications =
-          await FirebaseAuth.instance.fetchSignInMethodsForEmail(email);
-      if (authentications.isNotEmpty) {
-        return true;
-      } else {
-        return false;
-      }
+      await FirebaseAuth.instance
+          .signInWithEmailAndPassword(email: email, password: password);
+      return true;
     } on FirebaseAuthException catch (e) {
       print(e.toString());
       return false;
     }
   }
 
-  Future<bool> login(String email, String password) async {
+  Future<bool> resetPassword(String email) async {
     try {
-      await FirebaseAuth.instance
-          .signInWithEmailAndPassword(email: email, password: password);
+      await auth.sendPasswordResetEmail(email: email);
       return true;
     } on FirebaseAuthException catch (e) {
       print(e.toString());

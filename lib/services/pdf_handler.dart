@@ -6,7 +6,6 @@ import 'package:flutter/services.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:open_file/open_file.dart';
 import 'package:path/path.dart' as _path;
-//import 'package:printing/printing_web.dart';
 import 'package:universal_html/html.dart' as html;
 import 'package:path_provider/path_provider.dart';
 import 'package:pdf/pdf.dart';
@@ -44,12 +43,21 @@ class PDFHandler {
         build: (Context context) {
           return Padding(
               padding: EdgeInsets.all(2),
-              child: BarcodeWidget(
-                data: qrData,
-                width: 150,
-                height: 150,
-                barcode: Barcode.qrCode(),
-              ));
+              child: Center(
+                  child: Column(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: [
+                    Padding(
+                        padding: EdgeInsets.all(8),
+                        child: Text(
+                            "Codice QR di ${patient.name} ${patient.surname}")),
+                    BarcodeWidget(
+                      data: qrData,
+                      width: 150,
+                      height: 150,
+                      barcode: Barcode.qrCode(),
+                    )
+                  ])));
         }));
   }
 
@@ -259,6 +267,9 @@ class PDFHandler {
               _braceletLogo(centodiciotto),
             ])),
       ]));
+      widgets.add(
+        SizedBox(height: 10),
+      );
     });
     return widgets;
   }
@@ -276,6 +287,16 @@ class PDFHandler {
   //badge
   openBadge() async {
     await _createBadge();
+    if (kIsWeb) {
+      await _openPDFWeb(badge);
+    } else {
+      await _savePDF(badge);
+      await _openPDF(badge);
+    }
+  }
+
+  openMultipleBadge() async {
+    await _createMultipleBadge();
     if (kIsWeb) {
       await _openPDFWeb(badge);
     } else {
@@ -319,13 +340,41 @@ class PDFHandler {
         pageFormat: PdfPageFormat.a4,
         margin: EdgeInsets.all(0),
         build: (Context context) {
-          return _blockFour(mvi, ice, profile);
+          return _blockFour(mvi, ice, profile, qrData);
         }));
+  }
+
+  _createMultipleBadge() async {
+    final mvi =
+        (await rootBundle.load('assets/logos/mvi.png')).buffer.asUint8List();
+    final ice =
+        (await rootBundle.load('assets/logos/ice.png')).buffer.asUint8List();
+    final profile = (await rootBundle.load('assets/images/profile.jpeg'))
+        .buffer
+        .asUint8List();
+    qrDataList.forEach((element) {
+      pdf.addPage(Page(
+          pageFormat: PdfPageFormat.a4,
+          margin: EdgeInsets.all(0),
+          build: (Context context) {
+            return _blockFour(mvi, ice, profile, element);
+          }));
+    });
   }
 
   //cis
   openCIS() async {
     await _createCIS();
+    if (kIsWeb) {
+      await _openPDFWeb(cis);
+    } else {
+      await _savePDF(cis);
+      await _openPDF(cis);
+    }
+  }
+
+  openMultipleCIS() async {
+    await _createMultipleCIS();
     if (kIsWeb) {
       await _openPDFWeb(cis);
     } else {
@@ -392,9 +441,53 @@ class PDFHandler {
                 _blockOne(centodiciotto, centododici),
                 _blockTwo(comuneMilano, mvi, areu, simeu, omceo),
                 _blockThree(),
-                _blockFour(mvi, ice, profile),
+                _blockFour(mvi, ice, profile, qrData),
               ]);
         }));
+  }
+
+  _createMultipleCIS() async {
+    print("Prova");
+    final centodiciotto =
+        (await rootBundle.load('assets/logos/118.jpg')).buffer.asUint8List();
+    final centododici =
+        (await rootBundle.load('assets/logos/112.png')).buffer.asUint8List();
+    final comuneMilano =
+        (await rootBundle.load('assets/logos/comune_milano2.png'))
+            .buffer
+            .asUint8List();
+    final mvi =
+        (await rootBundle.load('assets/logos/mvi.png')).buffer.asUint8List();
+    final areu =
+        (await rootBundle.load('assets/logos/areu2.jpg')).buffer.asUint8List();
+    final simeu =
+        (await rootBundle.load('assets/logos/simeu.png')).buffer.asUint8List();
+    final omceo =
+        (await rootBundle.load('assets/logos/omceo.jpg')).buffer.asUint8List();
+    final ice =
+        (await rootBundle.load('assets/logos/ice.png')).buffer.asUint8List();
+    final profile = (await rootBundle.load('assets/images/profile.jpeg'))
+        .buffer
+        .asUint8List();
+    print("ORA");
+    qrDataList.forEach((element) {
+      pdf.addPage(Page(
+          pageFormat: PdfPageFormat.a4,
+          margin: EdgeInsets.all(0),
+          build: (Context context) {
+            return GridView(
+                crossAxisCount: 2,
+                childAspectRatio: (PdfPageFormat.a4.height / 2) /
+                    (PdfPageFormat.a4.width / 2),
+                children: [
+                  _blockOne(centodiciotto, centododici),
+                  _blockTwo(comuneMilano, mvi, areu, simeu, omceo),
+                  _blockThree(),
+                  _blockFour(mvi, ice, profile, element),
+                ]);
+          }));
+      print("Pagina");
+    });
   }
 
   Container _blockOne(centodiciotto, centododici) {
@@ -655,7 +748,7 @@ class PDFHandler {
         ]));
   }
 
-  Container _blockFour(mvi, ice, profile) {
+  Container _blockFour(mvi, ice, profile, String data) {
     return Container(
         decoration: BoxDecoration(border: Border.all(color: PdfColors.black)),
         width: PdfPageFormat.a4.width / 2,
@@ -756,7 +849,7 @@ class PDFHandler {
               child:
                   Row(mainAxisAlignment: MainAxisAlignment.center, children: [
                 BarcodeWidget(
-                  data: qrData,
+                  data: data,
                   width: (PdfPageFormat.a4.width / 10) * 2,
                   height: (PdfPageFormat.a4.height / 10) * 2,
                   barcode: Barcode.qrCode(),
@@ -869,8 +962,6 @@ class PDFHandler {
   _sharePDFWeb(String name) async {
     final bytes = await pdf.save();
     Printing.layoutPdf(onLayout: (_) => bytes);
-    /* await PrintingPlugin().layoutPdf(
-        Printer(url: "default"), (_) => bytes, name, PdfPageFormat.a4, true); */
   }
 
   _printPDF(String name) async {
