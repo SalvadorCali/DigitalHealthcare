@@ -1,6 +1,8 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
+import 'package:thesis/model/end_user.dart';
+import 'package:thesis/model/patient.dart';
 import 'package:thesis/screens/emergency_numbers.dart';
 import 'package:thesis/screens/homepage.dart';
 import 'package:thesis/screens/login.dart';
@@ -18,39 +20,55 @@ class _WrapperState extends State<Wrapper> {
 
   @override
   void initState() {
-    //_setPersistence();
-    //Future<User> user = FirebaseAuth.instance.authStateChanges().first;
-    User user = FirebaseAuth.instance.currentUser;
-    if (user == null) {
-      setState(() {
-        logged = false;
-      });
-    } else {
-      setState(() {
-        logged = true;
-      });
-    }
+    //user = FirebaseAuth.instance.currentUser;
+    FirebaseAuth.instance.authStateChanges().listen((User user) {
+      if (user == null) {
+        setState(() {
+          logged = false;
+        });
+      } else {
+        setState(() {
+          logged = true;
+        });
+      }
+    });
     super.initState();
-  }
-
-  _setPersistence() async {
-    if (kIsWeb) {
-      await FirebaseAuth.instance.setPersistence(Persistence.LOCAL);
-    }
   }
 
   @override
   Widget build(BuildContext context) {
     if (logged) {
-      return FutureBuilder<bool>(
-          future: DatabaseService().isUser(),
+      return FutureBuilder<EndUser>(
+          future: DatabaseService().getUser(),
           builder: (context, snapshot) {
             if (snapshot.hasData) {
-              if (snapshot.data) {
-                return Homepage(
-                    openQRCodeScanner, openEmergencyNumbersLogged, logout);
+              EndUser endUser = snapshot.data;
+              if (snapshot.data.isUser) {
+                return FutureBuilder<Patient>(
+                    future: DatabaseService().getPatient(endUser.tin),
+                    builder: (context, snapshot) {
+                      if (snapshot.hasData) {
+                        Patient patient = snapshot.data;
+                        return Homepage(patient, openQRCodeScanner,
+                            openEmergencyNumbersLogged, logout);
+                      } else {
+                        return Scaffold(
+                            body: Center(child: CircularProgressIndicator()));
+                      }
+                    });
               } else {
-                return Volunteer(logout);
+                return FutureBuilder<List<Patient>>(
+                    future: DatabaseService().getPatientsList(endUser.tin),
+                    builder: (context, snapshot) {
+                      if (snapshot.hasData) {
+                        List<Patient> patients = snapshot.data;
+                        DatabaseService().populatePatientsData(patients);
+                        return Volunteer(patients, logout);
+                      } else {
+                        return Scaffold(
+                            body: Center(child: CircularProgressIndicator()));
+                      }
+                    });
               }
             } else {
               return Scaffold(body: Center(child: CircularProgressIndicator()));

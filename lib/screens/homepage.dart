@@ -2,7 +2,6 @@ import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:thesis/constants.dart';
 import 'package:thesis/model/patient.dart';
-import 'package:thesis/services/database_service.dart';
 import 'package:thesis/services/pdf_handler.dart';
 import 'package:thesis/services/qr_code_handler.dart';
 import 'package:thesis/widgets/appbar_button.dart';
@@ -12,29 +11,22 @@ import 'package:thesis/widgets/function_card.dart';
 import 'package:thesis/widgets/processing_indicator.dart';
 
 class Homepage extends StatefulWidget {
+  final Patient patient;
   final openQRCodeScanner;
   final openEmergencyNumbers;
   final changeScreen;
-  Homepage(
-      this.openQRCodeScanner, this.openEmergencyNumbers, this.changeScreen);
+  Homepage(this.patient, this.openQRCodeScanner, this.openEmergencyNumbers,
+      this.changeScreen);
 
   @override
   _HomepageState createState() => _HomepageState();
 }
 
 class _HomepageState extends State<Homepage> {
-  // 1) ottengo dati da Firebase
-  // 2) creo Patient
-  // 3) passo Patient per usarne dati
-  Map<String, Patient> dateArchive = Map();
-  final Patient patient = createPatient();
-  final Patient patient2 = createPatientWithName("Davide", "Laffi");
-  final Patient patient3 = createPatientWithName("Simona", "Di Nunno");
-  String qrCodeData;
   bool processing = false;
-  bool hideQR = false;
-  bool floatingButton = false;
-  String date = "A";
+  String qrCodeData;
+  String qrCodeCovid;
+  String date;
 
   @override
   void initState() {
@@ -47,48 +39,39 @@ class _HomepageState extends State<Homepage> {
     return DefaultTabController(
         length: 3,
         child: Scaffold(
-          appBar: AppBar(
-            leading: AppBarButton(Icon(Icons.logout), widget.changeScreen),
-            title: Text("Homepage"),
-            actions: [
-              AppBarButton(Icon(Icons.contact_phone_outlined),
-                  widget.openEmergencyNumbers),
-              kIsWeb
-                  ? SizedBox.shrink()
-                  : AppBarButton(
-                      Icon(Icons.qr_code_scanner), widget.openQRCodeScanner),
-              _buildDateMenu(),
-            ],
-            bottom: TabBar(
-              tabs: (kIsWeb &&
-                      MediaQuery.of(context).size.width >
-                          MediaQuery.of(context).size.height)
-                  ? [
-                      Tab(icon: Icon(Icons.qr_code), text: "Codice QR"),
-                      Tab(icon: Icon(Icons.info), text: "Informazioni"),
-                      Tab(icon: Icon(Icons.coronavirus), text: "Covid19"),
-                    ]
-                  : [
-                      Tab(icon: Icon(Icons.qr_code)),
-                      Tab(icon: Icon(Icons.info)),
-                      Tab(icon: Icon(Icons.coronavirus)),
-                    ],
+            appBar: AppBar(
+              leading: AppBarButton(Icon(Icons.logout), widget.changeScreen),
+              title: Text("Homepage"),
+              actions: [
+                AppBarButton(Icon(Icons.contact_phone_outlined),
+                    widget.openEmergencyNumbers),
+                kIsWeb
+                    ? SizedBox.shrink()
+                    : AppBarButton(
+                        Icon(Icons.qr_code_scanner), widget.openQRCodeScanner),
+                _buildDateMenu(),
+              ],
+              bottom: TabBar(
+                tabs: (kIsWeb &&
+                        MediaQuery.of(context).size.width >
+                            MediaQuery.of(context).size.height)
+                    ? [
+                        Tab(icon: Icon(Icons.qr_code), text: "Codice QR"),
+                        Tab(icon: Icon(Icons.info), text: "Informazioni"),
+                        Tab(icon: Icon(Icons.coronavirus), text: "Covid19"),
+                      ]
+                    : [
+                        Tab(icon: Icon(Icons.qr_code)),
+                        Tab(icon: Icon(Icons.info)),
+                        Tab(icon: Icon(Icons.coronavirus)),
+                      ],
+              ),
             ),
-          ),
-          body: FutureBuilder<String>(
-              future: DatabaseService().getProva(),
-              builder: (context, snapshot) {
-                if (snapshot.hasData) {
-                  return TabBarView(children: [
-                    _qrCodeScreen(qrCodeData),
-                    _functionalitiesScreen(),
-                    _covidScreen()
-                  ]);
-                } else {
-                  return Center(child: CircularProgressIndicator());
-                }
-              }),
-        ));
+            body: TabBarView(children: [
+              _qrCodeScreen(qrCodeData),
+              _functionalitiesScreen(),
+              _covidScreen()
+            ])));
   }
 
   PopupMenuButton _buildDateMenu() {
@@ -96,7 +79,7 @@ class _HomepageState extends State<Homepage> {
       icon: Icon(Icons.more_vert),
       initialValue: date,
       itemBuilder: (BuildContext context) {
-        return dateArchive.keys.map((element) {
+        return widget.patient.data.keys.map((element) {
           return PopupMenuItem(
             value: element,
             child: Text(element),
@@ -106,7 +89,8 @@ class _HomepageState extends State<Homepage> {
       onSelected: (value) {
         setState(() {
           date = value;
-          qrCodeData = dateArchive[value].getLifeSavingInformation();
+          qrCodeData = widget.patient.data[value].getLifeSavingInformation();
+          qrCodeCovid = widget.patient.data[value].getLifeSavingInformation();
         });
       },
     );
@@ -114,13 +98,9 @@ class _HomepageState extends State<Homepage> {
 
   _initializePatient() {
     setState(() {
-      date = "30 aprile";
-      dateArchive = {
-        "30 aprile": patient,
-        "30 marzo": patient2,
-        "30 febbraio": patient3,
-      };
-      qrCodeData = patient.getLifeSavingInformation();
+      date = widget.patient.data.keys.last;
+      qrCodeData = widget.patient.data[date].getLifeSavingInformation();
+      qrCodeCovid = widget.patient.data[date].getLifeSavingInformation();
     });
   }
 
@@ -315,102 +295,119 @@ class _HomepageState extends State<Homepage> {
   }
 
   printQRCode() async {
-    await PDFHandler(qrData: qrCodeData, patient: patient).printQRCode();
+    await PDFHandler(qrData: qrCodeData, patient: widget.patient.data[date])
+        .printQRCode();
   }
 
   openData() async {
     _setProcessing(true);
-    await PDFHandler(qrData: qrCodeData, patient: patient).openData();
+    await PDFHandler(qrData: qrCodeData, patient: widget.patient.data[date])
+        .openData();
     _setProcessing(false);
   }
 
   downloadData() async {
     _setProcessing(true);
-    await PDFHandler(qrData: qrCodeData, patient: patient).downloadData();
+    await PDFHandler(qrData: qrCodeData, patient: widget.patient.data[date])
+        .downloadData();
     _setProcessing(false);
   }
 
   printData() async {
     _setProcessing(true);
-    await PDFHandler(qrData: qrCodeData, patient: patient).printData();
+    await PDFHandler(qrData: qrCodeData, patient: widget.patient.data[date])
+        .printData();
     _setProcessing(false);
   }
 
   shareData() async {
     _setProcessing(true);
-    await PDFHandler(qrData: qrCodeData, patient: patient).shareData();
+    await PDFHandler(qrData: qrCodeData, patient: widget.patient.data[date])
+        .shareData();
     _setProcessing(false);
   }
 
   openBracelet() async {
     _setProcessing(true);
-    await PDFHandler(qrData: qrCodeData).openBracelet();
+    await PDFHandler(qrData: qrCodeData, patient: widget.patient.data[date])
+        .openBracelet();
     _setProcessing(false);
   }
 
   downloadBracelet() async {
     _setProcessing(true);
-    await PDFHandler(qrData: qrCodeData).downloadBracelet();
+    await PDFHandler(qrData: qrCodeData, patient: widget.patient.data[date])
+        .downloadBracelet();
     _setProcessing(false);
   }
 
   printBracelet() async {
     _setProcessing(true);
-    await PDFHandler(qrData: qrCodeData).printBracelet();
+    await PDFHandler(qrData: qrCodeData, patient: widget.patient.data[date])
+        .printBracelet();
     _setProcessing(false);
   }
 
   shareBracelet() async {
     _setProcessing(true);
-    await PDFHandler(qrData: qrCodeData).shareBracelet();
+    await PDFHandler(qrData: qrCodeData, patient: widget.patient.data[date])
+        .shareBracelet();
     _setProcessing(false);
   }
 
   openBadge() async {
     _setProcessing(true);
-    await PDFHandler(qrData: qrCodeData).openBadge();
+    await PDFHandler(qrData: qrCodeData, patient: widget.patient.data[date])
+        .openBadge();
     _setProcessing(false);
   }
 
   downloadBadge() async {
     _setProcessing(true);
-    await PDFHandler(qrData: qrCodeData).downloadBadge();
+    await PDFHandler(qrData: qrCodeData, patient: widget.patient.data[date])
+        .downloadBadge();
     _setProcessing(false);
   }
 
   printBadge() async {
     _setProcessing(true);
-    await PDFHandler(qrData: qrCodeData).printBadge();
+    await PDFHandler(qrData: qrCodeData, patient: widget.patient.data[date])
+        .printBadge();
     _setProcessing(false);
   }
 
   shareBadge() async {
     _setProcessing(true);
-    await PDFHandler(qrData: qrCodeData).shareBadge();
+    await PDFHandler(qrData: qrCodeData, patient: widget.patient.data[date])
+        .shareBadge();
     _setProcessing(false);
   }
 
   openCIS() async {
     _setProcessing(true);
-    await PDFHandler(qrData: qrCodeData, patient: patient).openCIS();
+    await PDFHandler(qrData: qrCodeData, patient: widget.patient.data[date])
+        .openCIS();
     _setProcessing(false);
   }
 
   downloadCIS() async {
     _setProcessing(true);
-    await PDFHandler(qrData: qrCodeData, patient: patient).downloadCIS();
+    await PDFHandler(qrData: qrCodeData, patient: widget.patient.data[date])
+        .downloadCIS();
     _setProcessing(false);
   }
 
   printCIS() async {
     _setProcessing(true);
-    await PDFHandler(qrData: qrCodeData, patient: patient).printCIS();
+    await PDFHandler(qrData: qrCodeData, patient: widget.patient.data[date])
+        .printCIS();
     _setProcessing(false);
   }
 
   shareCIS() async {
     _setProcessing(true);
-    await PDFHandler(qrData: qrCodeData, patient: patient).shareCIS();
+    await PDFHandler(qrData: qrCodeData, patient: widget.patient.data[date])
+        .shareCIS();
     _setProcessing(false);
   }
 

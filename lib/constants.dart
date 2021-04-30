@@ -27,6 +27,12 @@ List<Icon> icons = [
   Icon(Icons.calendar_view_day),
 ];
 
+String fromMillisecondsToDate(String date) {
+  int dateInt = int.parse(date);
+  DateTime dateTime = DateTime.fromMillisecondsSinceEpoch(dateInt);
+  return formatDate(dateTime);
+}
+
 String formatDate(DateTime date) {
   return date.day.toString() +
       " " +

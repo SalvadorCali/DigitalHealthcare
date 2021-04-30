@@ -4,10 +4,26 @@ import 'package:thesis/model/patient.dart';
 import 'package:thesis/services/pdf_handler.dart';
 import 'package:thesis/widgets/function_button.dart';
 
-class VolunteerCard extends StatelessWidget {
+class VolunteerCard extends StatefulWidget {
   final Patient patient;
+  final int index;
+  final setDate;
   final removePatient;
-  const VolunteerCard(this.patient, this.removePatient);
+  const VolunteerCard(
+      this.patient, this.index, this.setDate, this.removePatient);
+
+  @override
+  _VolunteerCardState createState() => _VolunteerCardState();
+}
+
+class _VolunteerCardState extends State<VolunteerCard> {
+  String currentDate;
+
+  @override
+  void initState() {
+    currentDate = widget.patient.data.keys.last;
+    super.initState();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -21,16 +37,27 @@ class VolunteerCard extends StatelessWidget {
               children: [
                 PopupMenuButton(
                   icon: Icon(Icons.menu),
-                  itemBuilder: (BuildContext context) => <PopupMenuEntry>[
-                    const PopupMenuItem(child: Text('Item A')),
-                    const PopupMenuItem(child: Text('Item B')),
-                  ],
+                  initialValue: currentDate,
+                  itemBuilder: (BuildContext context) {
+                    return widget.patient.data.keys.map((element) {
+                      return PopupMenuItem(
+                        value: element,
+                        child: Text(element),
+                      );
+                    }).toList();
+                  },
+                  onSelected: (value) {
+                    setState(() {
+                      currentDate = value;
+                      widget.setDate(widget.index, value);
+                    });
+                  },
                 ),
                 IconButton(icon: Icon(Icons.close), onPressed: remove),
               ],
             ),
-            title: Text(patient.name),
-            subtitle: Text('CLCNDR96D19A940K'),
+            title: Text(widget.patient.fullName),
+            subtitle: Text(widget.patient.tin),
           ),
           Divider(),
           ListTile(
@@ -56,17 +83,12 @@ class VolunteerCard extends StatelessWidget {
               mainAxisAlignment: MainAxisAlignment.start,
               children: [
                 Text(
-                  "Ultimo aggiornamento: 21/04/21",
+                  "Ultimo aggiornamento: ${widget.patient.data.keys.last}",
                   style: Theme.of(context).textTheme.caption,
                 ),
               ],
             ),
           ),
-          /* ListTile(
-            dense: true,
-            subtitle: Text("Ultimo aggiornamento: 21/04/21"),
-            minVerticalPadding: 0,
-          ), */
         ],
       ),
     );
@@ -74,23 +96,26 @@ class VolunteerCard extends StatelessWidget {
 
   printBadge() async {
     await PDFHandler(
-            qrData: patient.getLifeSavingInformation(), patient: patient)
+            qrData: widget.patient.data[currentDate].getLifeSavingInformation(),
+            patient: widget.patient.data[currentDate])
         .printBadge();
   }
 
   printCIS() async {
     await PDFHandler(
-            qrData: patient.getLifeSavingInformation(), patient: patient)
+            qrData: widget.patient.data[currentDate].getLifeSavingInformation(),
+            patient: widget.patient.data[currentDate])
         .printCIS();
   }
 
   printBracelet() async {
     await PDFHandler(
-            qrData: patient.getLifeSavingInformation(), patient: patient)
+            qrData: widget.patient.data[currentDate].getLifeSavingInformation(),
+            patient: widget.patient.data[currentDate])
         .printBracelet();
   }
 
   remove() {
-    removePatient(patient.name);
+    widget.removePatient(widget.patient.tin);
   }
 }

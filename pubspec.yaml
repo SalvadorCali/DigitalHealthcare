@@ -51,6 +51,7 @@ dependencies:
   overlay: ^0.0.1 # per immagini in overlay
   unicorndial: ^1.1.5 # per creare speed dial
   loading_overlay: ^0.2.1 # per loading in overlay
+  uiblock: ^2.0.0
 
 dev_dependencies:
   change_app_package_name: ^0.1.2

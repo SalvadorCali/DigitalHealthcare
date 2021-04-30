@@ -1,3 +1,4 @@
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:material_floating_search_bar/material_floating_search_bar.dart';
 import 'package:thesis/constants.dart';
@@ -9,17 +10,18 @@ import 'package:thesis/widgets/volunteer_card.dart';
 import 'package:unicorndial/unicorndial.dart';
 
 class Volunteer extends StatefulWidget {
+  final List<Patient> patients;
   final changeScreen;
-  const Volunteer(this.changeScreen);
+  const Volunteer(this.patients, this.changeScreen);
 
   @override
   _VolunteerState createState() => _VolunteerState();
 }
 
 class _VolunteerState extends State<Volunteer> {
-  Patient patient;
-  Patient patient2;
   List<String> qrCodeDataList = [];
+  List<String> namesList = [];
+  List<String> dateList = [];
   List<SearchedPatient> patients = [];
   List<SearchedPatient> queryResult = [];
   List<SearchedPatient> bodyPatients = [];
@@ -29,6 +31,14 @@ class _VolunteerState extends State<Volunteer> {
   void initState() {
     _initializePatient();
     super.initState();
+  }
+
+  _initializePatient() {
+    setState(() {
+      widget.patients.forEach((element) {
+        patients.add(SearchedPatient(element, false));
+      });
+    });
   }
 
   @override
@@ -43,7 +53,10 @@ class _VolunteerState extends State<Volunteer> {
             AppBarButton(Icon(Icons.logout), widget.changeScreen),
           ],
         ),
-        body: loading ? LinearProgressIndicator() : _searchScreen());
+        body: loading
+            //? Center(child: Text("Generazione PDF..."))
+            ? LinearProgressIndicator()
+            : _searchScreen());
   }
 
   Widget _searchScreen() {
@@ -62,8 +75,8 @@ class _VolunteerState extends State<Volunteer> {
                 itemCount: bodyPatients.length,
                 itemBuilder: (context, index) {
                   return bodyPatients[index].body
-                      ? VolunteerCard(
-                          bodyPatients[index].patient, removeElement)
+                      ? VolunteerCard(bodyPatients[index].patient, index,
+                          _setDate, _removeElement)
                       : SizedBox.shrink();
                 },
               ),
@@ -90,7 +103,13 @@ class _VolunteerState extends State<Volunteer> {
         if (query != "") {
           setState(() {
             queryResult = patients
-                .where((element) => element.patient.name.contains(query))
+                .where((element) =>
+                    element.patient.fullName
+                        .toLowerCase()
+                        .contains(query.toLowerCase()) ||
+                    element.patient.tin
+                        .toLowerCase()
+                        .contains(query.toLowerCase()))
                 .toList();
           });
         }
@@ -130,8 +149,8 @@ class _VolunteerState extends State<Volunteer> {
     List<Widget> widgets = [];
     queryResult.forEach((element) {
       widgets.add(ListTile(
-        title: Text(element.patient.name),
-        subtitle: Text("Codice Fiscale"),
+        title: Text(element.patient.fullName),
+        subtitle: Text(element.patient.tin),
         trailing: element.body
             ? SizedBox.shrink()
             : ElevatedButton(
@@ -139,6 +158,8 @@ class _VolunteerState extends State<Volunteer> {
                   setState(() {
                     element.body = true;
                     bodyPatients.add(element);
+                    namesList.add(element.patient.fullName);
+                    dateList.add(element.patient.data.keys.last);
                   });
                 },
                 child: Text("Aggiungi")),
@@ -147,31 +168,30 @@ class _VolunteerState extends State<Volunteer> {
     return widgets;
   }
 
-  removeElement(String name) {
+  _setDate(int index, String newDate) {
+    setState(() {
+      dateList[index] = newDate;
+    });
+  }
+
+  _removeElement(String tin) {
     bool exit = false;
     for (int i = 0; i < bodyPatients.length; i++) {
-      if (bodyPatients[i].patient.name == name) {
+      if (bodyPatients[i].patient.tin == tin) {
         setState(() {
           patients.forEach((member) {
-            if (member.patient.name == name) {
+            if (member.patient.tin == tin) {
               member.body = false;
             }
           });
           bodyPatients.remove(bodyPatients[i]);
+          namesList.remove(namesList[i]);
+          dateList.remove(dateList[i]);
           exit = true;
         });
         if (exit) break;
       }
     }
-  }
-
-  _initializePatient() {
-    setState(() {
-      patient = createPatient();
-      patient2 = createPatientWithName("Ciao", "ciaaa");
-      patients.add(SearchedPatient(patient, false));
-      patients.add(SearchedPatient(patient2, false));
-    });
   }
 
   Widget _buildFloatingButton() {
@@ -204,44 +224,64 @@ class _VolunteerState extends State<Volunteer> {
   }
 
   generateMultipleBadge() {
-    //da rimuovere l'aggiunta in questo punto perché continua ad addare ad ogni click
-    setState(() {
-      loading = true;
-    });
-    bodyPatients.forEach((element) {
-      qrCodeDataList.add(element.patient.getLifeSavingInformation());
-    });
-    PDFHandler(qrDataList: qrCodeDataList).openMultipleBadge().whenComplete(() {
-      setState(() {
-        loading = false;
+    Future.delayed(Duration(seconds: 1), () async {
+      _createData();
+      await PDFHandler(qrDataList: qrCodeDataList)
+          .openMultipleBadge()
+          .whenComplete(() {
+        _resetData();
       });
     });
   }
 
   generateMultipleCIS() {
     Future.delayed(Duration(seconds: 1), () async {
-      setState(() {
-        loading = true;
-      });
-      bodyPatients.forEach((element) {
-        qrCodeDataList.add(element.patient.getLifeSavingInformation());
-      });
-      await PDFHandler(qrDataList: qrCodeDataList, patient: patient)
+      _createData();
+      await PDFHandler(qrDataList: qrCodeDataList)
           .openMultipleCIS()
           .whenComplete(() {
-        setState(() {
-          loading = false;
-        });
+        _resetData();
       });
     });
-    //da rimuovere l'aggiunta in questo punto perché continua ad addare ad ogni click
+  }
+
+  task() {
+    compute(generateMultipleBracelet(), "ok");
   }
 
   generateMultipleBracelet() async {
-    //da rimuovere l'aggiunta in questo punto perché continua ad addare ad ogni click
-    bodyPatients.forEach((element) {
-      qrCodeDataList.add(element.patient.getLifeSavingInformation());
+    _createData();
+    await PDFHandler(
+            qrDataList: qrCodeDataList,
+            names: namesList,
+            setLoading: _setLoading)
+        .openMultipleBracelet()
+        .whenComplete(() {
+      _resetData();
     });
-    await PDFHandler(qrDataList: qrCodeDataList).openMultipleBracelet();
+    //qrCodeDataList.clear();
+  }
+
+  _createData() {
+    setState(() {
+      loading = true;
+    });
+    for (int i = 0; i < bodyPatients.length; i++) {
+      qrCodeDataList.add(
+          bodyPatients[i].patient.data[dateList[i]].getLifeSavingInformation());
+    }
+  }
+
+  _resetData() {
+    qrCodeDataList.clear();
+    setState(() {
+      loading = false;
+    });
+  }
+
+  _setLoading() {
+    setState(() {
+      loading = false;
+    });
   }
 }

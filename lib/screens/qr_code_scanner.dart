@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_barcode_scanner/flutter_barcode_scanner.dart';
-import 'package:thesis/model/patient.dart';
+import 'package:thesis/model/timestamp_patient.dart';
 import 'package:thesis/widgets/function_button.dart';
 
 class QRCodeScanner extends StatefulWidget {
@@ -26,7 +26,7 @@ class _QRCodeScannerState extends State<QRCodeScanner> {
 
   @override
   Widget build(BuildContext context) {
-    Patient patient = createPatient();
+    TimestampPatient patient = createPatient();
     qrCodeDataFake = patient.getLifeSavingInformation();
     return Scaffold(
       appBar: AppBar(
