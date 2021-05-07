@@ -1,5 +1,6 @@
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
+import "dart:async";
 import 'package:material_floating_search_bar/material_floating_search_bar.dart';
 import 'package:thesis/constants.dart';
 import 'package:thesis/model/patient.dart';
@@ -266,6 +267,7 @@ class _VolunteerState extends State<Volunteer> {
     setState(() {
       loading = true;
     });
+
     for (int i = 0; i < bodyPatients.length; i++) {
       qrCodeDataList.add(
           bodyPatients[i].patient.data[dateList[i]].getLifeSavingInformation());
@@ -273,15 +275,15 @@ class _VolunteerState extends State<Volunteer> {
   }
 
   _resetData() {
-    qrCodeDataList.clear();
+    //qrCodeDataList.clear();
     setState(() {
       loading = false;
     });
   }
 
-  _setLoading() {
+  _setLoading(bool status) {
     setState(() {
-      loading = false;
+      loading = status;
     });
   }
 }

@@ -1,37 +1,135 @@
-\contentsline {chapter}{\numberline {1}Introduction}{1}{}%
-\contentsline {section}{\numberline {1.1}Purpose}{1}{}%
-\contentsline {section}{\numberline {1.2}State of the Art}{1}{}%
-\contentsline {subsection}{\numberline {1.2.1}Carta d'Identità Salvavita}{1}{}%
-\contentsline {section}{\numberline {1.3}Scope}{2}{}%
-\contentsline {subsection}{\numberline {1.3.1}Goals}{2}{}%
-\contentsline {subsubsection}{Citizen}{2}{}%
-\contentsline {paragraph}{[G1]}{2}{}%
-\contentsline {paragraph}{[G2]}{2}{}%
-\contentsline {paragraph}{[G3]}{2}{}%
-\contentsline {paragraph}{[G4]}{2}{}%
-\contentsline {paragraph}{[G5]}{2}{}%
-\contentsline {paragraph}{[G6]}{2}{}%
-\contentsline {subsubsection}{Volunteer}{2}{}%
-\contentsline {paragraph}{[G7]}{2}{}%
-\contentsline {paragraph}{[G8]}{2}{}%
-\contentsline {paragraph}{[G9]}{2}{}%
-\contentsline {paragraph}{[G10]}{2}{}%
-\contentsline {subsubsection}{Generic}{2}{}%
-\contentsline {paragraph}{[G11]}{2}{}%
-\contentsline {paragraph}{[G12]}{2}{}%
-\contentsline {paragraph}{[G13]}{2}{}%
-\contentsline {section}{\numberline {1.4}Definitions and Acronyms}{3}{}%
-\contentsline {subsection}{\numberline {1.4.1}Definitions}{3}{}%
-\contentsline {subsection}{\numberline {1.4.2}Acronyms}{3}{}%
-\contentsline {chapter}{\numberline {2}Project Overview}{4}{}%
-\contentsline {section}{\numberline {2.1}Introduction}{4}{}%
-\contentsline {subsection}{\numberline {2.1.1}Web Application}{4}{}%
-\contentsline {subsection}{\numberline {2.1.2}Database}{4}{}%
-\contentsline {subsection}{\numberline {2.1.3}Mobile Application}{4}{}%
-\contentsline {chapter}{\numberline {3}Implementation}{5}{}%
-\contentsline {section}{\numberline {3.1}Architecture}{5}{}%
-\contentsline {section}{\numberline {3.2}Flutter}{5}{}%
-\contentsline {section}{\numberline {3.3}Web Application}{6}{}%
-\contentsline {section}{\numberline {3.4}Mobile Application}{6}{}%
-\contentsline {chapter}{\numberline {4}Functionalities}{7}{}%
-\contentsline {chapter}{\numberline {5}Discussions and Conclusion}{8}{}%
+\boolfalse {citerequest}\boolfalse {citetracker}\boolfalse {pagetracker}\boolfalse {backtracker}\relax 
+\babel@toc {italian}{}
+\babel@toc {italian}{}
+\babel@toc {english}{}
+\babel@toc {italian}{}
+\babel@toc {english}{}
+\babel@toc {italian}{}
+\defcounter {refsection}{0}\relax 
+\contentsline {chapter}{\numberline {1}Definizioni e Acronimi}{3}{chapter.1}%
+\defcounter {refsection}{0}\relax 
+\contentsline {section}{\numberline {1.1}Definizioni}{3}{section.1.1}%
+\defcounter {refsection}{0}\relax 
+\contentsline {section}{\numberline {1.2}Acronimi}{3}{section.1.2}%
+\defcounter {refsection}{0}\relax 
+\contentsline {chapter}{Introduzione}{3}{section.1.2}%
+\defcounter {refsection}{0}\relax 
+\contentsline {section}{\numberline {1.3}Panoramica Generale}{5}{section.1.3}%
+\defcounter {refsection}{0}\relax 
+\contentsline {section}{\numberline {1.4}Stato dell'Arte}{5}{section.1.4}%
+\defcounter {refsection}{0}\relax 
+\contentsline {subsection}{\numberline {1.4.1}Carta d'Identità Salvavita}{6}{subsection.1.4.1}%
+\defcounter {refsection}{0}\relax 
+\contentsline {section}{\numberline {1.5}Obiettivo del Progetto}{6}{section.1.5}%
+\defcounter {refsection}{0}\relax 
+\contentsline {subsection}{\numberline {1.5.1}Goals}{6}{subsection.1.5.1}%
+\defcounter {refsection}{0}\relax 
+\contentsline {subsubsection}{Generali}{7}{section*.14}%
+\defcounter {refsection}{0}\relax 
+\contentsline {paragraph}{[G1]}{7}{section*.15}%
+\defcounter {refsection}{0}\relax 
+\contentsline {paragraph}{[G1]}{7}{section*.16}%
+\defcounter {refsection}{0}\relax 
+\contentsline {paragraph}{[G1]}{7}{section*.17}%
+\defcounter {refsection}{0}\relax 
+\contentsline {paragraph}{[G1]}{7}{section*.18}%
+\defcounter {refsection}{0}\relax 
+\contentsline {subsubsection}{Cittadino}{7}{section*.19}%
+\defcounter {refsection}{0}\relax 
+\contentsline {paragraph}{[G1]}{7}{section*.20}%
+\defcounter {refsection}{0}\relax 
+\contentsline {paragraph}{[G2]}{7}{section*.21}%
+\defcounter {refsection}{0}\relax 
+\contentsline {paragraph}{[G3]}{7}{section*.22}%
+\defcounter {refsection}{0}\relax 
+\contentsline {paragraph}{[G4]}{7}{section*.23}%
+\defcounter {refsection}{0}\relax 
+\contentsline {paragraph}{[G5]}{7}{section*.24}%
+\defcounter {refsection}{0}\relax 
+\contentsline {paragraph}{[G6]}{7}{section*.25}%
+\defcounter {refsection}{0}\relax 
+\contentsline {paragraph}{[G1]}{7}{section*.26}%
+\defcounter {refsection}{0}\relax 
+\contentsline {subsubsection}{Volontario}{7}{section*.27}%
+\defcounter {refsection}{0}\relax 
+\contentsline {paragraph}{[G7]}{7}{section*.28}%
+\defcounter {refsection}{0}\relax 
+\contentsline {paragraph}{[G8]}{7}{section*.29}%
+\defcounter {refsection}{0}\relax 
+\contentsline {paragraph}{[G1]}{8}{section*.30}%
+\defcounter {refsection}{0}\relax 
+\contentsline {paragraph}{[G9]}{8}{section*.31}%
+\defcounter {refsection}{0}\relax 
+\contentsline {paragraph}{[G10]}{8}{section*.32}%
+\defcounter {refsection}{0}\relax 
+\contentsline {chapter}{\numberline {2}Panoramica del progetto}{9}{chapter.2}%
+\defcounter {refsection}{0}\relax 
+\contentsline {section}{\numberline {2.1}Architettura}{9}{section.2.1}%
+\defcounter {refsection}{0}\relax 
+\contentsline {section}{\numberline {2.2}Web Application}{9}{section.2.2}%
+\defcounter {refsection}{0}\relax 
+\contentsline {section}{\numberline {2.3}Mobile Application}{9}{section.2.3}%
+\defcounter {refsection}{0}\relax 
+\contentsline {subsection}{\numberline {2.3.1}Flutter}{9}{subsection.2.3.1}%
+\defcounter {refsection}{0}\relax 
+\contentsline {section}{\numberline {2.4}Database}{10}{section.2.4}%
+\defcounter {refsection}{0}\relax 
+\contentsline {chapter}{\numberline {3}Implementazione}{11}{chapter.3}%
+\defcounter {refsection}{0}\relax 
+\contentsline {section}{\numberline {3.1}Applicazione Mobile}{11}{section.3.1}%
+\defcounter {refsection}{0}\relax 
+\contentsline {subsection}{\numberline {3.1.1}Model}{11}{subsection.3.1.1}%
+\defcounter {refsection}{0}\relax 
+\contentsline {subsection}{\numberline {3.1.2}Screens}{12}{subsection.3.1.2}%
+\defcounter {refsection}{0}\relax 
+\contentsline {subsection}{\numberline {3.1.3}Services}{12}{subsection.3.1.3}%
+\defcounter {refsection}{0}\relax 
+\contentsline {subsection}{\numberline {3.1.4}Widgets}{12}{subsection.3.1.4}%
+\defcounter {refsection}{0}\relax 
+\contentsline {section}{\numberline {3.2}Server-Side Application}{12}{section.3.2}%
+\defcounter {refsection}{0}\relax 
+\contentsline {subsection}{\numberline {3.2.1}Authentication}{12}{subsection.3.2.1}%
+\defcounter {refsection}{0}\relax 
+\contentsline {subsection}{\numberline {3.2.2}Firestore Database}{12}{subsection.3.2.2}%
+\defcounter {refsection}{0}\relax 
+\contentsline {section}{\numberline {3.3}External Services and Libraries}{13}{section.3.3}%
+\defcounter {refsection}{0}\relax 
+\contentsline {chapter}{\numberline {4}Funzionalità}{15}{chapter.4}%
+\defcounter {refsection}{0}\relax 
+\contentsline {section}{\numberline {4.1}Panoramica dell'Applicazione}{15}{section.4.1}%
+\defcounter {refsection}{0}\relax 
+\contentsline {section}{\numberline {4.2}Descrizione delle Funzionalità}{16}{section.4.2}%
+\defcounter {refsection}{0}\relax 
+\contentsline {subsection}{\numberline {4.2.1}Registrazione}{16}{subsection.4.2.1}%
+\defcounter {refsection}{0}\relax 
+\contentsline {subsection}{\numberline {4.2.2}Login}{16}{subsection.4.2.2}%
+\defcounter {refsection}{0}\relax 
+\contentsline {subsection}{\numberline {4.2.3}Schermata del Volontario}{16}{subsection.4.2.3}%
+\defcounter {refsection}{0}\relax 
+\contentsline {subsection}{\numberline {4.2.4}Homepage}{16}{subsection.4.2.4}%
+\defcounter {refsection}{0}\relax 
+\contentsline {subsection}{\numberline {4.2.5}Numeri Utili}{17}{subsection.4.2.5}%
+\defcounter {refsection}{0}\relax 
+\contentsline {subsection}{\numberline {4.2.6}Scanner QR Code}{18}{subsection.4.2.6}%
+\defcounter {refsection}{0}\relax 
+\contentsline {chapter}{\numberline {5}Interfaccia Utente e Casi d'Uso}{19}{chapter.5}%
+\defcounter {refsection}{0}\relax 
+\contentsline {section}{\numberline {5.1}UI Design}{19}{section.5.1}%
+\defcounter {refsection}{0}\relax 
+\contentsline {section}{\numberline {5.2}Use Cases}{19}{section.5.2}%
+\defcounter {refsection}{0}\relax 
+\contentsline {subsection}{\numberline {5.2.1}Login}{19}{subsection.5.2.1}%
+\defcounter {refsection}{0}\relax 
+\contentsline {subsection}{\numberline {5.2.2}Homepage}{20}{subsection.5.2.2}%
+\defcounter {refsection}{0}\relax 
+\contentsline {subsection}{\numberline {5.2.3}Volunteer Screen}{20}{subsection.5.2.3}%
+\defcounter {refsection}{0}\relax 
+\contentsline {subsection}{\numberline {5.2.4}Useful Numbers}{20}{subsection.5.2.4}%
+\defcounter {refsection}{0}\relax 
+\contentsline {subsection}{\numberline {5.2.5}QR Code Scanner}{20}{subsection.5.2.5}%
+\defcounter {refsection}{0}\relax 
+\contentsline {section}{\numberline {5.3}User-Flow Diagram}{20}{section.5.3}%
+\defcounter {refsection}{0}\relax 
+\contentsline {chapter}{\numberline {6}Discussions and Conclusion}{21}{chapter.6}%
+\defcounter {refsection}{0}\relax 
+\contentsline {chapter}{\numberline {7}Bibliografia}{23}{chapter.7}%

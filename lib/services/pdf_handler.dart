@@ -7,6 +7,7 @@ import 'package:flutter/services.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:open_file/open_file.dart';
 import 'package:path/path.dart' as _path;
+import 'package:threading/threading.dart';
 import 'package:universal_html/html.dart' as html;
 import 'package:path_provider/path_provider.dart';
 import 'package:pdf/pdf.dart';
@@ -16,6 +17,8 @@ import 'package:printing/printing.dart';
 import 'package:thesis/constants.dart';
 import 'package:thesis/model/timestamp_patient.dart';
 import 'package:url_launcher/url_launcher.dart';
+import 'package:printing/printing.dart';
+import 'package:flutter/material.dart' as mat;
 
 class PDFHandler {
   //A4: 297mm x 210mm
@@ -26,6 +29,7 @@ class PDFHandler {
   final String badge = "badge";
 
   final pdf = Document();
+  PdfDocument pdf2;
   final TimestampPatient patient;
   final String qrData;
   final List<String> qrDataList;
@@ -136,6 +140,7 @@ class PDFHandler {
   }
 
   openMultipleBracelet() async {
+    print("prova2");
     await _createMultipleBracelet();
     if (kIsWeb) {
       await _openPDFWeb(bracelet);
@@ -224,10 +229,13 @@ class PDFHandler {
   }
 
   _createMultipleBracelet() async {
+    print("Porva4");
+
     final municipioTre =
         (await rootBundle.load('assets/logos/municipio_tre.png'))
             .buffer
             .asUint8List();
+    print("provaee");
     final comuneMilano =
         (await rootBundle.load('assets/logos/comune_milano.png'))
             .buffer
@@ -241,6 +249,7 @@ class PDFHandler {
         (await rootBundle.load('assets/logos/areu2.jpg')).buffer.asUint8List();
     final centodiciotto =
         (await rootBundle.load('assets/logos/118.jpg')).buffer.asUint8List();
+
     /* final municipioTre =
         await compute(imageTask, 'assets/logos/municipio_tre.png');
     final comuneMilano =
@@ -249,6 +258,7 @@ class PDFHandler {
     final polimi = await compute(imageTask, 'assets/logos/polimi2.png');
     final areu = await compute(imageTask, 'assets/logos/areu2.jpg');
     final centodiciotto = await compute(imageTask, 'assets/logos/118.jpg'); */
+    print("Porva3");
     pdf.addPage(MultiPage(
         pageFormat: PdfPageFormat.a4,
         margin: EdgeInsets.all(0),
@@ -296,6 +306,7 @@ class PDFHandler {
   }
 
   Container _braceletLogo(image) {
+    //PdfImage image = PdfImage(pdf.document, image: municipioTre, height: 100, width: 200);
     return Container(
         width: (PdfPageFormat.a4.width / 1.83) / 7,
         height: PdfPageFormat.a4.height / 13.68,
@@ -928,11 +939,14 @@ class PDFHandler {
 
   _openPDFWeb(String name) async {
     try {
-      final bytes = await compute(pdfTask, pdf);
+      final bytes = await pdf.save();
       final blob = html.Blob([bytes], 'application/pdf');
       final url = html.Url.createObjectUrlFromBlob(blob);
       html.window.open(url, "_blank");
       html.Url.revokeObjectUrl(url);
+      setLoading(false);
+
+      print("Eccomi");
       /* print("A");
       SchedulerBinding.instance
           .scheduleTask(() => task(pdf), Priority.animation)
