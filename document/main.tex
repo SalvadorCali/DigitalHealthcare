@@ -14,7 +14,10 @@
 \usepackage{emptypage}
 \usepackage{indentfirst}
 \usepackage{fancyhdr}
+\usepackage{relsize}
 \usepackage{bookmark}
+\usepackage{lipsum}	
+\usepackage[footnote,smaller]{acronym}
 \usepackage{pdfpages}
 \setlength{\headheight}{15pt}
 \usepackage{graphicx}
@@ -22,21 +25,7 @@
 \graphicspath{ {images/} }
 
 \usepackage[autostyle,italian=guillemets]{csquotes}
-%
-% pacchetto biblatex
-%
-% STILI di citazione:
-% style=numeric-comp,	<-- ufficialmente richiesto dal PoliMi (numeri tra [ ])
-% style=philosophy-modern,	<-- autore-anno (meno anonimo, più immediato e più elegante)
-%
-\usepackage[style=philosophy-modern,	% numeric-comp oppure philosophy-modern,
-	hyperref,			% riferimenti cliccabili
-	backref,			% link alle pagine in cui il riferimento è citato
-	natbib, 			% mantiene compatibilità con eventuali comandi natbib
-	backend=biber,		% motore bibliografico (v. ArteLatex di Pantieri)
-	defernumbers=true,	 	% riferimenti ordinati in ordine di comparsa
-	]{biblatex}
-%
+\usepackage[style=philosophy-modern,hyperref,backref,natbib,backend=biber,defernumbers=true]{biblatex}
 \addbibresource{Bibliografia.bib}
 
 %\title{Library Box}
@@ -44,18 +33,19 @@
 %\author{Andrea Calici (10490117)}
 
 \begin{document}
-\includepdf{Frontespizio-Official-Word.pdf}
-\input{fronte/frontespizio.tex}
-
-%\maketitle
+%\input{settings}
+\includepdf{fronte/fronte.pdf}
+%\input{fronte/frontespizio.tex}
 \pagenumbering{gobble}
+%\maketitle
 \input{fronte/indice.tex}
 \input{fronte/ringraziamenti.tex}
 \input{fronte/sommario.tex}
-\pagenumbering{arabic}
+%\input{fronte/acronimi.tex}
 
-\chapter{Definizioni e Acronimi}
-\section{Definizioni}
+\addcontentsline{toc}{chapter}{Definizioni e Acronimi}
+\chapter*{Definizioni e Acronimi}
+\section*{Definizioni}
 In questa sezione verrà presentata una lista di termini comuni e di utile comprensione che verranno utilizzati nel corso della trattazione:
 \begin{itemize}
 \item Utente: il generico utente finale dell'applicazione e comprensivo delle figure dei Cittadino e del Volontario;
@@ -66,7 +56,7 @@ In questa sezione verrà presentata una lista di termini comuni e di utile compr
 \item Scheda Sanitaria Individuale:
 \end{itemize}
 
-\section{Acronimi}
+\section*{Acronimi}
 In questa sezione verrà presentata una lista di acronimi comuni e di utile comprensione che verranno utilizzati nel corso della trattazione:
 \begin{itemize}
 \item CIS: Carta d'Identità Salvavita;
@@ -77,8 +67,10 @@ In questa sezione verrà presentata una lista di acronimi comuni e di utile comp
 \item SSI: Scheda Sanitaria Individuale;
 \end{itemize}
 
-\addcontentsline{toc}{chapter}{Introduzione}
-\chapter*{Introduzione}
+
+\pagenumbering{arabic}
+%\addcontentsline{toc}{chapter}{Introduzione}
+\chapter{Introduzione}
 \markboth{Introduzione}{Introduzione}	% headings
 %
 \label{cap:introduzione}
@@ -112,7 +104,9 @@ Il singolo cittadino, infatti:
 \item può utilizzare l'app ICE che permette di contattare i soccorsi sanitari in caso di emergenza;
 \item può richiedere la Carta d'Identità Salvavita.
 \end{itemize}
-Necessità fondamentale in questa situazione è cercare di integrare quanto più possibile questi diversi sistemi per realizzare un prodotto accessibile dall'utente finale e manutenibile dalle stesse entità senza la presenza di informazioni duplicate o contrastanti.
+Necessità fondamentale in questa situazione è cercare di integrare quanto più possibile questi diversi sistemi per realizzare un prodotto accessibile dall'utente finale e manutenibile dalle stesse entità senza la presenza di informazioni duplicate o contrastanti.\newline
+
+\textbf{IMMAGINE SCHEMATICA}
 
 \subsection{Carta d'Identità Salvavita}
 Medici Volontari Italiani ha sviluppato, con l'aiuto di Fondazione IBM, Società Gisette e il Comune di Milano, un sistema in grado di digitalizzare i dati sanitari salvavita in modo che siano utilizzabili da soccorritore in caso di necessità. Tramite l'inserimento delle informazioni del cittadino, il sistema genera la Carta d'Identità Salvavita, una tessera cartacea che presenta sulla facciata sinistra i dati anagrafici e i dati salvavita forniti dall'MMG e sulla parte destra il cosiddetto badge, ovvero un QR code riassuntivo di tali informazioni e i numeri di emergenza da contattare in caso di necessità.
@@ -159,7 +153,9 @@ L'intero sistema può essere suddiviso in 3 parti fondamentali:
 \item l'applicazione mobile, sviluppata da me, e realizzata con lo scopo di essere utilizzata dal Cittadino per avere traccia delle sue informazioni sanitarie e salvavita e di conseguenza accedere ai documenti generati e dal Volontario che ha la facoltà di ricercare uno o più utenti con lo scopo di fornire servizi di utilità ai cittadini, quali la stampa dei loro documenti;
 \item il lato server, realizzato utilizzando Google Firebase, e che fornisce il servizio di autenticazione per gli utenti e il servizio di database che consente il salvataggio delle informazioni relative ai cittadini.
 \end{itemize}
-Nelle sezioni seguenti verranno analizzate le 3 parti nel dettaglio, focalizzando l'attenzione sulle tecnologie utilizzate.
+Nelle sezioni seguenti verranno analizzate le 3 parti nel dettaglio, focalizzando l'attenzione sulle tecnologie utilizzate.\newline
+
+\textbf{IMMAGINE SCHEMATICA}
 
 \section{Web Application}
 L'applicazione web è stata sviluppata da Davide Laffi.
@@ -168,12 +164,12 @@ L'applicazione web è stata sviluppata da Davide Laffi.
 L'applicazione mobile è stata realizzata utilizzando Flutter.
 
 \subsection{Flutter}
-\textbf{Flutter} is an open-source UI software development kit created by Google and released in 2017, used to develop cross-platform mobile applications. Flutter code is written in Dart, a client-optimized programming language for apps on multiple platforms also developed by Google and used to build not only mobile but also desktop, server, and web applications. Flutter has some very important characteristics that brought the decision of use this code language for the development of the application:
+\textbf{Flutter} è un UI software development kit open-source creato da Google e rilasciato nel 2017 e utilizzabile per sviluppare applicazioni mobile cross-platform. Il codice di Flutter è scritto in Dart, un linguaggio di programmazione client-optimized per applicazioni su multiple piattaforme, sviluppato anch'esso da Google e utilizzato per l'implementazione di applicazioni mobile, desktop, server e web. Tra le caratteristiche principali di Flutter è bene considerare:
 \begin{itemize}
-\item \textbf{Cross-platform}: Flutter bases on Dart which is a unique language the allows to develop the same application for Android, iOS and the web;
-\item \textbf{Firebase}: the integration between Flutter and Firebase is very simple and easy to implement. This is because Flutter is a Google coding language, while Firebase is a Google service. 
-\item \textbf{Widgets}: user interface is made of composition of widgets which developers have to assembly and link together. Widget is a very powerful unit both on code and UI part.
-\item \textbf{Plugins and Packages}: Flutter has a large community which supports it. This allows most expert users to release plugins which are external libraries which permit to implement and integrate lots of services.
+\item \textbf{Cross-platform}: si basa su Dart, linguaggio unico che permette lo sviluppo su Android, iOS e sul web;
+\item \textbf{Firebase}: si integra in maniera semplice e completa con Firebase;
+\item \textbf{Widgets}: si compone di widgets, componenti atomiche che rappresentano elementi della UI e che possono essere uniti nella creazione di schermate pulite e complesse allo stesso tempo; 
+\item \textbf{Plugins and Packages}: grazie alla vasta community di supporto esistono moltissimi packages in grado di implementare i più svariati servizi.
 \end{itemize}
 
 \section{Database}
@@ -195,17 +191,19 @@ L'applicazione mobile è stata sviluppata utilizzando Flutter 2.0. Le varie clas
 \end{figure}
 Il package Model contiene i vari oggetti utilizzati all'interno dell'applicazione che spesso si presentano con la presenza dei vari campi, del costruttore e di metodi di utilità generale per la classe. In particolare:
 \begin{itemize}
-\item end\_user: rappresenta l'utente finale dell'applicazione e permette di salvare le sue informazioni fondamentali ottenute da Firebase quali l'id, il codice fiscale, l'email e la tipologia di utente (cittadino o volontario);
-\item patient: rappresenta il cittadino e contiene le informazioni invariabili (codice fiscale, nome e cognome) e una mappa di \texttt{TimestampPatient} organizzata per data con la funzione di storico per i dati precedenti a quelli attuali;
-\item searched\_patient: rappresenta la classe utilizzata per gestire la ricerca dei cittadini da parte del volontario;
-\item timestamp\_patient: contiene tutte le informazioni sanitarie e salvavita del cittadino relative ad una certa data e metodi di utilità per accedere ai dati.
+\item \texttt{end\_user}: rappresenta l'utente finale dell'applicazione e permette di salvare le sue informazioni fondamentali ottenute da Firebase quali l'id, il codice fiscale, l'email e la tipologia di utente (cittadino o volontario);
+\item \texttt{patient}: rappresenta il cittadino e contiene le informazioni invariabili (codice fiscale, nome e cognome) e una mappa di \texttt{TimestampPatient} organizzata per data con la funzione di storico per i dati precedenti a quelli attuali;
+\item \texttt{searched\_patient}: rappresenta la classe utilizzata per gestire la ricerca dei cittadini da parte del volontario;
+\item \texttt{timestamp\_patient}: contiene tutte le informazioni sanitarie e salvavita del cittadino relative ad una certa data e metodi di utilità per accedere ai dati.
 \end{itemize}
 
 \subsection{Screens}
+\textbf{IMMAGINE SCHEMATICA}\newline
+
 Il package Screens contiene le schermate principali dell'applicazione. Ogni file corrisponde ad una schermata i cui widgets sono spesso contenuti nel package Widgets. In particolare:
 \begin{itemize}
-\item \texttt{emergency\_numbers}
-\item \texttt{homepage}
+\item \texttt{emergency\_numbers}: rappresenta la schermata dei Numeri Utili e si suddivide in due tabs fondamentali. La prima tab contiene i contatti (email e numero di telefono) dell'MMG e del volontario ed è costruita utilizzando le \texttt{NumbersCard}. La seconda tab contiene i numeri di emergenza da contattare in caso di necessità ed è costruita usando le \texttt{EmergencyNumberTile};
+\item \texttt{homepage}: rappresenta la schermata principale dell'applicazione per quanto riguarda il cittadino. Si suddivide in 3 tab fondamentali, ovvero
 \item \texttt{login}
 \item \texttt{qr\_code\_scanner}
 \item \texttt{volunteer}
@@ -213,31 +211,118 @@ Il package Screens contiene le schermate principali dell'applicazione. Ogni file
 \end{itemize}
 
 \subsection{Services}
+\textbf{IMMAGINE SCHEMATICA}\newline
+
 Il package Services contiene le classi responsabili dei principali servizi utilizzati nelle varie schermate e nella logica dell'applicazione. In particolare:
 \begin{itemize}
-\item \texttt{auth\_service}
-\item \texttt{database\_service}
-\item \texttt{pdf\_handler}
-\item \texttt{qr\_code\_handler}
+\item \texttt{auth\_service}: rappresenta la classe incaricata di gestire l'autenticazione degli utenti. Si compone dei seguenti metodi:
+\begin{itemize}
+\item \texttt{getCurrentUser}: restituisce l'utente Firebase corrente;
+\item \texttt{login}: esegue il login dell'utente specificato attraverso email e password e restituisce un booleano rappresentante il risultato dell'operazione;
+\item \texttt{resetPassword}: permette di inviare all'utente il link per il reset della password alla mail specificata.
+\end{itemize}
+\item \texttt{database\_service}: è la classe che si occupa della gestione del database Firebase. Ha una variabile per ogni collezione (users, patients, volunteers) e i seguenti metodi:
+\begin{itemize}
+\item \texttt{getUser}: restituisce il documento Firebase relativo all'utente corrente. Viene mappato nella classe \texttt{EndUser} attraverso il metodo \texttt{\_userFromFirebase};
+\item \texttt{getPatient}: restituisce il documento Firebase relativo al cittadino corrente insieme ai dati sanitari e salvavita. Viene mappato nella classe \texttt{Patient} attraverso il metodo \texttt{\_patientFromFirebase};
+\item \texttt{getPatientsList}: restituisce la lista dei documenti Firebase relativi a tutti i cittadini di competenza del volontario specificato.Viene mappato nella lista di \texttt{Patient} attraverso il metodo \texttt{populatePatientsData}.
+\end{itemize}
+\item \texttt{pdf\_handler}: è la classe che si occupa della gestione dei file in formato .pdf all'interno dell'applicazione. In particolare per ogni documento viene specificato un metodo di creazione per il file. Successivamente per ogni file è presente un metodo che si occupi di:
+\begin{itemize}
+\item aprire il file;
+\item scaricare il file;
+\item condividere il file;
+\item stampare il file.
+\end{itemize}
+\item \texttt{qr\_code\_handler}: è la classe che si occupa della gestione dei codici QR all'interno dell'applicazione. In particolare:
+\begin{itemize}
+\item \texttt{generateQRCode}: genera il codice QR partendo da una stringa di dati;
+\item \texttt{openQRCode}: apre il codice QR dopo averlo generato;
+\item \texttt{saveQRCodeToGallery}: salva nella galleria del dispositivo il codice QR in formato immagine;
+\end{itemize}
 \end{itemize}
 
 \subsection{Widgets}
+\textbf{IMMAGINE SCHEMATICA}\newline
 
-\section{Server-Side Application}
-The server-side of the application is entirely hosted by \textbf{Google Firebase} that offers two main functionalities for the entire system:
+Il package Widgets contiene i widgets utilizzati frequentemente nelle altre classi dell'applicazione con l'obiettivo di ridurre al minimo la duplicazione del codice. In particolare:
 \begin{itemize}
-\item \textbf{Authentication}:
-\item \textbf{Firestore Database}:
+\item \texttt{appbar\_button}: rappresenta le icone cliccabili nell'appbar a cui è collegata una funzione;
+\item \texttt{covid\_tile}: rappresenta le tiles presenti nello storico Covid, caratterizzate dall'evento Covid, dalla data in cui è avvenuto e dal link al documento correlato;
+\item \texttt{emergency\_numbers\_tile}: rappresenta le tiles presente nella tab Emergenza dei Numeri Utili, caratterizzate da un'icona, la descrizione del contatto e il numero telefonico;
+\item \texttt{form\_text\_field}:
+\item \texttt{function\_button}:
+\item \texttt{function\_card}:
+\item \texttt{function\_icon}:
+\item \texttt{numbers\_card}: rappresenta le cards presenti nella tab Contatti dei Numeri Utili, caratterizzate da un'icona, il nome, la professione (medico o volontario) e i contatti (email e numero di telefono);
+\item \texttt{processing\_indicator}: rappresenta l'indicatore di caricamento presente nelle schermate dell'applicazione;
+\item \texttt{radio\_tile}:
+\item \texttt{volunteer\_card}: rappresenta le cards relative ai cittadini presenti nella Schermata del Volontario. Ognuna di esse si compone del nome del cittadino, il codice fiscale e i pulsanti per la stampa dei documenti relativi.
 \end{itemize}
-The best advantage is that Firebase and Flutter are both created by Google so it is very easy to implement the communication between them.
 
-\subsection{Authentication}
+\section{Lato Server}
+Il lato server dell'applicazione è interamente sviluppato attraverso \textbf{Google Firebase} che offre due funzionalità fondamentali per l'intero sistema:
+\begin{itemize}
+\item \textbf{Autenticazione}: gestisce il login degli utenti e la creazione degli accounts;
+\item \textbf{Firestore Database}: permette la creazione di collezioni e documenti con cui eseguire il salvataggio dei dati degli utenti e dei cittadini.
+\end{itemize}
+Il vantaggio fondamentale nell'utilizzo di Firebase consiste nella sua perfetta integrazione con Flutter in quanto sono entrambi servizi Google.
+
+\subsection{Autenticazione}
+Poichè l'intero sistema si basa su 3 profili utente principali (MMG, volontario e cittadino), risulta necessario un servizio di autenticazione efficiente in grado servire questo scopo. In particolare l'accesso avviene tramite email e password, considerato il metodo di autenticazione più comune e scelto per:
+\begin{itemize}
+\item consentire ai volontari incaricati di creare gli account dei cittadini;
+\item consentire alle persone meno pratiche o tecnologiche di ricordare solamente questi due parametri senza la necessità di utilizzare ulteriori fattori di autenticazione che andrebbero a complicare il processo;
+\item uniformare il processo di login basandosi sul concetto che gli account social non sono posseduti da tutti, ma l'utilizzo delle mail risulta pressoché essenziale anche per i servizi più generici.
+\end{itemize}
+In generale i metodi di Firebase utilizzati in fase di autenticazione sono essenzialmente i seguenti:
+\begin{itemize}
+\item \texttt{signInWithEmailAndPassword}: consente di eseguire il login di un utente attraverso email e password nel caso in cui le credenziali fossero valide;
+\item \texttt{sendPasswordResetEmail}: permette di inviare un link per il reset della password all'indirizzo email specificato.
+\end{itemize}
 
 \subsection{Firestore Database}
-Diagramma ER.
+Cloud Firestore è un database cloud NoSQL che permette di salvare e utilizzare i dati lato client in maniera istantanea e rapida. I dati vengono sincronizzati in tempo reale e viene offerto supporto per il lavoro indipendentemente dalla latenza di rete. Le principali funzionalità offerte, reperibili nella documentazione ufficiale, sono:
+\begin{itemize}
+\item flessibilità: permette di organizzare i dati in collezioni e documenti;
+\item interrogazione espressiva: le query possono essere utilizzate per richiedere documenti specifici o intere collezioni, attraverso l'uso di filtri e criteri di ordinamento;
+\item supporto offline: i dati utilizzati dall'applicazione vengono memorizzati automaticamente nella cache in modo che il sistema possa funzionare anche in assenza di rete.
+\end{itemize}
+Il database del sistema è stato organizzato in 4 collezioni fondamentali:
+\begin{itemize}
+\item \textbf{users}: contiene un documento per ogni utente, caratterizzato dall'id utente assegnato in fase di creazione dell'account di Firebase. All'interno di ogni documento sono specificati id, codice fiscale, email e tipologia di account;
+\item \textbf{patients}: contiene un documento per ogni cittadino, caratterizzato dal relativo codice fiscale. Ogni documento è collegato a sua volta ad una sottocollezione che tiene in memoria tutti i dati relativi allo storico del relativo cittadino;
+\item \textbf{doctors}: contiene un documento per ogni MMG, caratterizzato dal relativo codice fiscale. Ogni documento contiene i dati anagrafici del relativo medico;
+\item \textbf{volunteers}: contiene un documento per ogni volontario, caratterizzato dal relativo codice fiscale. Ogni documento contiene i dati anagrafici del relativo volontario.
+\end{itemize}
+Di seguito un diagramma ER che mostra più nel dettaglio le interazioni tra le varie collezioni e i campi dei singoli documenti.\newline
+
+\textbf{IMMAGINE SCHEMATICA}
 
 \section{External Services and Libraries}
-Durante la fase di sviluppo dell'applicazione mobile è stato fatto largo utilizzo dei packages forniti.
+Durante la fase di sviluppo dell'applicazione mobile è stato fatto largo utilizzo dei packages forniti dal sito \texttt{pub.dev}. Le motivazioni alla base di questa scelta sono dovute alla possibilità di sfruttare la presenza di funzionalità già esistenti per arricchire l'applicazione evitando il riutilizzo di codice e favorendo la pulizia dello stesso. Nell'elenco seguente verranno menzionati tutti i packages utilizzati con le relative funzionalità principali:
+\begin{itemize}
+\item \texttt{firebase\_core}: per connettere l'applicazione ai vari servizi offerti da Firebase;
+\item \texttt{firebase\_auth}: per utilizzare le funzionalità di autenticazione offerte da Firebase;
+\item \texttt{cloud\_firestore}: per utilizzare le funzionalità del database cloud offerto da Firebase;
+\item \texttt{path\_provider}: per ottenere percorsi comuni di cartelle nei dispositivi in cui viene eseguita l'applicazione;
+\item \texttt{pdf}: per generare i file .pdf utilizzati nell'applicazione e modificarli;
+\item \texttt{qr\_flutter}: per generare i codici QR utilizzati per i dati salvavita e per lo storico Covid;
+\item \texttt{image\_gallery\_saver}: per salvare nella galleria del dispositivo i QR code;
+\item \texttt{fluttertoast}: per mostrare messaggi in rilievo a seguito di operazioni eseguite con successo;
+\item \texttt{open\_file}: per aprire i file .pdf in maniera nativa nel sistema di appartenenza;
+\item \texttt{downloads\_path\_provider}: per ottenere il path relativo alla cartella di Download nei dispositivi mobili;
+\item \texttt{permission\_handler}: per gestire i permessi all'interno dell'applicazione;
+\item \texttt{flutter\_barcode\_scanner}: per fornire la funzionalità di scansione dei codici QR;
+\item \texttt{url\_launcher}: per aprire pagine internet, indirizzi email o numeri telefoni con l'applicazione di sistema correlata;
+\item \texttt{humanitarian\_icons}: per avere icone aggiuntive da utilizzare nella schermata relativa ai contatti di emergenza;
+\item \texttt{printing}: per abilitare le funzionalità di condivisione e stampa dei vari documenti;
+\item \texttt{path}: per eseguire operazioni di manipolazione sui percorsi del sistema in uso;
+\item \texttt{universal\_html}: per gestire in maniera cross-platform il package html;
+\item \texttt{material\_floating\_search\_bar}: per generare una barra di ricerca consona al Material design;
+\item \texttt{flutter\_login}: per generare una schermata di login pulita ed efficiente;
+\item \texttt{unicorndial}: per utilizzare un floating action button con molteplici funzionalità.
+\end{itemize}
 
 
 \chapter{Funzionalità}
@@ -318,36 +403,106 @@ La schermata dello Scanner è accessibile sia dalla schermata di Login, sia dall
 
 \chapter{Interfaccia Utente e Casi d'Uso}
 \section{UI Design}
-Descrizione della UI e delle scelte prese in merito.
+Il design dell'interfaccia utente è basato principalmente sulle linee guida del Material design, cercando di focalizzarsi simultaneamente su:
+\begin{itemize}
+\item semplicità d'uso: garantita dalle schermate pulite e prive di troppi elementi a schermo, cercando di rendere chiaro all'utente lo scopo di ogni singola componente;
+\item efficienza: garantita dalla presenza di singole operazioni atomiche che non bloccano eccessivamente l'utilizzo dell'applicazione all'utente.
+\end{itemize}
+Nei prossimi paragrafi verranno analizzate in dettaglio le scelte stilistiche e progettuali volte a soddisfare i requisiti appena definiti, focalizzandosi sulle motivazioni di tali scelte.
+
+\subsection{Logo}
+\subsection{Schermate Principali}
+\subsection{Layout Web}
 
 \section{Use Cases}
+Nelle sezioni successive verrano analizzate i casi d'uso più frequenti, avendo cura di specificare:
+\begin{itemize}
+\item Scenario: il titolo riassuntivo del caso d'uso analizzato;
+\item Condizione d'ingresso: requisiti minimi per l'esecuzione del caso d'uso;
+\item Flusso degli eventi: azioni o avvenimenti che caratterizzano il caso d'uso;
+\item Condizione d'uscita: evento finale che termina il flusso degli eventi;
+\item Eccezioni: possibili avvenimenti che causano l'interruzione o privano l'esecuzione degli eventi.
+\end{itemize}
 
 
 \subsection{Login}
 \begin{table}[H]
 \centering
-\begin{tabular}{|p{3cm}|p{10.5cm}|}
+\begin{tabular}{|p{4cm}|p{10cm}|}
 \hline
-Scenario & User's login \\
+Scenario & Login utente \\
 \hline
-Entry condition & The user has downloaded the app or has accessed it using the web browser \newline
-The user already has an account created by the volunteer \\
+Condizione d'ingresso & L'utente ha scaricato l'applicazione o ha eseguito l'accesso attraverso il web browser \newline
+L'utente ha già un account creato dal volontario incaricato \\
 \hline
-Flow of events & 
+Flusso degli eventi & 
 \begin{enumerate}
-\item User fills in his email in the 'Email' field
-\item User fills in his password in the 'Password' field
-\item User clicks on the 'Login' button
+\item L'utente inserisce la sua email nel campo "Email" della schermata
+\item L'utente inserisce la sua password nel campo "Password" della schermata
+\item L'utente clicca sul bottone di "Login"
 \end{enumerate}\\
 \hline
-Exit condition & The application redirects the user to the Homepage of the application \\
+Condizione d'uscita & L'applicazione reindirizza l'utente nella schermata corretta, in base alla tipologia di account (cittadino o volontario)\\
 \hline
-Exceptions & 
+Eccezioni & 
 \begin{itemize}
-\item User did not insert valid personal information
-\item User does not fill in all mandatory fields
-\item The email address is already assigned to another account
-\item The system is not able to complete the request due to an internal error
+\item L'utente non ha inserito credenziali valide
+\item L'utente non ha inserito le credenziali in tutti i campi obbligatori
+\item Il sistema non è in grado di completare la richiesta a causa di un errore interno
+\end{itemize} \\
+\hline
+\end{tabular}
+\end{table}
+
+\begin{table}[H]
+\centering
+\begin{tabular}{|p{4cm}|p{10cm}|}
+\hline
+Scenario & Reset della password \\
+\hline
+Condizione d'ingresso & L'utente ha scaricato l'applicazione o ha eseguito l'accesso attraverso il web browser \newline
+L'utente ha già un account creato dal volontario incaricato \\
+\hline
+Flusso degli eventi & 
+\begin{enumerate}
+\item L'utente clicca sulla scritta "Password dimenticata?"
+\item L'applicazione mostra il form per il reset della password
+\item L'utente inserisce la sua email nel campo "Email" della schermata
+\item L'utente clicca sul bottone di "Reset"
+\end{enumerate}\\
+\hline
+Condizione d'uscita & L'applicazione mostra un messaggio di successo\\
+\hline
+Eccezioni & 
+\begin{itemize}
+\item L'utente non ha inserito credenziali valide
+\item L'utente non ha inserito l'email nel campo relativo
+\item Il sistema non è in grado di completare la richiesta a causa di un errore interno
+\end{itemize} \\
+\hline
+\end{tabular}
+\end{table}
+
+\subsection{Logout}
+\begin{table}[H]
+\centering
+\begin{tabular}{|p{4cm}|p{10cm}|}
+\hline
+Scenario & Cambio schermata \\
+\hline
+Condizione d'ingresso & L'utente è nella schermata di Homepage o nella Schermata del Volontario\\
+\hline
+Flusso degli eventi & 
+\begin{enumerate}
+\item L'utente clicca sull'icona relativa alla logout in alto a sinistra
+\end{enumerate}\\
+\hline
+Condizione d'uscita & L'applicazione esegue il logout dell'utente e lo reindirizza alla schermata di Login
+\\
+\hline
+Eccezioni & 
+\begin{itemize}
+\item Il sistema non è in grado di completare la richiesta a causa di un errore interno
 \end{itemize} \\
 \hline
 \end{tabular}
@@ -356,38 +511,408 @@ Exceptions &
 \subsection{Homepage}
 \begin{table}[H]
 \centering
-\begin{tabular}{|p{3cm}|p{10.5cm}|}
+\begin{tabular}{|p{4cm}|p{10cm}|}
 \hline
-Scenario & Life-Saving Information QR Code \\
+Scenario & Cambio schermata \\
 \hline
-Entry condition & The citizen is logged-in in the Homepage screen\\
+Condizione d'ingresso & L'utente è nella schermata di Homepage\\
 \hline
-Flow of events & 
+Flusso degli eventi & 
 \begin{enumerate}
-\item User clicks on the "Apri" button
-\item The application opens the full-screen image of the QR Code
+\item L'utente clicca sull'icona relativa alla schermata scelta in alto a destra (Numeri Utili o Scanner QR)
 \end{enumerate}\\
 \hline
-Exit condition & The application redirects the user to the Homepage of the application \\
+Condizione d'uscita & L'applicazione reindirizza l'utente nella schermata scelta
+\\
 \hline
-Exceptions & 
+Eccezioni & 
 \begin{itemize}
-\item User did not insert valid personal information
-\item User does not fill in all mandatory fields
-\item The email address is already assigned to another account
-\item The system is not able to complete the request due to an internal error
+\item Il sistema non è in grado di completare la richiesta a causa di un errore interno
 \end{itemize} \\
 \hline
 \end{tabular}
 \end{table}
 
-\subsection{Volunteer Screen}
+\begin{table}[H]
+\centering
+\begin{tabular}{|p{4cm}|p{10cm}|}
+\hline
+Scenario & Scelta documenti \\
+\hline
+Condizione d'ingresso & L'utente è nella schermata di Homepage\\
+\hline
+Flusso degli eventi & 
+\begin{enumerate}
+\item L'utente clicca sull'icona relativa al menu in alto a destra della schermata
+\item L'applicazione mostra le date relative allo storico dell'utente
+\item L'utente clicca sulla data scelta
+\end{enumerate}\\
+\hline
+Condizione d'uscita & L'applicazione aggiorna i dati del cittadino mostrando quelli relativi alla data scelta
+\\
+\hline
+Eccezioni & 
+\begin{itemize}
+\item Il cittadino non dispone di altre date tra cui scegliere oltre a quella attuale
+\item Il sistema non è in grado di completare la richiesta a causa di un errore interno
+\end{itemize} \\
+\hline
+\end{tabular}
+\end{table}
 
-\subsection{Useful Numbers}
+\begin{table}[H]
+\centering
+\begin{tabular}{|p{4cm}|p{10cm}|}
+\hline
+Scenario & Codice QR \\
+\hline
+Condizione d'ingresso & L'utente è nella schermata di Homepage, nella tab Codice QR\\
+\hline
+Flusso degli eventi & 
+\begin{enumerate}
+\item L'utente clicca sul bottone:
+\begin{itemize}
+\item "Apri"
+\item "Salva"
+\item "Stampa"
+\end{itemize}
+\item L'applicazione esegue l'azione richiesta
+\end{enumerate}\\
+\hline
+Condizione d'uscita & L'applicazione:
+\begin{itemize}
+\item apre il codice QR come immagine
+\item salva nel dispositivo il codice QR come immagine
+\item apre la schermata di stampa per il codice QR in formato .pdf
+\end{itemize}\\
+\hline
+Eccezioni & 
+\begin{itemize}
+\item Il sistema non è in grado di completare la richiesta a causa di un errore interno
+\end{itemize} \\
+\hline
+\end{tabular}
+\end{table}
+
+\begin{table}[H]
+\centering
+\begin{tabular}{|p{4cm}|p{10cm}|}
+\hline
+Scenario & Informazioni \\
+\hline
+Condizione d'ingresso & L'utente è nella schermata di Homepage, nella tab Informazioni\\
+\hline
+Flusso degli eventi & 
+\begin{enumerate}
+\item L'utente sceglie il documento di interesse:
+\begin{itemize}
+\item Dati
+\item Badge
+\item CIS
+\item Braccialetto
+\end{itemize}
+\item L'utente clicca sull'icona relativa a:
+\begin{itemize}
+\item "Apri"
+\item "Salva"
+\item "Stampa"
+\end{itemize}
+\item L'applicazione genera il documento ed esegue l'azione richiesta
+\end{enumerate}\\
+\hline
+Condizione d'uscita & L'applicazione:
+\begin{itemize}
+\item apre il documento in formato .pdf
+\item salva nel dispositivo il documento in formato .pdf
+\item apre la schermata di stampa per documento in formato .pdf
+\end{itemize}\\
+\hline
+Eccezioni & 
+\begin{itemize}
+\item Il sistema non è in grado di completare la richiesta a causa di un errore interno
+\end{itemize} \\
+\hline
+\end{tabular}
+\end{table}
+
+\begin{table}[H]
+\centering
+\begin{tabular}{|p{4cm}|p{10cm}|}
+\hline
+Scenario & Covid19 - QR code\\
+\hline
+Condizione d'ingresso & L'utente è nella schermata di Homepage, nella tab Covid19\\
+\hline
+Flusso degli eventi & 
+\begin{enumerate}
+\item L'utente clicca sul bottone:
+\begin{itemize}
+\item "Apri"
+\item "Salva"
+\item "Stampa"
+\end{itemize}
+\item L'applicazione esegue l'azione richiesta
+\end{enumerate}\\
+\hline
+Condizione d'uscita & L'applicazione:
+\begin{itemize}
+\item apre il codice QR come immagine
+\item salva nel dispositivo il codice QR come immagine
+\item apre la schermata di stampa per il codice QR in formato .pdf
+\end{itemize}\\
+\hline
+Eccezioni & 
+\begin{itemize}
+\item Il sistema non è in grado di completare la richiesta a causa di un errore interno
+\end{itemize} \\
+\hline
+\end{tabular}
+\end{table}
+
+\begin{table}[H]
+\centering
+\begin{tabular}{|p{4cm}|p{10cm}|}
+\hline
+Scenario & Covid19 - Storico\\
+\hline
+Condizione d'ingresso & L'utente è nella schermata di Homepage, nella tab Covid19\\
+\hline
+Flusso degli eventi & 
+\begin{enumerate}
+\item L'utente sceglie dalla lista l'evento di interesse
+\item L'utente clicca sul bottone "Apri"
+\item L'applicazione esegue l'azione richiesta
+\end{enumerate}\\
+\hline
+Condizione d'uscita & L'applicazione apre il documento richiesto nella pagina web di provenienza\\
+\hline
+Eccezioni & 
+\begin{itemize}
+\item L'utente non ha alcun dato nello storico Covid
+\item Il sistema non è in grado di completare la richiesta a causa di un errore interno
+\end{itemize} \\
+\hline
+\end{tabular}
+\end{table}
+
+\subsection{Schermata del Volontario}
+\begin{table}[H]
+\centering
+\begin{tabular}{|p{4cm}|p{10cm}|}
+\hline
+Scenario & Ricerca cittadino \\
+\hline
+Condizione d'ingresso & Il volontario ha scaricato l'applicazione o ha eseguito l'accesso attraverso il web browser \newline
+Il volontario ha già un account \\
+\hline
+Flusso degli eventi & 
+\begin{enumerate}
+\item Il volontario inserisce il nome (o il codice fiscale) del cittadino di sua competenza nella barra di ricerca che presenta la scritta "Cerca..."
+\item L'applicazione mostra i cittadini che soddisfano la ricerca del volontario
+\item Il volontario seleziona il cittadino (o i cittadini) desiderato cliccando il pulsante "Aggiungi"
+\end{enumerate}\\
+\hline
+Condizione d'uscita & L'applicazione aggiunge alla lista il cittadino selezionato e lo mostra nella schermata\\
+\hline
+Eccezioni & 
+\begin{itemize}
+\item Il volontario ha inserito un nome (o un codice fiscale) inesistente
+\item Il cittadino non fa parte delle competenze del volontario
+\item Il sistema non è in grado di completare la richiesta a causa di un errore interno
+\end{itemize} \\
+\hline
+\end{tabular}
+\end{table}
+
+\begin{table}[H]
+\centering
+\begin{tabular}{|p{4cm}|p{10cm}|}
+\hline
+Scenario & Rimozione cittadino \\
+\hline
+Condizione d'ingresso & Il volontario ha scaricato l'applicazione o ha eseguito l'accesso attraverso il web browser \newline
+Il volontario ha già un account\newline
+Il volontario ha selezionato un cittadino attraverso la barra di ricerca\\
+\hline
+Flusso degli eventi & 
+\begin{enumerate}
+\item Il volontario seleziona il cittadino di interesse tra quelli presenti nella lista
+\item Il volontario clicca sull'icona ad X nella scheda relativa al cittadino
+\end{enumerate}\\
+\hline
+Condizione d'uscita & L'applicazione rimuove dalla lista il cittadino selezionato\\
+\hline
+Eccezioni & 
+\begin{itemize}
+\item Il sistema non è in grado di completare la richiesta a causa di un errore interno
+\end{itemize} \\
+\hline
+\end{tabular}
+\end{table}
+
+\begin{table}[H]
+\centering
+\begin{tabular}{|p{4cm}|p{10cm}|}
+\hline
+Scenario & Scelta documenti cittadino \\
+\hline
+Condizione d'ingresso & Il volontario ha scaricato l'applicazione o ha eseguito l'accesso attraverso il web browser \newline
+Il volontario ha già un account\newline
+Il volontario ha selezionato un cittadino attraverso la barra di ricerca \\
+\hline
+Flusso degli eventi & 
+\begin{enumerate}
+\item Il volontario seleziona il cittadino di interesse tra quelli presenti nella lista
+\item Il volontario clicca sull'icona rappresentante il menu nella scheda relativa al cittadino
+\item Il volontario clicca sulla data di interesse
+\end{enumerate}\\
+\hline
+Condizione d'uscita & L'applicazione aggiorna i dati del cittadino mostrando quelli relativi alla data scelta\\
+\hline
+Eccezioni & 
+\begin{itemize}
+\item Il cittadino selezionato non dispone di altre date tra cui scegliere oltre a quella attuale
+\item Il sistema non è in grado di completare la richiesta a causa di un errore interno
+\end{itemize} \\
+\hline
+\end{tabular}
+\end{table}
+
+\begin{table}[H]
+\centering
+\begin{tabular}{|p{4cm}|p{10cm}|}
+\hline
+Scenario & Stampa singola \\
+\hline
+Condizione d'ingresso & Il volontario ha scaricato l'applicazione o ha eseguito l'accesso attraverso il web browser \newline
+Il volontario ha già un account\newline
+Il volontario ha selezionato un cittadino attraverso la barra di ricerca \\
+\hline
+Flusso degli eventi & 
+\begin{enumerate}
+\item Il volontario seleziona il cittadino di interesse tra quelli presenti nella lista
+\item Il volontario seleziona il documento di interesse tra Badge, CIS e Braccialetto
+\item Il volontario clicca sul pulsante "Stampa"
+\end{enumerate}\\
+\hline
+Condizione d'uscita & L'applicazione mostra la schermata di stampa del documento selezionato in formato .pdf\\
+\hline
+Eccezioni & 
+\begin{itemize}
+\item Il sistema non è in grado di completare la richiesta a causa di un errore interno
+\end{itemize} \\
+\hline
+\end{tabular}
+\end{table}
+
+\begin{table}[H]
+\centering
+\begin{tabular}{|p{4cm}|p{10cm}|}
+\hline
+Scenario & Stampa multipla \\
+\hline
+Condizione d'ingresso & Il volontario ha scaricato l'applicazione o ha eseguito l'accesso attraverso il web browser \newline
+Il volontario ha già un account\newline
+Il volontario ha selezionato più cittadini attraverso la barra di ricerca \\
+\hline
+Flusso degli eventi & 
+\begin{enumerate}
+\item Il volontario clicca sul pulsante in basso a destra dello schermo che presenta l'icona di stampa
+\item Il volontario seleziona il documento di interesse cliccando sull'icon corrispondente
+\end{enumerate}\\
+\hline
+Condizione d'uscita & L'applicazione mostra la schermata di stampa dei documenti selezionati in formato .pdf\\
+\hline
+Eccezioni & 
+\begin{itemize}
+\item Il sistema non è in grado di completare la richiesta a causa di un errore interno
+\end{itemize} \\
+\hline
+\end{tabular}
+\end{table}
+
+\subsection{Numeri Utili}
+\begin{table}[H]
+\centering
+\begin{tabular}{|p{4cm}|p{10cm}|}
+\hline
+Scenario & Contatti \\
+\hline
+Condizione d'ingresso & L'utente ha scaricato l'applicazione o ha eseguito l'accesso attraverso il web browser\newline
+L'utente ha già un account creato dal volontario incaricato\newline
+L'utente è nella schermata Numeri Utili, nella tab Contatti\\
+\hline
+Flusso degli eventi & 
+\begin{enumerate}
+\item L'utente sceglie il contatto desiderato tra MMG e volontario
+\item L'utente clicca sulla forma di comunicazione desiderata (numero telefonico o email)
+\end{enumerate}\\
+\hline
+Condizione d'uscita & L'applicazione apre l'applicazione del dispositivo in grado di gestire la richiesta\\
+\hline
+Eccezioni & 
+\begin{itemize}
+\item Il sistema non è in grado di completare la richiesta a causa di un errore interno
+\end{itemize} \\
+\hline
+\end{tabular}
+\end{table}
+
+\begin{table}[H]
+\centering
+\begin{tabular}{|p{4cm}|p{10cm}|}
+\hline
+Scenario & Contatti \\
+\hline
+Condizione d'ingresso & L'utente ha scaricato l'applicazione o ha eseguito l'accesso attraverso il web browser\newline
+L'utente è nella schermata Numeri Utili, nella tab Emergenza\\
+\hline
+Flusso degli eventi & 
+\begin{enumerate}
+\item L'utente sceglie il contatto desiderato tra Carabinieri, Polizia di Stato, Vigili del Fuoco, Guardia di Finanza e Emergenza Sanitaria
+\item L'utente clicca sul contatto desiderato
+\end{enumerate}\\
+\hline
+Condizione d'uscita & L'applicazione apre l'applicazione del dispositivo in grado di gestire la richiesta\\
+\hline
+Eccezioni & 
+\begin{itemize}
+\item Il sistema non è in grado di completare la richiesta a causa di un errore interno
+\end{itemize} \\
+\hline
+\end{tabular}
+\end{table}
 
 \subsection{QR Code Scanner}
+\begin{table}[H]
+\centering
+\begin{tabular}{|p{4cm}|p{10cm}|}
+\hline
+Scenario & Scansione QR \\
+\hline
+Condizione d'ingresso & L'utente ha scaricato l'applicazione\newline
+L'utente è nella schermata QR Code Scanner\\
+\hline
+Flusso degli eventi & 
+\begin{enumerate}
+\item L'utente clicca sul pulsante "Scan"
+\item L'applicazione attiva la camera del dispositivo in attesa della scansione
+\item L'utente esegue la scansione di un codice QR
+\end{enumerate}\\
+\hline
+Condizione d'uscita & L'applicazione mostra i dati relativi al codice QR scansionato\\
+\hline
+Eccezioni & 
+\begin{itemize}
+\item L'utente cerca di eseguire la scansione di un codice QR che non soddisfa i requisiti dell'applicazione
+\item Il sistema non è in grado di completare la richiesta a causa di un errore interno
+\end{itemize} \\
+\hline
+\end{tabular}
+\end{table}
 
 \section{User-Flow Diagram}
+Il grafico seguente mostra nel dettaglio tutte le possibili interazioni tra le schermate dell'applicazione attraverso un user flow diagram.
 
 
 \chapter{Discussions and Conclusion}
