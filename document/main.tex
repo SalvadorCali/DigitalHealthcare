@@ -48,12 +48,12 @@
 \section*{Definizioni}
 In questa sezione verrà presentata una lista di termini comuni e di utile comprensione che verranno utilizzati nel corso della trattazione:
 \begin{itemize}
-\item Utente: il generico utente finale dell'applicazione e comprensivo delle figure dei Cittadino e del Volontario;
-\item Cittadino: utente finale che utilizzando l'applicazione è in grado di ;
-\item Volontario: utente finale dell'applicazione che rappresenta la figura di riferimento per l'inserimento dei dati di natura pratica del Cittadino e che può avere accesso al sistema sia per la fase di inserimento di informazioni, sia per eseguire funzioni di utilizzo dei dati;
+\item Utente: il generico utente finale dell'applicazione e comprensivo delle figure del cittadino e del volontario;
+\item Cittadino: utente finale che è in grado di accedere ai propri dati sanitari e salvavita e generare attraverso l'applicazione documenti di utilità;
+\item Volontario: utente finale dell'applicazione che rappresenta la figura di riferimento per l'inserimento dei dati di natura pratica del cittadino e che può avere accesso al sistema sia per la fase di inserimento di informazioni, sia per eseguire funzioni di utilizzo dei dati;
 \item Carta d'Identità Salvavita: documento contenente il codice QR salvavita e i dati sanitari di emergenza del cittadino;
-\item Fascicolo Sanitario Elettronico:
-\item Scheda Sanitaria Individuale:
+\item Fascicolo Sanitario Elettronico: strumento che permette di ricostruire la storia clinica del cittadino con la presenza dei dati e dei documenti sanitari dello stesso;
+\item Scheda Sanitaria Individuale: documento compilato dal Medico di Medicina Generale che contiene la storia clinica del paziente e le sue informazioni sanitarie.
 \end{itemize}
 
 \section*{Acronimi}
@@ -66,7 +66,7 @@ In questa sezione verrà presentata una lista di acronimi comuni e di utile comp
 \item FSE: Fascicolo Sanitario Elettronico;
 \item SSI: Scheda Sanitaria Individuale;
 \end{itemize}
-
+\cleardoublepage
 
 \pagenumbering{arabic}
 %\addcontentsline{toc}{chapter}{Introduzione}
@@ -102,46 +102,56 @@ Il singolo cittadino, infatti:
 \item è dotato del Fascicolo Sanitario Elettronico accessibile attraverso il portale della regione di residenza che riporta la storia sanitaria dello stesso;
 \item presenta la sua storia clinica attuale nella Scheda Sanitaria Individuale compilata dal Medico di Medicina Generale;
 \item può utilizzare l'app ICE che permette di contattare i soccorsi sanitari in caso di emergenza;
-\item può richiedere la Carta d'Identità Salvavita.
+\item può richiedere la Carta d'Identità Salvavita e i relativi servizi correlati.
 \end{itemize}
 Necessità fondamentale in questa situazione è cercare di integrare quanto più possibile questi diversi sistemi per realizzare un prodotto accessibile dall'utente finale e manutenibile dalle stesse entità senza la presenza di informazioni duplicate o contrastanti.\newline
 
 \textbf{IMMAGINE SCHEMATICA}
 
 \subsection{Carta d'Identità Salvavita}
-Medici Volontari Italiani ha sviluppato, con l'aiuto di Fondazione IBM, Società Gisette e il Comune di Milano, un sistema in grado di digitalizzare i dati sanitari salvavita in modo che siano utilizzabili da soccorritore in caso di necessità. Tramite l'inserimento delle informazioni del cittadino, il sistema genera la Carta d'Identità Salvavita, una tessera cartacea che presenta sulla facciata sinistra i dati anagrafici e i dati salvavita forniti dall'MMG e sulla parte destra il cosiddetto badge, ovvero un QR code riassuntivo di tali informazioni e i numeri di emergenza da contattare in caso di necessità.
+Medici Volontari Italiani ha sviluppato, con l'aiuto di Fondazione IBM, Società Gisette e il Comune di Milano, un sistema in grado di digitalizzare i dati sanitari salvavita in modo che siano utilizzabili dal soccorritore in caso di necessità. Tramite l'inserimento delle informazioni del cittadino, il sistema genera la Carta d'Identità Salvavita, una tessera cartacea che presenta sulla facciata sinistra i dati anagrafici e i dati salvavita forniti dall'MMG e sulla parte destra il cosiddetto badge, ovvero un QR code riassuntivo di tali informazioni e i numeri di emergenza da contattare in caso di necessità.
+
+\subsection{Braccialetto Salvavita}
+Sviluppato parallelamente alla CIS, il braccialetto salvavita offre la possibilità di avere sempre a portata di mano il QR code la cui lettura comunica ai soccorritori le informazioni sanitarie d'emergenza definite precedentemente e segnala che la persona che lo indossa è dotata di una CIS.
 
 \section{Obiettivo del Progetto}
-L'obiettivo del progetto è quello di realizzare un sistema che unifichi il flusso di informazioni suddividendolo in due parti fondamentali:
+Partendo dalla presenza di diverse realtà differenti che si occupano di fornire al cittadino l'obiettivo comune di salvaguardare la sua salutw, questo progetto nasce con la necessità di poter crare un punto di partenza per realizzare un sistema in grado di unificare, per quanto possibile, il flusso di informazioni appena definito cercando di semplificare l'inserimento dei dati, la loro gestione e  soprattutto l'accesso e l'utilizzo da parte dei cittadini attraverso la generazione di documenti di utilità.
+Il sistema realizzato si compone di due componenti fondamentali:
 \begin{itemize}
 \item l'inserimento dei dati sanitari e salvavita del cittadino realizzato dal MMG e dal volontario;
 \item l'utilizzo di queste informazioni per generare la CIS e altri documenti di utilità per il cittadino per essere sempre in grado di fornirli al soccorritore in caso di necessità.
 \end{itemize}
+In questo modo l'MMG è in grado di gestire e modificare i dati relativi ai suoi pazienti e i cittadini sono in grado di avere l'accesso immediato a tali dati.
 
-\subsection{Goals}
-Gli obiettivi fondamentali dell'applicazione sono enunciati in seguito.
+\subsection{Obiettivi}
+Gli obiettivi (goals) fondamentali dell'applicazione sono enunciati in seguito e sono suddivisi in:
+\begin{itemize}
+\item generali: riferiti all'utente generico dell'applicazione, senza alcun tipo di differenziazione tra account del volontario o account del cittadino;
+\item cittadino: riferiti all'utilizzo dell'applicazione da parte del cittadino;
+\item volontario: riferiti all'utilizzo dell'applicazione da parte del volontario.
+\end{itemize}
 
 \subsubsection{Generali}
 \paragraph{[G1]} Permettere all'utente di eseguire il reset della password tramite l'invio via mail di un link;
-\paragraph{[G1]} Mostrare una lista di numeri di emergenza che possono essere contattati in caso di necessità;
-\paragraph{[G1]} Permettere all'utente di eseguire la scansione di un codice QR e mostrare i relativi dati;
-\paragraph{[G1]} Generare partendo dai dati del cittadino la il QR code, il Profilo Sanitario Sintetico, la Carta d'Identità Salvavita, il badge e il braccialetto.
+\paragraph{[G2]} Mostrare una lista di numeri di emergenza che possono essere contattati in caso di necessità;
+\paragraph{[G3]} Permettere all'utente di eseguire la scansione di un codice QR e mostrare i relativi dati.
 
 \subsubsection{Cittadino}
-\paragraph{[G1]} Permettere al cittadino di diventare utente dell'applicazione a seguito dell'inserimento dei suoi dati da parte del MMG e del volontario;
-\paragraph{[G2]} Permettere all'utente di eseguire il login nel sistema attraverso l'utilizzo di valide credenziali (email e password);
-\paragraph{[G3]} Mostrare all'utente il QR code che riassume le informazioni salvavita con la possibilità di aprirlo come immagine, salvarlo nel dispositivo o stamparlo in formato .pdf;
-\paragraph{[G4]} Mostrare all'utente i documenti fondamentali generati dai suoi dati sanitari, quali il Profilo Sanitario Sintetico, la Carta d'Identità Salvavita, il badge e il braccialetto;
-\paragraph{[G5]} Mostrare lo storico Covid dell'utente con la possibilità di aprire i documenti relativi sul web e il QR code riassuntivo degli stessi con la possibilità di aprirlo come immagine, salvarlo nel dispositivo o stamparlo in formato .pdf;
-\paragraph{[G6]} Permettere all'utente di contattare l'MMG e il volontario incaricato dell'inserimento e della gestione dei dati tramite email o numero telefonico.
-\paragraph{[G1]} Permettere al cittadino di selezionare i dati precedenti a quelli attuali e i relativi documenti in base alla data.
+\paragraph{[G4]} Generare partendo dai dati del cittadino il QR code, il Profilo Sanitario Sintetico, la Carta d'Identità Salvavita, il badge e il braccialetto;
+\paragraph{[G5]} Permettere al cittadino di diventare utente dell'applicazione a seguito dell'inserimento dei suoi dati da parte del MMG e del volontario;
+\paragraph{[G6]} Permettere all'utente di eseguire il login nel sistema attraverso l'utilizzo di valide credenziali (email e password);
+\paragraph{[G7]} Mostrare all'utente il QR code che riassume le informazioni salvavita con la possibilità di aprirlo come immagine, salvarlo nel dispositivo o stamparlo in formato .pdf;
+\paragraph{[G8]} Mostrare all'utente i documenti fondamentali generati dai suoi dati sanitari, quali il Profilo Sanitario Sintetico, la Carta d'Identità Salvavita, il badge e il braccialetto;
+\paragraph{[G9]} Mostrare lo storico Covid dell'utente con la possibilità di aprire i documenti relativi sul web e il QR code riassuntivo degli stessi con la possibilità di aprirlo come immagine, salvarlo nel dispositivo o stamparlo in formato .pdf;
+\paragraph{[G10]} Permettere all'utente di contattare l'MMG e il volontario incaricato dell'inserimento e della gestione dei dati tramite email o numero telefonico.
+\paragraph{[G11]} Permettere al cittadino di selezionare i dati precedenti a quelli attuali e i relativi documenti in base alla data.
 
 \subsubsection{Volontario}
-\paragraph{[G7]} Permettere al volontario di eseguire il login nel sistema attraverso l'utilizzo di valide credenziali (email e password);
-\paragraph{[G8]} Permettere al volontario di ricercare tra i cittadini a lui assegnati e selezionarli;
-\paragraph{[G1]} Permettere al volontario di selezionare per il singolo cittadino i dati scelti in base alla data in cui sono stati inseriti;
-\paragraph{[G9]} Permettere al volontario di stampare la Carta d'Identità Salvavita, il badge e il braccialetto di un cittadino;
-\paragraph{[G10]} Permettere al volontario di stampare la Carta d'Identità Salvavita, il badge e il braccialetto a più cittadini nello stesso momento.
+\paragraph{[G12]} Permettere al volontario di eseguire il login nel sistema attraverso l'utilizzo di valide credenziali (email e password);
+\paragraph{[G13]} Permettere al volontario di ricercare tra i cittadini a lui assegnati e selezionarli;
+\paragraph{[G14]} Permettere al volontario di selezionare per il singolo cittadino i dati scelti in base alla data in cui sono stati inseriti;
+\paragraph{[G15]} Permettere al volontario di stampare la Carta d'Identità Salvavita, il badge e il braccialetto di un cittadino;
+\paragraph{[G16]} Permettere al volontario di stampare la Carta d'Identità Salvavita, il badge e il braccialetto a più cittadini nello stesso momento.
 
 
 \chapter{Panoramica del progetto}
@@ -158,7 +168,7 @@ Nelle sezioni seguenti verranno analizzate le 3 parti nel dettaglio, focalizzand
 \textbf{IMMAGINE SCHEMATICA}
 
 \section{Web Application}
-L'applicazione web è stata sviluppata da Davide Laffi.
+L'applicazione web è stata sviluppata da Davide Laffi. Questa parte sarà descritta a seguito del lavoro di Davide.
 
 \section{Mobile Application}
 L'applicazione mobile è stata realizzata utilizzando Flutter.
@@ -172,16 +182,50 @@ L'applicazione mobile è stata realizzata utilizzando Flutter.
 \item \textbf{Plugins and Packages}: grazie alla vasta community di supporto esistono moltissimi packages in grado di implementare i più svariati servizi.
 \end{itemize}
 
-\section{Database}
-Il lato server del sistema è stato realizzato utilizzando \textbf{Google Firebase}, una piattaforma online che permette di salvare, sincronizzare e utilizzare i dati generati dalle applicazione web e mobile. Dalla moltitudine di funzionalità offerte dal servizio, per lo sviluppo del sistema sono state utilizzate in particolare due di esse:
+\section{Lato Server}
+Il lato server del sistema è stato realizzato utilizzando \textbf{Google Firebase}, una piattaforma online che permette di salvare, sincronizzare e utilizzare i dati generati dalle applicazioni web e mobile. Dalla moltitudine di funzionalità offerte dal servizio, per lo sviluppo del sistema sono state utilizzate in particolare due di esse:
 \begin{itemize}
 \item \textbf{Autenticazione}: abilita la creazione e la gestione degli utenti per il sistema. Tra i vari metodi di sign-in disponibili è stato scelto quello classico di iscrizione e login tramite email e password. Nel servizio di autenticazione è fornita anche la possibilità del reset della password;
 \item \textbf{Firestore Database}: permette la creazione di collezioni e documenti che andranno a popolare i dati che verranno utilizzati dal sistema.
 \end{itemize}
+Il vantaggio fondamentale nell'utilizzo di Firebase consiste nella sua perfetta integrazione con Flutter in quanto sono entrambi servizi Google.
+
+\subsection{Autenticazione}
+Poichè l'intero sistema si basa su 3 profili utente principali (MMG, volontario e cittadino), risulta necessario un servizio di autenticazione efficiente in grado servire questo scopo. In particolare l'accesso avviene tramite email e password, considerato il metodo di autenticazione più comune e scelto per:
+\begin{itemize}
+\item consentire ai volontari incaricati di creare gli account dei cittadini;
+\item consentire alle persone meno pratiche o tecnologiche di ricordare solamente questi due parametri senza la necessità di utilizzare ulteriori fattori di autenticazione che andrebbero a complicare il processo;
+\item uniformare il processo di login basandosi sul concetto che gli account social non sono posseduti da tutti, ma l'utilizzo delle mail risulta pressoché essenziale anche per i servizi più generici.
+\end{itemize}
+In generale i metodi di Firebase utilizzati in fase di autenticazione sono essenzialmente i seguenti:
+\begin{itemize}
+\item \texttt{signInWithEmailAndPassword}: consente di eseguire il login di un utente attraverso email e password nel caso in cui le credenziali fossero valide;
+\item \texttt{sendPasswordResetEmail}: permette di inviare un link per il reset della password all'indirizzo email specificato.
+\end{itemize}
+
+\subsection{Firestore Database}
+Cloud Firestore è un database cloud NoSQL che permette di salvare e utilizzare i dati lato client in maniera istantanea e rapida. I dati vengono sincronizzati in tempo reale e viene offerto supporto per il lavoro indipendentemente dalla latenza di rete. Le principali funzionalità offerte, reperibili nella documentazione ufficiale, sono:
+\begin{itemize}
+\item flessibilità: permette di organizzare i dati in collezioni e documenti;
+\item interrogazione espressiva: le query possono essere utilizzate per richiedere documenti specifici o intere collezioni, attraverso l'uso di filtri e criteri di ordinamento;
+\item supporto offline: i dati utilizzati dall'applicazione vengono memorizzati automaticamente nella cache in modo che il sistema possa funzionare anche in assenza di rete.
+\end{itemize}
+Il database del sistema è stato organizzato in 4 collezioni fondamentali:
+\begin{itemize}
+\item \textbf{users}: contiene un documento per ogni utente, caratterizzato dall'id utente assegnato in fase di creazione dell'account di Firebase. All'interno di ogni documento sono specificati id, codice fiscale, email e tipologia di account;
+\item \textbf{patients}: contiene un documento per ogni cittadino, caratterizzato dal relativo codice fiscale. Ogni documento è collegato a sua volta ad una sottocollezione che tiene in memoria tutti i dati relativi allo storico del relativo cittadino;
+\item \textbf{doctors}: contiene un documento per ogni MMG, caratterizzato dal relativo codice fiscale. Ogni documento contiene i dati anagrafici del relativo medico;
+\item \textbf{volunteers}: contiene un documento per ogni volontario, caratterizzato dal relativo codice fiscale. Ogni documento contiene i dati anagrafici del relativo volontario.
+\end{itemize}
+Di seguito un diagramma ER che mostra più nel dettaglio le interazioni tra le varie collezioni e i campi dei singoli documenti.\newline
+
+\textbf{IMMAGINE SCHEMATICA}
 
 \chapter{Implementazione}
-\section{Applicazione Mobile}
-L'applicazione mobile è stata sviluppata utilizzando Flutter 2.0. Le varie classi dell'applicazione sono state suddivise in packages in base alla tipologia per incrementare la manutenibilità, la chiarezza e la separazione delle stesse.
+\section{Packages e Classi}
+L'applicazione mobile è stata sviluppata utilizzando Flutter 2.0. Le varie classi dell'applicazione sono state suddivise in packages in base alla tipologia per incrementare la manutenibilità, la chiarezza e la separazione delle stesse.\newline
+
+\textbf{IMMAGINE SCHEMATICA}
 
 \subsection{Model}
 \begin{figure}[H]
@@ -203,11 +247,16 @@ Il package Model contiene i vari oggetti utilizzati all'interno dell'applicazion
 Il package Screens contiene le schermate principali dell'applicazione. Ogni file corrisponde ad una schermata i cui widgets sono spesso contenuti nel package Widgets. In particolare:
 \begin{itemize}
 \item \texttt{emergency\_numbers}: rappresenta la schermata dei Numeri Utili e si suddivide in due tabs fondamentali. La prima tab contiene i contatti (email e numero di telefono) dell'MMG e del volontario ed è costruita utilizzando le \texttt{NumbersCard}. La seconda tab contiene i numeri di emergenza da contattare in caso di necessità ed è costruita usando le \texttt{EmergencyNumberTile};
-\item \texttt{homepage}: rappresenta la schermata principale dell'applicazione per quanto riguarda il cittadino. Si suddivide in 3 tab fondamentali, ovvero
-\item \texttt{login}
-\item \texttt{qr\_code\_scanner}
-\item \texttt{volunteer}
-\item \texttt{wrapper}
+\item \texttt{homepage}: rappresenta la schermata principale dell'applicazione per quanto riguarda il cittadino. Si suddivide in 3 tab fondamentali, ovvero:
+\begin{itemize}
+\item QR Code: composta dal codice QR relativo alle informazioni salvavita e ai 3 \texttt{FunctionButton};
+\item Informazioni: composta da 4 \texttt{FunctionCard}, ognuna relativa a un documento del cittadino;
+\item Covid19: composta dal codice QR relativo allo storico Covid e ad una lista di \texttt{CovidTile}.
+\end{itemize}
+\item \texttt{login}: rappresenta la schermata in cui gli utenti possono effettuare l'accesso all'applicazione. È realizzata utilizzando il package \texttt{flutter\_login} che garantisce la presenza di una schermata pulita e fornita di tutte le funzionalità necessarie al suo utilizzo;
+\item \texttt{qr\_code\_scanner}: rappresenta la schermata responsabile della scansione dei codici QR. Si compone di un \texttt{FunctionButton} che permette di avviare lo scanner e, in caso di scansione corretta, presenta i dati letti dal codice QR;
+\item \texttt{volunteer}: rappresenta la Schermata del Volontario e si compone di una barra di ricerca realizzata attraverso il package \texttt{material\_floating\_search\_bar}. Gli utenti selezionati vengono inseriti in una lista di \texttt{VolunteerCard};
+\item \texttt{wrapper}: rappresenta il widget responsabile del reindirizzamento degli utenti nella schermata corretta. Se l'utente risulta già loggato dalla sessione precedente, allora lo indirizza alla pagina relativa, altrimenti mostra la schermata di Login e attende le credenziali per reindirizzare l'utente nella Homepage (cittadino) o nella Schermata del Volontario (volontario).
 \end{itemize}
 
 \subsection{Services}
@@ -259,45 +308,6 @@ Il package Widgets contiene i widgets utilizzati frequentemente nelle altre clas
 \item \texttt{radio\_tile}:
 \item \texttt{volunteer\_card}: rappresenta le cards relative ai cittadini presenti nella Schermata del Volontario. Ognuna di esse si compone del nome del cittadino, il codice fiscale e i pulsanti per la stampa dei documenti relativi.
 \end{itemize}
-
-\section{Lato Server}
-Il lato server dell'applicazione è interamente sviluppato attraverso \textbf{Google Firebase} che offre due funzionalità fondamentali per l'intero sistema:
-\begin{itemize}
-\item \textbf{Autenticazione}: gestisce il login degli utenti e la creazione degli accounts;
-\item \textbf{Firestore Database}: permette la creazione di collezioni e documenti con cui eseguire il salvataggio dei dati degli utenti e dei cittadini.
-\end{itemize}
-Il vantaggio fondamentale nell'utilizzo di Firebase consiste nella sua perfetta integrazione con Flutter in quanto sono entrambi servizi Google.
-
-\subsection{Autenticazione}
-Poichè l'intero sistema si basa su 3 profili utente principali (MMG, volontario e cittadino), risulta necessario un servizio di autenticazione efficiente in grado servire questo scopo. In particolare l'accesso avviene tramite email e password, considerato il metodo di autenticazione più comune e scelto per:
-\begin{itemize}
-\item consentire ai volontari incaricati di creare gli account dei cittadini;
-\item consentire alle persone meno pratiche o tecnologiche di ricordare solamente questi due parametri senza la necessità di utilizzare ulteriori fattori di autenticazione che andrebbero a complicare il processo;
-\item uniformare il processo di login basandosi sul concetto che gli account social non sono posseduti da tutti, ma l'utilizzo delle mail risulta pressoché essenziale anche per i servizi più generici.
-\end{itemize}
-In generale i metodi di Firebase utilizzati in fase di autenticazione sono essenzialmente i seguenti:
-\begin{itemize}
-\item \texttt{signInWithEmailAndPassword}: consente di eseguire il login di un utente attraverso email e password nel caso in cui le credenziali fossero valide;
-\item \texttt{sendPasswordResetEmail}: permette di inviare un link per il reset della password all'indirizzo email specificato.
-\end{itemize}
-
-\subsection{Firestore Database}
-Cloud Firestore è un database cloud NoSQL che permette di salvare e utilizzare i dati lato client in maniera istantanea e rapida. I dati vengono sincronizzati in tempo reale e viene offerto supporto per il lavoro indipendentemente dalla latenza di rete. Le principali funzionalità offerte, reperibili nella documentazione ufficiale, sono:
-\begin{itemize}
-\item flessibilità: permette di organizzare i dati in collezioni e documenti;
-\item interrogazione espressiva: le query possono essere utilizzate per richiedere documenti specifici o intere collezioni, attraverso l'uso di filtri e criteri di ordinamento;
-\item supporto offline: i dati utilizzati dall'applicazione vengono memorizzati automaticamente nella cache in modo che il sistema possa funzionare anche in assenza di rete.
-\end{itemize}
-Il database del sistema è stato organizzato in 4 collezioni fondamentali:
-\begin{itemize}
-\item \textbf{users}: contiene un documento per ogni utente, caratterizzato dall'id utente assegnato in fase di creazione dell'account di Firebase. All'interno di ogni documento sono specificati id, codice fiscale, email e tipologia di account;
-\item \textbf{patients}: contiene un documento per ogni cittadino, caratterizzato dal relativo codice fiscale. Ogni documento è collegato a sua volta ad una sottocollezione che tiene in memoria tutti i dati relativi allo storico del relativo cittadino;
-\item \textbf{doctors}: contiene un documento per ogni MMG, caratterizzato dal relativo codice fiscale. Ogni documento contiene i dati anagrafici del relativo medico;
-\item \textbf{volunteers}: contiene un documento per ogni volontario, caratterizzato dal relativo codice fiscale. Ogni documento contiene i dati anagrafici del relativo volontario.
-\end{itemize}
-Di seguito un diagramma ER che mostra più nel dettaglio le interazioni tra le varie collezioni e i campi dei singoli documenti.\newline
-
-\textbf{IMMAGINE SCHEMATICA}
 
 \section{External Services and Libraries}
 Durante la fase di sviluppo dell'applicazione mobile è stato fatto largo utilizzo dei packages forniti dal sito \texttt{pub.dev}. Le motivazioni alla base di questa scelta sono dovute alla possibilità di sfruttare la presenza di funzionalità già esistenti per arricchire l'applicazione evitando il riutilizzo di codice e favorendo la pulizia dello stesso. Nell'elenco seguente verranno menzionati tutti i packages utilizzati con le relative funzionalità principali:
@@ -353,13 +363,19 @@ La registrazione degli accounts avviene in due modi fondamentali in base alla ti
 Le password degli accounts sono generate in maniera randomica e inoltrate agli utenti via mail. A seguito di ciò l'utente sarà libero di modificarla secondo le proprie preferenze.
 
 \subsection{Login}
-La schermata di Login permette agli utenti di accedere al sistema fornendo credenziali valide e fornite a seguito del processo di registrazione analizzato precedentemente. Gli utenti sono in grado di modificare la propria password cliccando su "Hai dimenticato la password?" che invierà all'utente una mail contenente un link per il reset della stessa. Sia il cittadino che il volontario condividono la stessa scheramta di Login. Il sistema controlla le credenziali e reindirizza l'utente alla schermata corretta.
+La schermata di Login permette agli utenti di accedere al sistema fornendo credenziali valide e fornite a seguito del processo di registrazione analizzato precedentemente. Gli utenti sono in grado di modificare la propria password cliccando su "Hai dimenticato la password?" che invierà all'utente una mail contenente un link per il reset della stessa. Sia il cittadino che il volontario condividono la stessa scheramta di Login. Il sistema controlla le credenziali e reindirizza l'utente alla schermata corretta.\newline
+
+Tramite la schermata di Login è possibile accedere, senza necessità di avere un account o di aver eseguito l'accesso, a:
+\begin{itemize}
+\item Numeri Utili: l'accesso senza account è stato pensato per poter utilizzare questa scheramata come una rubrica formata da tutti i numeri di emergenza accessibile in caso di necessità;
+\item Scanner QR Code: l'accesso senza account è stato pensato per i soccorritori, unici veri utilizzatori di questo servizio, con l'obiettivo di velocizzare il processo di scansione il più possibile senza la necessità di possedere necessariamente un account.
+\end{itemize}
 
 \subsection{Schermata del Volontario}
-Il volontario ha accesso ad una singola schermata nell'applicazione mobile in quanto la maggior parte delle sue facoltà sono correlate all'utilizzo dell'applicazione web. Il volontario tramite un'apposita barra di ricerca è in grado di ricercare attraverso nome o codice fiscale gli utenti di sua competenza e selezionarli. A seguito della selezione è in grado di eseguire la stampa dei documenti fondamentali (CIS, badge e braccialetto) del singolo o del gruppo di utenti selezionati.
+Il volontario ha accesso ad una singola schermata nell'applicazione mobile in quanto la maggior parte delle sue facoltà sono correlate all'utilizzo dell'applicazione web. Il volontario, tramite un'apposita barra di ricerca, è in grado di ricercare attraverso nome o codice fiscale gli utenti di sua competenza e selezionarli. A seguito della selezione è in grado di eseguire la stampa dei documenti fondamentali (CIS, badge e braccialetto) del singolo o del gruppo di utenti selezionati. Per ogni utente, il volontario può modificare la data dei documenti scegliendo di stampare quelli richiesti.
 
 \subsection{Homepage}
-L'Homepage è la schermata principale dell'applicazione ha cui ha accesso il cittadino. Questa scheramta è suddivisa in 3 tabs principali che forniscono diverse funzionalità:
+L'Homepage è la schermata principale dell'applicazione a cui ha accesso il cittadino. Questa schermata è suddivisa in 3 tabs principali che forniscono diverse funzionalità:
 \begin{enumerate}
 \item la prima tab mostra il QR code salvavita del cittadino contenente:
 \begin{itemize}
@@ -382,7 +398,7 @@ e permette all'utente di aprirlo come immagine, salvarlo nella galleria del disp
 \end{itemize}
 \item la terza tab mostra gli eventi relativi alla storia Covid del cittadino, come ad esempio i tamponi effettuati o le vaccinazioni con la possibilità di aprire i documenti relativi inseriti dall'MMG o dal volontario. La schermata contiene anche un QR code riassuntivo dei vari eventi.
 \end{enumerate}
-Tramite l'Homepage il cittadino è in grado di accedere alle altre funzionalità dell'applicazione (accessibili anche dalla schermata di Login) o di disconnettersi.
+Tramite l'Homepage il cittadino è in grado di accedere alle altre funzionalità dell'applicazione (Numeri Utili e Scanner QR Code) o di disconnettersi. Il cittadino può anche selezionare la data relativa ai suoi dati scegliendoli in base al periodo in cui sono stati aggiunti o modificati dall'MMG.
 
 \subsection{Numeri Utili}
 La schermata dei Numeri Utili è accessibile sia dalla schermata di Login, sia dall'Homepage e presenta due funzionalità principali:
@@ -408,7 +424,7 @@ Il design dell'interfaccia utente è basato principalmente sulle linee guida del
 \item semplicità d'uso: garantita dalle schermate pulite e prive di troppi elementi a schermo, cercando di rendere chiaro all'utente lo scopo di ogni singola componente;
 \item efficienza: garantita dalla presenza di singole operazioni atomiche che non bloccano eccessivamente l'utilizzo dell'applicazione all'utente.
 \end{itemize}
-Nei prossimi paragrafi verranno analizzate in dettaglio le scelte stilistiche e progettuali volte a soddisfare i requisiti appena definiti, focalizzandosi sulle motivazioni di tali scelte.
+Nei prossimi paragrafi verranno analizzate in dettaglio le scelte stilistiche e progettuali volte a soddisfare i requisiti appena definiti, focalizzandosi sulle motivazioni di tali scelte e mostrando le schermate fondamentali dell'applicazione.
 
 \subsection{Logo}
 \subsection{Schermate Principali}
@@ -915,8 +931,14 @@ Eccezioni &
 Il grafico seguente mostra nel dettaglio tutte le possibili interazioni tra le schermate dell'applicazione attraverso un user flow diagram.
 
 
-\chapter{Discussions and Conclusion}
-Discussione sui risultati raggiunti e sulle possibili migliorie.
+\chapter{Conclusione e Sviluppi Futuri}
+Il sistema realizzato riesce a concentrare in un unico flusso la fase di inserimento dei dati sanitari e salvavita del cittadino e il loro utilizzo per garantire servizi di utilità e salvaguardia per gli utenti finali. Sebbene realizzato con dati fittizi e senza la presunzione di andare a sostituire quanto già in uso, si propone come un'idea con cui poter sviluppare, in futuro, un sistema complessivo in grado di gestire interamente questo tipo di informazioni e dati per poterne semplificare l'accesso e l'uso.\newline
+
+Come già analizzato brevemente all'inizio di questa trattazione, lo stato dell'arte presenta numerosi sistemi proprietari che non si interfacciano e rendono spesso complicata l'interazione o l'accesso ai propri cittadini. Realizzato quanto fatto, poniamo le basi per un sistema in grado di interfacciarsi con le differenti realtà presenti.\newline
+
+L'inserimento della schermata relativa al Covid19 risulta sicuramente volto all'utilità che potrebbe conseguirne soprattutto in questo periodo storico in cui avere a portata di mano i documenti relativi a tamponi e vaccinazioni può rappresentare un vantaggio notevole a livello di utilità, ma più che altro mostra come il sistema realizzato sia in grado di integrare, all'occorrenza, nuove funzionalità che possano aiutare i cittadini nella loro vita sanitaria cercando di inglobare in un unico accesso quanti più dati e servizi utili per gli stessi.\newline
+
+Partendo da quanto fatto ci auguriamo che il lavoro realizzato possa fornire spunti interessanti per lo sviluppo futuro di un sistema completo e coerente dotato di tutte le caratteristiche necessarie per aiutare il cittadino nella gestione e nell'accesso a dati fondamentali come quelli sanitari.
 
 \chapter{Bibliografia}
 Di seguito le fonti utilizzate per la stesura del documento e la realizzazione del progetto:
