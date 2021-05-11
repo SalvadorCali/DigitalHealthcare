@@ -1,4 +1,3 @@
-import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import "dart:async";
 import 'package:material_floating_search_bar/material_floating_search_bar.dart';
@@ -54,10 +53,7 @@ class _VolunteerState extends State<Volunteer> {
             AppBarButton(Icon(Icons.logout), widget.changeScreen),
           ],
         ),
-        body: loading
-            //? Center(child: Text("Generazione PDF..."))
-            ? LinearProgressIndicator()
-            : _searchScreen());
+        body: loading ? LinearProgressIndicator() : _searchScreen());
   }
 
   Widget _searchScreen() {
@@ -225,8 +221,8 @@ class _VolunteerState extends State<Volunteer> {
   }
 
   generateMultipleBadge() {
+    _createData();
     Future.delayed(Duration(seconds: 1), () async {
-      _createData();
       await PDFHandler(qrDataList: qrCodeDataList)
           .openMultipleBadge()
           .whenComplete(() {
@@ -236,8 +232,8 @@ class _VolunteerState extends State<Volunteer> {
   }
 
   generateMultipleCIS() {
+    _createData();
     Future.delayed(Duration(seconds: 1), () async {
-      _createData();
       await PDFHandler(
               qrDataList: qrCodeDataList,
               patient: bodyPatients[0].patient.data[dateList[0]])
@@ -248,34 +244,23 @@ class _VolunteerState extends State<Volunteer> {
     });
   }
 
-  task() {
-    compute(generateMultipleBracelet(), "ok");
-  }
-
   generateMultipleBracelet() async {
     _createData();
-
-    /*  compute(tasks, qrCodeDataList);
-    _resetData(); */
     await Future.delayed(Duration(seconds: 1), () {
-      PDFHandler(
-              qrDataList: qrCodeDataList,
-              names: namesList,
-              setLoading: _setLoading)
+      PDFHandler(qrDataList: qrCodeDataList, names: namesList)
           .openMultipleBracelet()
           .whenComplete(() {
         _resetData();
       });
     });
-
-    //qrCodeDataList.clear();
   }
 
   _createData() {
-    setState(() {
+    /* setState(() {
       loading = true;
     });
-
+ */
+    _showLoadingDialog();
     for (int i = 0; i < bodyPatients.length; i++) {
       qrCodeDataList.add(
           bodyPatients[i].patient.data[dateList[i]].getLifeSavingInformation());
@@ -284,9 +269,10 @@ class _VolunteerState extends State<Volunteer> {
 
   _resetData() {
     qrCodeDataList.clear();
-    setState(() {
+    Navigator.of(context).pop();
+    /* setState(() {
       loading = false;
-    });
+    }); */
   }
 
   _setLoading(bool status) {
@@ -294,9 +280,27 @@ class _VolunteerState extends State<Volunteer> {
       loading = status;
     });
   }
-}
 
-tasks(qrCodeDataList) {
-  print("Prova");
-  PDFHandler(qrDataList: qrCodeDataList).openMultipleBracelet();
+  Future<void> _showLoadingDialog() async {
+    return showDialog<void>(
+      context: context,
+      barrierDismissible: false,
+      builder: (BuildContext context) {
+        return AlertDialog(
+          content: SingleChildScrollView(
+            child: ListBody(
+              children: <Widget>[
+                Padding(
+                  padding: const EdgeInsets.all(8.0),
+                  child: Icon(Icons.upload_file),
+                ),
+                //Image.asset("assets/images/loading.gif"),
+                Center(child: Text('Generazione documento in corso...')),
+              ],
+            ),
+          ),
+        );
+      },
+    );
+  }
 }

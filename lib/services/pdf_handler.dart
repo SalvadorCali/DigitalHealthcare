@@ -1,13 +1,11 @@
 import 'dart:io';
 import 'dart:typed_data';
-
 import 'package:downloads_path_provider/downloads_path_provider.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/services.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:open_file/open_file.dart';
 import 'package:path/path.dart' as _path;
-import 'package:threading/threading.dart';
 import 'package:universal_html/html.dart' as html;
 import 'package:path_provider/path_provider.dart';
 import 'package:pdf/pdf.dart';
@@ -17,8 +15,6 @@ import 'package:printing/printing.dart';
 import 'package:thesis/constants.dart';
 import 'package:thesis/model/timestamp_patient.dart';
 import 'package:url_launcher/url_launcher.dart';
-import 'package:printing/printing.dart';
-import 'package:flutter/material.dart' as mat;
 
 class PDFHandler {
   //A4: 297mm x 210mm
@@ -29,19 +25,12 @@ class PDFHandler {
   final String badge = "badge";
 
   final pdf = Document();
-  PdfDocument pdf2;
   final TimestampPatient patient;
   final String qrData;
   final List<String> qrDataList;
   final List<String> names;
-  final setLoading;
 
-  PDFHandler(
-      {this.patient,
-      this.qrData,
-      this.qrDataList,
-      this.names,
-      this.setLoading});
+  PDFHandler({this.patient, this.qrData, this.qrDataList, this.names});
 
   printQRCode() async {
     await _createQRCode();
@@ -245,15 +234,6 @@ class PDFHandler {
         (await rootBundle.load('assets/logos/areu2.jpg')).buffer.asUint8List();
     final centodiciotto =
         (await rootBundle.load('assets/logos/118.jpg')).buffer.asUint8List();
-
-    /* final municipioTre =
-        await compute(imageTask, 'assets/logos/municipio_tre.png');
-    final comuneMilano =
-        await compute(imageTask, 'assets/logos/comune_milano.png');
-    final mvi = await compute(imageTask, 'assets/logos/mvi.png');
-    final polimi = await compute(imageTask, 'assets/logos/polimi2.png');
-    final areu = await compute(imageTask, 'assets/logos/areu2.jpg');
-    final centodiciotto = await compute(imageTask, 'assets/logos/118.jpg'); */
     pdf.addPage(MultiPage(
         pageFormat: PdfPageFormat.a4,
         margin: EdgeInsets.all(0),
@@ -301,7 +281,6 @@ class PDFHandler {
   }
 
   Container _braceletLogo(image) {
-    //PdfImage image = PdfImage(pdf.document, image: municipioTre, height: 100, width: 200);
     return Container(
         width: (PdfPageFormat.a4.width / 1.83) / 7,
         height: PdfPageFormat.a4.height / 13.68,
@@ -474,7 +453,6 @@ class PDFHandler {
   }
 
   _createMultipleCIS() async {
-    print("Prova");
     final centodiciotto =
         (await rootBundle.load('assets/logos/118.jpg')).buffer.asUint8List();
     final centododici =
@@ -496,7 +474,6 @@ class PDFHandler {
     final profile = (await rootBundle.load('assets/images/profile.jpeg'))
         .buffer
         .asUint8List();
-    print("ORA");
     qrDataList.forEach((element) {
       pdf.addPage(Page(
           pageFormat: PdfPageFormat.a4,
@@ -513,7 +490,6 @@ class PDFHandler {
                   _blockFour(mvi, ice, profile, element),
                 ]);
           }));
-      print("Pagina");
     });
   }
 
@@ -935,30 +911,6 @@ class PDFHandler {
       final url = html.Url.createObjectUrlFromBlob(blob);
       html.window.open(url, "_blank");
       html.Url.revokeObjectUrl(url);
-      setLoading(false);
-
-      print("Eccomi");
-      /* print("A");
-      SchedulerBinding.instance
-          .scheduleTask(() => task(pdf), Priority.animation)
-          .then((value) => setLoading());
-      print("B"); */
-
-      /* Future(() async {
-        await compute(task, pdf);
-        setLoading(); */
-      /* await pdf.save().then((value) {
-          final blob = html.Blob([value], 'application/pdf');
-          final url = html.Url.createObjectUrlFromBlob(blob);
-          html.window.open(url, "_blank");
-          html.Url.revokeObjectUrl(url); */
-      //setLoading();
-      //});
-      /* final blob = html.Blob([bytes], 'application/pdf');
-        final url = html.Url.createObjectUrlFromBlob(blob);
-        html.window.open(url, "_blank");
-        html.Url.revokeObjectUrl(url); */
-      // });
     } catch (e) {
       Fluttertoast.showToast(msg: e.toString());
     }
@@ -1027,8 +979,4 @@ class PDFHandler {
     final bytes = await pdf.save();
     Printing.layoutPdf(onLayout: (_) => bytes);
   }
-}
-
-Future<Uint8List> pdfTask(Document pdfFile) {
-  return pdfFile.save();
 }
