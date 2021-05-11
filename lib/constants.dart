@@ -4,6 +4,13 @@ String space = " ";
 String aCapo = "\n";
 String colon = ":";
 
+List<Image> images = [
+  Image.asset("assets/images/summary.png"),
+  Image.asset("assets/images/badge.png"),
+  Image.asset("assets/images/cis.png"),
+  Image.asset("assets/images/bracelet.png"),
+];
+
 List<String> functionalities = ["Dati", "Badge", "CIS", "Braccialetto"];
 
 List<String> subtitles = [

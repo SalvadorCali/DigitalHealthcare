@@ -238,7 +238,9 @@ class _VolunteerState extends State<Volunteer> {
   generateMultipleCIS() {
     Future.delayed(Duration(seconds: 1), () async {
       _createData();
-      await PDFHandler(qrDataList: qrCodeDataList)
+      await PDFHandler(
+              qrDataList: qrCodeDataList,
+              patient: bodyPatients[0].patient.data[dateList[0]])
           .openMultipleCIS()
           .whenComplete(() {
         _resetData();
@@ -252,14 +254,20 @@ class _VolunteerState extends State<Volunteer> {
 
   generateMultipleBracelet() async {
     _createData();
-    await PDFHandler(
-            qrDataList: qrCodeDataList,
-            names: namesList,
-            setLoading: _setLoading)
-        .openMultipleBracelet()
-        .whenComplete(() {
-      _resetData();
+
+    /*  compute(tasks, qrCodeDataList);
+    _resetData(); */
+    await Future.delayed(Duration(seconds: 1), () {
+      PDFHandler(
+              qrDataList: qrCodeDataList,
+              names: namesList,
+              setLoading: _setLoading)
+          .openMultipleBracelet()
+          .whenComplete(() {
+        _resetData();
+      });
     });
+
     //qrCodeDataList.clear();
   }
 
@@ -275,7 +283,7 @@ class _VolunteerState extends State<Volunteer> {
   }
 
   _resetData() {
-    //qrCodeDataList.clear();
+    qrCodeDataList.clear();
     setState(() {
       loading = false;
     });
@@ -286,4 +294,9 @@ class _VolunteerState extends State<Volunteer> {
       loading = status;
     });
   }
+}
+
+tasks(qrCodeDataList) {
+  print("Prova");
+  PDFHandler(qrDataList: qrCodeDataList).openMultipleBracelet();
 }

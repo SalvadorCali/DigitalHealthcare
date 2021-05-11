@@ -4,6 +4,7 @@ import 'package:thesis/widgets/function_icon.dart';
 
 class FunctionCard extends StatelessWidget {
   final Icon icon;
+  final Image image;
   final String title;
   final String subtitle;
   final String description;
@@ -13,6 +14,7 @@ class FunctionCard extends StatelessWidget {
   final shareFunction;
   const FunctionCard(
       this.icon,
+      this.image,
       this.title,
       this.subtitle,
       this.description,
@@ -28,7 +30,7 @@ class FunctionCard extends StatelessWidget {
       child: Column(
         children: <Widget>[
           ListTile(
-            leading: icon,
+            leading: image,
             title: Text(title),
             subtitle: Text(subtitle),
           ),

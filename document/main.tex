@@ -77,26 +77,12 @@ In questa sezione verrà presentata una lista di acronimi comuni e di utile comp
 \section{Panoramica Generale}
 Lo scopo di questo documento è di descrivere il processo di design e di implementazione dell'applicazione mobile e web sviluppata per Android e per i più comuni web browsers attualmente disponibili attraverso la descrizione funzionale dell'intero sistema, l'analisi dettagliata dell'architettura, i componenti con le relative interazioni e i più frequenti casi d'uso.\newline
 
-Partendo dal lavoro svolto da Medici Volontari Italiani che ha sviluppato la Carta d'Identità Salvavita e il progetto Busta Rossa del Comune di Milano volto alla salvaguardia della salute del cittadino, io e Davide Laffi abbiamo sviluppato un sistema in grado di:
-\begin{itemize}
-\item salvare le informazioni dei cittadini inserite dal Medico di Medicina Generale o dal volontario incaricato;
-\item mostrare queste informazioni all'utente finale dell'applicazione sviluppata;
-\item utilizzare i vari dati salvati per generare documenti di utilità per il cittadino.
-\end{itemize}
-In particolare il sistema si compone di 3 parti fondamentali:
-\begin{itemize}
-\item l'applicazione web sviluppata da Davide Laffi e pensata per gli MMG e i volontari per la fase di inserimento e modifica dei dati sanitari e salvavita dei cittadini;
-\item l'applicazione mobile, accessibile anche dal web, sviluppata da me e pensata soprattutto per i cittadini che possono accedere ai propri dati e avere sempre a portata di mano i propri dati sanitari e salvavita;
-\item il lato server che fornisce funzioni di autenticazione e database e che permette di interfacciare le due componenti precedenti.
-\end{itemize}
+Partendo dal lavoro svolto da Medici Volontari Italiani che ha sviluppato la Carta d'Identità Salvavita e il progetto Busta Rossa del Comune di Milano volto alla salvaguardia della salute del cittadino, io e Davide Laffi abbiamo sviluppato un sistema in grado di salvare le informazioni sanitarie dei cittadini inserite dal Medico di Medicina Generale e dal volontario incaricato in modo da poter essere accessibili al relativo cittadino che tramite l'uso di un'applicazione mobile è sempre in grado di avere l'accesso per poter generare documenti di utilità.\newline
+
+In particolare, per soddisfare questi requisiti, il sistema complessivo si compone di 3 parti fondamentali che permettono di gestire in maniera indipendente la fase di inserimento dati da quella di utilizzo, riuscendo tuttavia ad interfacciarsi perfettamente. Il lato server dell'applicazione, sviluppato su Google Firebase, offre funzionalità di database che servono allo scopo appena descritto e permettono di integrare le due altre componenti del sistema: l'applicazione web e l'applicazione mobile. Per quanto riguarda il lato web, il suo utilizzo è riservato agli MMG e ai volontari che sono in grado di inserire attraverso un form completo i dati sanitari e salvavita relativi al cittadino e modificarli all'occorrenza. Queste informazioni, salvate nel database, sono quindi accessibile dall'utente finale, il cittadino possessore di tali dati, attraverso l'applicazione mobile che, oltre ad offire una panoramica sugli stessi, permette anche la creazione di documenti di utilità.
 
 \section{Stato dell'Arte}
-Lo stato attuale dell'arte presenta per il singolo cittadino una serie di entità differenziate in grado di gestire i suoi dati sanitari, con l'ovvia conseguenza di avere:
-\begin{itemize}
-\item informazioni duplicate;
-\item diversi sistemi proprietari che non si interfacciano tra di loro;
-\item dati inseriti manualmente e spesso soggetti ad errori o perdita degli stessi.
-\end{itemize}
+Lo stato attuale dell'arte presenta per il singolo cittadino una serie di entità differenziate in grado di gestire i suoi dati sanitari. L'ovvia conseguenza di questa situazione è chiaramente la presenza di troppe informazioni duplicate inserite da diversi sistemi proprietari che non si interfacciano tra di loro, complicando per il cittadino la possibilità di accesso e reperimento di tali dati. Inoltre, i dati sanitari vengono spesso trascritti manualmente, portando alla loro perdita.
 Il singolo cittadino, infatti:
 \begin{itemize}
 \item è dotato del Fascicolo Sanitario Elettronico accessibile attraverso il portale della regione di residenza che riporta la storia sanitaria dello stesso;
@@ -104,9 +90,13 @@ Il singolo cittadino, infatti:
 \item può utilizzare l'app ICE che permette di contattare i soccorsi sanitari in caso di emergenza;
 \item può richiedere la Carta d'Identità Salvavita e i relativi servizi correlati.
 \end{itemize}
-Necessità fondamentale in questa situazione è cercare di integrare quanto più possibile questi diversi sistemi per realizzare un prodotto accessibile dall'utente finale e manutenibile dalle stesse entità senza la presenza di informazioni duplicate o contrastanti.\newline
+Necessità fondamentale in questa situazione è cercare di integrare quanto più possibile questi diversi sistemi per realizzare un prodotto accessibile dall'utente finale e manutenibile dalle stesse entità senza la presenza di informazioni duplicate o contrastanti.
 
-\textbf{IMMAGINE SCHEMATICA}
+\begin{figure}[H]
+\centering
+\includegraphics[scale = 0.4]{statoarte}
+\caption{Stato dell'arte}
+\end{figure}
 
 \subsection{Carta d'Identità Salvavita}
 Medici Volontari Italiani ha sviluppato, con l'aiuto di Fondazione IBM, Società Gisette e il Comune di Milano, un sistema in grado di digitalizzare i dati sanitari salvavita in modo che siano utilizzabili dal soccorritore in caso di necessità. Tramite l'inserimento delle informazioni del cittadino, il sistema genera la Carta d'Identità Salvavita, una tessera cartacea che presenta sulla facciata sinistra i dati anagrafici e i dati salvavita forniti dall'MMG e sulla parte destra il cosiddetto badge, ovvero un QR code riassuntivo di tali informazioni e i numeri di emergenza da contattare in caso di necessità.
@@ -115,8 +105,10 @@ Medici Volontari Italiani ha sviluppato, con l'aiuto di Fondazione IBM, Società
 Sviluppato parallelamente alla CIS, il braccialetto salvavita offre la possibilità di avere sempre a portata di mano il QR code la cui lettura comunica ai soccorritori le informazioni sanitarie d'emergenza definite precedentemente e segnala che la persona che lo indossa è dotata di una CIS.
 
 \section{Obiettivo del Progetto}
-Partendo dalla presenza di diverse realtà differenti che si occupano di fornire al cittadino l'obiettivo comune di salvaguardare la sua salutw, questo progetto nasce con la necessità di poter crare un punto di partenza per realizzare un sistema in grado di unificare, per quanto possibile, il flusso di informazioni appena definito cercando di semplificare l'inserimento dei dati, la loro gestione e  soprattutto l'accesso e l'utilizzo da parte dei cittadini attraverso la generazione di documenti di utilità.
-Il sistema realizzato si compone di due componenti fondamentali:
+Partendo dalla presenza di diverse realtà differenti che si occupano di fornire al cittadino l'obiettivo comune di salvaguardare la sua salute, questo progetto nasce con la necessità di poter crare un punto di partenza per realizzare un sistema in grado di unificare, per quanto possibile, il flusso di informazioni appena definito cercando di semplificare l'inserimento dei dati, la loro gestione e  soprattutto l'accesso e l'utilizzo da parte dei cittadini attraverso la generazione di documenti di utilità.
+Il sistema realizzato salva i dati sanitari del cittadino attraverso l'applicazione web a cui hanno accesso l'MMG e il volontario, attraverso
+
+
 \begin{itemize}
 \item l'inserimento dei dati sanitari e salvavita del cittadino realizzato dal MMG e dal volontario;
 \item l'utilizzo di queste informazioni per generare la CIS e altri documenti di utilità per il cittadino per essere sempre in grado di fornirli al soccorritore in caso di necessità.
@@ -165,7 +157,11 @@ L'intero sistema può essere suddiviso in 3 parti fondamentali:
 \end{itemize}
 Nelle sezioni seguenti verranno analizzate le 3 parti nel dettaglio, focalizzando l'attenzione sulle tecnologie utilizzate.\newline
 
-\textbf{IMMAGINE SCHEMATICA}
+\begin{figure}[H]
+\centering
+\includegraphics[scale = 0.4]{architecture}
+\caption{Architettura}
+\end{figure}
 
 \section{Web Application}
 L'applicazione web è stata sviluppata da Davide Laffi. Questa parte sarà descritta a seguito del lavoro di Davide.

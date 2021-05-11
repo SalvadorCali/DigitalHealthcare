@@ -140,7 +140,6 @@ class PDFHandler {
   }
 
   openMultipleBracelet() async {
-    print("prova2");
     await _createMultipleBracelet();
     if (kIsWeb) {
       await _openPDFWeb(bracelet);
@@ -229,13 +228,10 @@ class PDFHandler {
   }
 
   _createMultipleBracelet() async {
-    print("Porva4");
-
     final municipioTre =
         (await rootBundle.load('assets/logos/municipio_tre.png'))
             .buffer
             .asUint8List();
-    print("provaee");
     final comuneMilano =
         (await rootBundle.load('assets/logos/comune_milano.png'))
             .buffer
@@ -258,7 +254,6 @@ class PDFHandler {
     final polimi = await compute(imageTask, 'assets/logos/polimi2.png');
     final areu = await compute(imageTask, 'assets/logos/areu2.jpg');
     final centodiciotto = await compute(imageTask, 'assets/logos/118.jpg'); */
-    print("Porva3");
     pdf.addPage(MultiPage(
         pageFormat: PdfPageFormat.a4,
         margin: EdgeInsets.all(0),
@@ -271,7 +266,7 @@ class PDFHandler {
   List<Widget> generateBracelets(
       municipioTre, comuneMilano, mvi, polimi, areu, centodiciotto) {
     List<Widget> widgets = [];
-    for (int i = 0; i < qrDataList.length; i++) {
+    for (int i = 0; i < 10; i++) {
       widgets.add(Row(children: [
         Container(
             decoration:
@@ -287,7 +282,7 @@ class PDFHandler {
                 child: Padding(
                     padding: EdgeInsets.all(2),
                     child: BarcodeWidget(
-                      data: qrDataList[i],
+                      data: qrDataList[0],
                       width: (PdfPageFormat.a4.width / 1.83) / 7,
                       height: PdfPageFormat.a4.height / 13.68,
                       barcode: Barcode.qrCode(),
@@ -296,7 +291,7 @@ class PDFHandler {
               _braceletLogo(areu),
               _braceletLogo(centodiciotto),
             ])),
-        Padding(padding: EdgeInsets.all(8), child: Text(names[i]))
+        Padding(padding: EdgeInsets.all(8), child: Text(names[0]))
       ]));
       widgets.add(
         SizedBox(height: 10),
@@ -915,7 +910,7 @@ class PDFHandler {
     Directory documentDirectory = await getApplicationDocumentsDirectory();
     String documentPath = documentDirectory.path;
     File file = File("$documentPath/$name.pdf");
-    file.writeAsBytesSync(await pdf.save());
+    file.writeAsBytesSync(await pdf.save(), flush: true);
   }
 
   _openPDF(String name) async {
@@ -931,10 +926,6 @@ class PDFHandler {
     } catch (e) {
       Fluttertoast.showToast(msg: e.toString());
     }
-  }
-
-  Future<Uint8List> pdfTask(Document pdfFile) {
-    return pdfFile.save();
   }
 
   _openPDFWeb(String name) async {
@@ -1036,4 +1027,8 @@ class PDFHandler {
     final bytes = await pdf.save();
     Printing.layoutPdf(onLayout: (_) => bytes);
   }
+}
+
+Future<Uint8List> pdfTask(Document pdfFile) {
+  return pdfFile.save();
 }

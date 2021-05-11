@@ -141,6 +141,7 @@ class _HomepageState extends State<Homepage> {
                       Flexible(
                         child: FunctionCard(
                             icons[0],
+                            images[0],
                             functionalities[0],
                             subtitles[0],
                             descriptions[0],
@@ -152,6 +153,7 @@ class _HomepageState extends State<Homepage> {
                       Flexible(
                         child: FunctionCard(
                             icons[1],
+                            images[1],
                             functionalities[1],
                             subtitles[1],
                             descriptions[1],
@@ -167,6 +169,7 @@ class _HomepageState extends State<Homepage> {
                       Flexible(
                         child: FunctionCard(
                             icons[2],
+                            images[2],
                             functionalities[2],
                             subtitles[2],
                             descriptions[2],
@@ -178,6 +181,7 @@ class _HomepageState extends State<Homepage> {
                       Flexible(
                         child: FunctionCard(
                             icons[3],
+                            images[3],
                             functionalities[3],
                             subtitles[3],
                             descriptions[3],
@@ -196,6 +200,7 @@ class _HomepageState extends State<Homepage> {
                     children: [
                       FunctionCard(
                           icons[0],
+                          images[0],
                           functionalities[0],
                           subtitles[0],
                           descriptions[0],
@@ -205,6 +210,7 @@ class _HomepageState extends State<Homepage> {
                           shareData),
                       FunctionCard(
                           icons[1],
+                          images[1],
                           functionalities[1],
                           subtitles[1],
                           descriptions[1],
@@ -214,6 +220,7 @@ class _HomepageState extends State<Homepage> {
                           shareBadge),
                       FunctionCard(
                           icons[2],
+                          images[2],
                           functionalities[2],
                           subtitles[2],
                           descriptions[2],
@@ -223,6 +230,7 @@ class _HomepageState extends State<Homepage> {
                           shareCIS),
                       FunctionCard(
                           icons[3],
+                          images[3],
                           functionalities[3],
                           subtitles[3],
                           descriptions[3],

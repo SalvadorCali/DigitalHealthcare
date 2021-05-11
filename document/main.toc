@@ -16,9 +16,9 @@
 \defcounter {refsection}{0}\relax 
 \contentsline {subsection}{\numberline {1.2.1}Carta d'Identità Salvavita}{2}{subsection.1.2.1}%
 \defcounter {refsection}{0}\relax 
-\contentsline {subsection}{\numberline {1.2.2}Braccialetto Salvavita}{2}{subsection.1.2.2}%
+\contentsline {subsection}{\numberline {1.2.2}Braccialetto Salvavita}{3}{subsection.1.2.2}%
 \defcounter {refsection}{0}\relax 
-\contentsline {section}{\numberline {1.3}Obiettivo del Progetto}{2}{section.1.3}%
+\contentsline {section}{\numberline {1.3}Obiettivo del Progetto}{3}{section.1.3}%
 \defcounter {refsection}{0}\relax 
 \contentsline {subsection}{\numberline {1.3.1}Obiettivi}{3}{subsection.1.3.1}%
 \defcounter {refsection}{0}\relax 
@@ -28,15 +28,15 @@
 \defcounter {refsection}{0}\relax 
 \contentsline {paragraph}{[G2]}{3}{section*.18}%
 \defcounter {refsection}{0}\relax 
-\contentsline {paragraph}{[G3]}{3}{section*.19}%
+\contentsline {paragraph}{[G3]}{4}{section*.19}%
 \defcounter {refsection}{0}\relax 
-\contentsline {subsubsection}{Cittadino}{3}{section*.20}%
+\contentsline {subsubsection}{Cittadino}{4}{section*.20}%
 \defcounter {refsection}{0}\relax 
-\contentsline {paragraph}{[G4]}{3}{section*.21}%
+\contentsline {paragraph}{[G4]}{4}{section*.21}%
 \defcounter {refsection}{0}\relax 
-\contentsline {paragraph}{[G5]}{3}{section*.22}%
+\contentsline {paragraph}{[G5]}{4}{section*.22}%
 \defcounter {refsection}{0}\relax 
-\contentsline {paragraph}{[G6]}{3}{section*.23}%
+\contentsline {paragraph}{[G6]}{4}{section*.23}%
 \defcounter {refsection}{0}\relax 
 \contentsline {paragraph}{[G7]}{4}{section*.24}%
 \defcounter {refsection}{0}\relax 
@@ -58,82 +58,82 @@
 \defcounter {refsection}{0}\relax 
 \contentsline {paragraph}{[G15]}{4}{section*.33}%
 \defcounter {refsection}{0}\relax 
-\contentsline {paragraph}{[G16]}{4}{section*.34}%
+\contentsline {paragraph}{[G16]}{5}{section*.34}%
 \defcounter {refsection}{0}\relax 
-\contentsline {chapter}{\numberline {2}Panoramica del progetto}{5}{chapter.2}%
+\contentsline {chapter}{\numberline {2}Panoramica del progetto}{7}{chapter.2}%
 \defcounter {refsection}{0}\relax 
-\contentsline {section}{\numberline {2.1}Architettura}{5}{section.2.1}%
+\contentsline {section}{\numberline {2.1}Architettura}{7}{section.2.1}%
 \defcounter {refsection}{0}\relax 
-\contentsline {section}{\numberline {2.2}Web Application}{5}{section.2.2}%
+\contentsline {section}{\numberline {2.2}Web Application}{8}{section.2.2}%
 \defcounter {refsection}{0}\relax 
-\contentsline {section}{\numberline {2.3}Mobile Application}{5}{section.2.3}%
+\contentsline {section}{\numberline {2.3}Mobile Application}{8}{section.2.3}%
 \defcounter {refsection}{0}\relax 
-\contentsline {subsection}{\numberline {2.3.1}Flutter}{6}{subsection.2.3.1}%
+\contentsline {subsection}{\numberline {2.3.1}Flutter}{8}{subsection.2.3.1}%
 \defcounter {refsection}{0}\relax 
-\contentsline {section}{\numberline {2.4}Lato Server}{6}{section.2.4}%
+\contentsline {section}{\numberline {2.4}Lato Server}{9}{section.2.4}%
 \defcounter {refsection}{0}\relax 
-\contentsline {subsection}{\numberline {2.4.1}Autenticazione}{6}{subsection.2.4.1}%
+\contentsline {subsection}{\numberline {2.4.1}Autenticazione}{9}{subsection.2.4.1}%
 \defcounter {refsection}{0}\relax 
-\contentsline {subsection}{\numberline {2.4.2}Firestore Database}{7}{subsection.2.4.2}%
+\contentsline {subsection}{\numberline {2.4.2}Firestore Database}{9}{subsection.2.4.2}%
 \defcounter {refsection}{0}\relax 
-\contentsline {chapter}{\numberline {3}Implementazione}{9}{chapter.3}%
+\contentsline {chapter}{\numberline {3}Implementazione}{11}{chapter.3}%
 \defcounter {refsection}{0}\relax 
-\contentsline {section}{\numberline {3.1}Packages e Classi}{9}{section.3.1}%
+\contentsline {section}{\numberline {3.1}Packages e Classi}{11}{section.3.1}%
 \defcounter {refsection}{0}\relax 
-\contentsline {subsection}{\numberline {3.1.1}Model}{9}{subsection.3.1.1}%
+\contentsline {subsection}{\numberline {3.1.1}Model}{11}{subsection.3.1.1}%
 \defcounter {refsection}{0}\relax 
-\contentsline {subsection}{\numberline {3.1.2}Screens}{10}{subsection.3.1.2}%
+\contentsline {subsection}{\numberline {3.1.2}Screens}{12}{subsection.3.1.2}%
 \defcounter {refsection}{0}\relax 
-\contentsline {subsection}{\numberline {3.1.3}Services}{10}{subsection.3.1.3}%
+\contentsline {subsection}{\numberline {3.1.3}Services}{12}{subsection.3.1.3}%
 \defcounter {refsection}{0}\relax 
-\contentsline {subsection}{\numberline {3.1.4}Widgets}{11}{subsection.3.1.4}%
+\contentsline {subsection}{\numberline {3.1.4}Widgets}{13}{subsection.3.1.4}%
 \defcounter {refsection}{0}\relax 
-\contentsline {section}{\numberline {3.2}External Services and Libraries}{12}{section.3.2}%
+\contentsline {section}{\numberline {3.2}External Services and Libraries}{14}{section.3.2}%
 \defcounter {refsection}{0}\relax 
-\contentsline {chapter}{\numberline {4}Funzionalità}{15}{chapter.4}%
+\contentsline {chapter}{\numberline {4}Funzionalità}{17}{chapter.4}%
 \defcounter {refsection}{0}\relax 
-\contentsline {section}{\numberline {4.1}Panoramica dell'Applicazione}{15}{section.4.1}%
+\contentsline {section}{\numberline {4.1}Panoramica dell'Applicazione}{17}{section.4.1}%
 \defcounter {refsection}{0}\relax 
-\contentsline {section}{\numberline {4.2}Descrizione delle Funzionalità}{16}{section.4.2}%
+\contentsline {section}{\numberline {4.2}Descrizione delle Funzionalità}{18}{section.4.2}%
 \defcounter {refsection}{0}\relax 
-\contentsline {subsection}{\numberline {4.2.1}Registrazione}{16}{subsection.4.2.1}%
+\contentsline {subsection}{\numberline {4.2.1}Registrazione}{18}{subsection.4.2.1}%
 \defcounter {refsection}{0}\relax 
-\contentsline {subsection}{\numberline {4.2.2}Login}{16}{subsection.4.2.2}%
+\contentsline {subsection}{\numberline {4.2.2}Login}{18}{subsection.4.2.2}%
 \defcounter {refsection}{0}\relax 
-\contentsline {subsection}{\numberline {4.2.3}Schermata del Volontario}{17}{subsection.4.2.3}%
+\contentsline {subsection}{\numberline {4.2.3}Schermata del Volontario}{19}{subsection.4.2.3}%
 \defcounter {refsection}{0}\relax 
-\contentsline {subsection}{\numberline {4.2.4}Homepage}{17}{subsection.4.2.4}%
+\contentsline {subsection}{\numberline {4.2.4}Homepage}{19}{subsection.4.2.4}%
 \defcounter {refsection}{0}\relax 
-\contentsline {subsection}{\numberline {4.2.5}Numeri Utili}{18}{subsection.4.2.5}%
+\contentsline {subsection}{\numberline {4.2.5}Numeri Utili}{20}{subsection.4.2.5}%
 \defcounter {refsection}{0}\relax 
-\contentsline {subsection}{\numberline {4.2.6}Scanner QR Code}{18}{subsection.4.2.6}%
+\contentsline {subsection}{\numberline {4.2.6}Scanner QR Code}{20}{subsection.4.2.6}%
 \defcounter {refsection}{0}\relax 
-\contentsline {chapter}{\numberline {5}Interfaccia Utente e Casi d'Uso}{19}{chapter.5}%
+\contentsline {chapter}{\numberline {5}Interfaccia Utente e Casi d'Uso}{21}{chapter.5}%
 \defcounter {refsection}{0}\relax 
-\contentsline {section}{\numberline {5.1}UI Design}{19}{section.5.1}%
+\contentsline {section}{\numberline {5.1}UI Design}{21}{section.5.1}%
 \defcounter {refsection}{0}\relax 
-\contentsline {subsection}{\numberline {5.1.1}Logo}{19}{subsection.5.1.1}%
+\contentsline {subsection}{\numberline {5.1.1}Logo}{21}{subsection.5.1.1}%
 \defcounter {refsection}{0}\relax 
-\contentsline {subsection}{\numberline {5.1.2}Schermate Principali}{19}{subsection.5.1.2}%
+\contentsline {subsection}{\numberline {5.1.2}Schermate Principali}{21}{subsection.5.1.2}%
 \defcounter {refsection}{0}\relax 
-\contentsline {subsection}{\numberline {5.1.3}Layout Web}{19}{subsection.5.1.3}%
+\contentsline {subsection}{\numberline {5.1.3}Layout Web}{21}{subsection.5.1.3}%
 \defcounter {refsection}{0}\relax 
-\contentsline {section}{\numberline {5.2}Use Cases}{19}{section.5.2}%
+\contentsline {section}{\numberline {5.2}Use Cases}{21}{section.5.2}%
 \defcounter {refsection}{0}\relax 
-\contentsline {subsection}{\numberline {5.2.1}Login}{20}{subsection.5.2.1}%
+\contentsline {subsection}{\numberline {5.2.1}Login}{22}{subsection.5.2.1}%
 \defcounter {refsection}{0}\relax 
-\contentsline {subsection}{\numberline {5.2.2}Logout}{21}{subsection.5.2.2}%
+\contentsline {subsection}{\numberline {5.2.2}Logout}{23}{subsection.5.2.2}%
 \defcounter {refsection}{0}\relax 
-\contentsline {subsection}{\numberline {5.2.3}Homepage}{22}{subsection.5.2.3}%
+\contentsline {subsection}{\numberline {5.2.3}Homepage}{24}{subsection.5.2.3}%
 \defcounter {refsection}{0}\relax 
-\contentsline {subsection}{\numberline {5.2.4}Schermata del Volontario}{26}{subsection.5.2.4}%
+\contentsline {subsection}{\numberline {5.2.4}Schermata del Volontario}{28}{subsection.5.2.4}%
 \defcounter {refsection}{0}\relax 
-\contentsline {subsection}{\numberline {5.2.5}Numeri Utili}{29}{subsection.5.2.5}%
+\contentsline {subsection}{\numberline {5.2.5}Numeri Utili}{31}{subsection.5.2.5}%
 \defcounter {refsection}{0}\relax 
-\contentsline {subsection}{\numberline {5.2.6}QR Code Scanner}{30}{subsection.5.2.6}%
+\contentsline {subsection}{\numberline {5.2.6}QR Code Scanner}{32}{subsection.5.2.6}%
 \defcounter {refsection}{0}\relax 
-\contentsline {section}{\numberline {5.3}User-Flow Diagram}{30}{section.5.3}%
+\contentsline {section}{\numberline {5.3}User-Flow Diagram}{32}{section.5.3}%
 \defcounter {refsection}{0}\relax 
-\contentsline {chapter}{\numberline {6}Conclusione e Sviluppi Futuri}{31}{chapter.6}%
+\contentsline {chapter}{\numberline {6}Conclusione e Sviluppi Futuri}{33}{chapter.6}%
 \defcounter {refsection}{0}\relax 
-\contentsline {chapter}{\numberline {7}Bibliografia}{33}{chapter.7}%
+\contentsline {chapter}{\numberline {7}Bibliografia}{35}{chapter.7}%
