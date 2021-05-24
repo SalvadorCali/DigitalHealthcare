@@ -10,7 +10,7 @@ class DatabaseService {
   final CollectionReference users =
       FirebaseFirestore.instance.collection('users');
   final CollectionReference patients =
-      FirebaseFirestore.instance.collection('patients');
+      FirebaseFirestore.instance.collection('citizens');
 
   Future<EndUser> getUser() {
     return users
@@ -27,24 +27,31 @@ class DatabaseService {
         isUser: snapshot.data()['user']);
   }
 
-  Future<Patient> getPatient(String tin) {
+  Future<Patient> getPatient(String tin) async {
     String name;
     String surname;
-    patients
+    print(tin);
+    await patients
         .doc(tin)
         .get()
         .then((value) => {name = value["name"], surname = value["surname"]});
-    return patients.doc(tin).collection("data").get().then(
-        (value) => Patient(tin, name, surname, _patientFromFirebase(value)));
+    print(name);
+    return patients.doc(tin).collection('data').get().then((value) {
+      print("qua");
+      return Patient(tin, name, surname, _patientFromFirebase(value));
+    });
   }
 
   Map<String, TimestampPatient> _patientFromFirebase(QuerySnapshot snapshot) {
+    print("qui");
     Map<String, TimestampPatient> data = Map();
     TimestampPatient patient = createPatient();
     snapshot.docs.forEach((element) {
       data.addAll({fromMillisecondsToDate(element.id): patient});
       patient = createPatientWithName("Piero", "Fasulli");
+      print("provina");
     });
+    print(data);
     return data;
   }
 

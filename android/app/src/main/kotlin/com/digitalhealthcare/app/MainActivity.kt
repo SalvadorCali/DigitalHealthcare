@@ -1,4 +1,4 @@
-package com.psscis.app
+package com.digitalhealthcare.app
 
 import io.flutter.embedding.android.FlutterActivity
 

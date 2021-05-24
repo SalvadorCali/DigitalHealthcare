@@ -19,7 +19,16 @@ class _WrapperState extends State<Wrapper> {
 
   @override
   void initState() {
-    //user = FirebaseAuth.instance.currentUser;
+    /* User user = FirebaseAuth.instance.currentUser;
+    if (user == null) {
+      setState(() {
+        logged = false;
+      });
+    } else {
+      setState(() {
+        logged = true;
+      });
+    } */
     FirebaseAuth.instance.authStateChanges().listen((User user) {
       if (user == null) {
         setState(() {
@@ -42,6 +51,8 @@ class _WrapperState extends State<Wrapper> {
           builder: (context, snapshot) {
             if (snapshot.hasData) {
               EndUser endUser = snapshot.data;
+              print(endUser.id);
+              print(endUser.tin);
               if (snapshot.data.isUser) {
                 return FutureBuilder<Patient>(
                     future: DatabaseService().getPatient(endUser.tin),
@@ -51,6 +62,7 @@ class _WrapperState extends State<Wrapper> {
                         return Homepage(patient, openQRCodeScanner,
                             openEmergencyNumbersLogged, logout);
                       } else {
+                        print("Here");
                         return Scaffold(
                             body: Center(child: CircularProgressIndicator()));
                       }
