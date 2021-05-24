@@ -36,7 +36,7 @@ class _VolunteerCardState extends State<VolunteerCard> {
               mainAxisSize: MainAxisSize.min,
               children: [
                 PopupMenuButton(
-                  icon: Icon(Icons.menu),
+                  icon: Icon(Icons.calendar_today),
                   initialValue: currentDate,
                   itemBuilder: (BuildContext context) {
                     return widget.patient.data.keys.map((element) {

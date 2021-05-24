@@ -36,8 +36,8 @@ class Login extends StatelessWidget {
     return Stack(children: [
       Center(
         child: FlutterLogin(
-          title: "PSS + CIS",
-          titleTag: "PSS + CIS",
+          title: "Sanità Digitale",
+          titleTag: "Sanità Digitale",
           onLogin: _authUser,
           onSignup: _authUser,
           hideSignUpButton: true,

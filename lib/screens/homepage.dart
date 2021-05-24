@@ -40,7 +40,7 @@ class _HomepageState extends State<Homepage> {
         length: 3,
         child: Scaffold(
             appBar: AppBar(
-              leading: AppBarButton(Icon(Icons.logout), widget.changeScreen),
+              //leading: AppBarButton(Icon(Icons.logout), widget.changeScreen),
               title: Text("Homepage"),
               actions: [
                 AppBarButton(Icon(Icons.contact_phone_outlined),
@@ -50,6 +50,7 @@ class _HomepageState extends State<Homepage> {
                     : AppBarButton(
                         Icon(Icons.qr_code_scanner), widget.openQRCodeScanner),
                 _buildDateMenu(),
+                AppBarButton(Icon(Icons.logout), widget.changeScreen),
               ],
               bottom: TabBar(
                 tabs: (kIsWeb &&
@@ -76,7 +77,7 @@ class _HomepageState extends State<Homepage> {
 
   PopupMenuButton _buildDateMenu() {
     return PopupMenuButton(
-      icon: Icon(Icons.more_vert),
+      icon: Icon(Icons.calendar_today),
       initialValue: date,
       itemBuilder: (BuildContext context) {
         return widget.patient.data.keys.map((element) {
@@ -423,5 +424,28 @@ class _HomepageState extends State<Homepage> {
     setState(() {
       processing = status;
     });
+  }
+
+  Future<void> _showLoadingDialog() async {
+    return showDialog<void>(
+      context: context,
+      barrierDismissible: false,
+      builder: (BuildContext context) {
+        return AlertDialog(
+          content: SingleChildScrollView(
+            child: ListBody(
+              children: <Widget>[
+                Padding(
+                  padding: const EdgeInsets.all(8.0),
+                  child: Icon(Icons.upload_file),
+                ),
+                //Image.asset("assets/images/loading.gif"),
+                Center(child: Text('Generazione documento in corso...')),
+              ],
+            ),
+          ),
+        );
+      },
+    );
   }
 }
