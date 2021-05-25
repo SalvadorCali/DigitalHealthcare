@@ -1,8 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_barcode_scanner/flutter_barcode_scanner.dart';
-import 'package:thesis/constants.dart';
-import 'package:thesis/model/timestamp_citizen.dart';
 import 'package:thesis/widgets/function_button.dart';
 
 class QRCodeScanner extends StatefulWidget {

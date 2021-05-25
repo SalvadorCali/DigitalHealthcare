@@ -48,13 +48,8 @@ dependencies:
   material_floating_search_bar: ^0.3.4 # per la barra di ricerca
   flutter_login: ^1.1.0 # per la schermata di login
   qr_utils: ^0.1.5
-  overlay: ^0.0.1 # per immagini in overlay
   unicorndial: ^1.1.5 # per creare speed dial
-  loading_overlay: ^0.2.1 # per loading in overlay
-  uiblock: ^2.0.0
-  threading: ^0.0.10
-  syncfusion_flutter_pdf: ^19.1.58-beta
-  http: ^0.13.3
+  http: ^0.13.3 # per ottenere dal web le immagini per i pdf
 
 dev_dependencies:
   change_app_package_name: ^0.1.2

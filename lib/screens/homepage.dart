@@ -8,14 +8,13 @@ import 'package:thesis/widgets/appbar_button.dart';
 import 'package:thesis/widgets/covid_tile.dart';
 import 'package:thesis/widgets/function_button.dart';
 import 'package:thesis/widgets/function_card.dart';
-import 'package:thesis/widgets/processing_indicator.dart';
 
 class Homepage extends StatefulWidget {
-  final Citizen patient;
+  final Citizen citizen;
   final openQRCodeScanner;
   final openEmergencyNumbers;
   final changeScreen;
-  Homepage(this.patient, this.openQRCodeScanner, this.openEmergencyNumbers,
+  Homepage(this.citizen, this.openQRCodeScanner, this.openEmergencyNumbers,
       this.changeScreen);
 
   @override
@@ -25,11 +24,11 @@ class Homepage extends StatefulWidget {
 class _HomepageState extends State<Homepage> {
   String qrCodeData;
   String qrCodeCovid;
-  String date;
+  String currentDate;
 
   @override
   void initState() {
-    _initializePatient();
+    _initializeCitizen();
     super.initState();
   }
 
@@ -39,7 +38,6 @@ class _HomepageState extends State<Homepage> {
         length: 3,
         child: Scaffold(
             appBar: AppBar(
-              //leading: AppBarButton(Icon(Icons.logout), widget.changeScreen),
               title: Text("Homepage"),
               actions: [
                 AppBarButton(Icon(Icons.contact_phone_outlined),
@@ -77,9 +75,9 @@ class _HomepageState extends State<Homepage> {
   PopupMenuButton _buildDateMenu() {
     return PopupMenuButton(
       icon: Icon(Icons.calendar_today),
-      initialValue: date,
+      initialValue: currentDate,
       itemBuilder: (BuildContext context) {
-        return widget.patient.data.keys.map((element) {
+        return widget.citizen.data.keys.map((element) {
           return PopupMenuItem(
             value: element,
             child: Text(element),
@@ -88,20 +86,20 @@ class _HomepageState extends State<Homepage> {
       },
       onSelected: (value) {
         setState(() {
-          date = value;
-          qrCodeData = widget.patient.data[value].getLifeSavingInformation();
-          qrCodeCovid = widget.patient.data[value].getLifeSavingInformation();
+          currentDate = value;
+          qrCodeData = widget.citizen.data[value].getLifeSavingInformation();
+          qrCodeCovid = widget.citizen.data[value].getLifeSavingInformation();
         });
       },
     );
   }
 
-  _initializePatient() {
+  _initializeCitizen() {
     setState(() {
-      date = widget.patient.data.keys.last;
-      qrCodeData = widget.patient.data[date].getLifeSavingInformation();
-      print(qrCodeData);
-      qrCodeCovid = widget.patient.data[date].getLifeSavingInformation();
+      currentDate = widget.citizen.data.keys.last;
+      qrCodeData = widget.citizen.data[currentDate].getLifeSavingInformation();
+      //da modificare inserendo i dati covid
+      qrCodeCovid = widget.citizen.data[currentDate].getLifeSavingInformation();
     });
   }
 
@@ -281,10 +279,11 @@ class _HomepageState extends State<Homepage> {
         : ListView(
             children: [
               _qrCodeScreen(qrCodeData),
-              CovidTile("Tampone", DateTime.now(), "https://andreacalici.com/"),
+              CovidTile(
+                  "Vaccinazione", DateTime.now(), "https://andreacalici.com/"),
               CovidTile("Tampone", DateTime.now(),
                   "https://andreacalici.files.wordpress.com/2021/03/aamas.pdf"),
-              CovidTile("Tampone", DateTime.now(),
+              CovidTile("Sierologico", DateTime.now(),
                   "https://andreacalici.files.wordpress.com/2021/03/aamas.pdf"),
               CovidTile("Tampone", DateTime.now(),
                   "https://andreacalici.files.wordpress.com/2021/03/aamas.pdf"),
@@ -314,7 +313,7 @@ class _HomepageState extends State<Homepage> {
   printQRCode() async {
     _setProcessing(true);
     await Future.delayed(Duration(seconds: 1), () {
-      PDFHandler(timestampCitizen: widget.patient.data[date])
+      PDFHandler(timestampCitizen: widget.citizen.data[currentDate])
           .printQRCode()
           .whenComplete(() {
         _setProcessing(false);
@@ -325,7 +324,7 @@ class _HomepageState extends State<Homepage> {
   openData() async {
     _setProcessing(true);
     await Future.delayed(Duration(seconds: 1), () {
-      PDFHandler(timestampCitizen: widget.patient.data[date])
+      PDFHandler(timestampCitizen: widget.citizen.data[currentDate])
           .openData()
           .whenComplete(() {
         _setProcessing(false);
@@ -336,7 +335,7 @@ class _HomepageState extends State<Homepage> {
   downloadData() async {
     _setProcessing(true);
     await Future.delayed(Duration(seconds: 1), () {
-      PDFHandler(timestampCitizen: widget.patient.data[date])
+      PDFHandler(timestampCitizen: widget.citizen.data[currentDate])
           .downloadData()
           .whenComplete(() {
         _setProcessing(false);
@@ -347,7 +346,7 @@ class _HomepageState extends State<Homepage> {
   printData() async {
     _setProcessing(true);
     await Future.delayed(Duration(seconds: 1), () {
-      PDFHandler(timestampCitizen: widget.patient.data[date])
+      PDFHandler(timestampCitizen: widget.citizen.data[currentDate])
           .printData()
           .whenComplete(() {
         _setProcessing(false);
@@ -358,7 +357,7 @@ class _HomepageState extends State<Homepage> {
   shareData() async {
     _setProcessing(true);
     await Future.delayed(Duration(seconds: 1), () {
-      PDFHandler(timestampCitizen: widget.patient.data[date])
+      PDFHandler(timestampCitizen: widget.citizen.data[currentDate])
           .shareData()
           .whenComplete(() {
         _setProcessing(false);
@@ -369,7 +368,7 @@ class _HomepageState extends State<Homepage> {
   openBracelet() async {
     _setProcessing(true);
     await Future.delayed(Duration(seconds: 1), () {
-      PDFHandler(timestampCitizen: widget.patient.data[date])
+      PDFHandler(timestampCitizen: widget.citizen.data[currentDate])
           .openBracelet()
           .whenComplete(() {
         _setProcessing(false);
@@ -380,7 +379,7 @@ class _HomepageState extends State<Homepage> {
   downloadBracelet() async {
     _setProcessing(true);
     await Future.delayed(Duration(seconds: 1), () {
-      PDFHandler(timestampCitizen: widget.patient.data[date])
+      PDFHandler(timestampCitizen: widget.citizen.data[currentDate])
           .downloadBracelet()
           .whenComplete(() {
         _setProcessing(false);
@@ -391,7 +390,7 @@ class _HomepageState extends State<Homepage> {
   printBracelet() async {
     _setProcessing(true);
     await Future.delayed(Duration(seconds: 1), () {
-      PDFHandler(timestampCitizen: widget.patient.data[date])
+      PDFHandler(timestampCitizen: widget.citizen.data[currentDate])
           .printBracelet()
           .whenComplete(() {
         _setProcessing(false);
@@ -402,7 +401,7 @@ class _HomepageState extends State<Homepage> {
   shareBracelet() async {
     _setProcessing(true);
     await Future.delayed(Duration(seconds: 1), () {
-      PDFHandler(timestampCitizen: widget.patient.data[date])
+      PDFHandler(timestampCitizen: widget.citizen.data[currentDate])
           .shareBracelet()
           .whenComplete(() {
         _setProcessing(false);
@@ -414,8 +413,8 @@ class _HomepageState extends State<Homepage> {
     _setProcessing(true);
     await Future.delayed(Duration(seconds: 1), () {
       PDFHandler(
-              citizen: widget.patient,
-              timestampCitizen: widget.patient.data[date])
+              citizen: widget.citizen,
+              timestampCitizen: widget.citizen.data[currentDate])
           .openBadge()
           .whenComplete(() {
         _setProcessing(false);
@@ -427,8 +426,8 @@ class _HomepageState extends State<Homepage> {
     _setProcessing(true);
     await Future.delayed(Duration(seconds: 1), () {
       PDFHandler(
-              citizen: widget.patient,
-              timestampCitizen: widget.patient.data[date])
+              citizen: widget.citizen,
+              timestampCitizen: widget.citizen.data[currentDate])
           .downloadBadge()
           .whenComplete(() {
         _setProcessing(false);
@@ -440,8 +439,8 @@ class _HomepageState extends State<Homepage> {
     _setProcessing(true);
     await Future.delayed(Duration(seconds: 1), () {
       PDFHandler(
-              citizen: widget.patient,
-              timestampCitizen: widget.patient.data[date])
+              citizen: widget.citizen,
+              timestampCitizen: widget.citizen.data[currentDate])
           .printBadge()
           .whenComplete(() {
         _setProcessing(false);
@@ -453,8 +452,8 @@ class _HomepageState extends State<Homepage> {
     _setProcessing(true);
     await Future.delayed(Duration(seconds: 1), () {
       PDFHandler(
-              citizen: widget.patient,
-              timestampCitizen: widget.patient.data[date])
+              citizen: widget.citizen,
+              timestampCitizen: widget.citizen.data[currentDate])
           .shareBadge()
           .whenComplete(() {
         _setProcessing(false);
@@ -466,8 +465,8 @@ class _HomepageState extends State<Homepage> {
     _setProcessing(true);
     await Future.delayed(Duration(seconds: 1), () {
       PDFHandler(
-              citizen: widget.patient,
-              timestampCitizen: widget.patient.data[date])
+              citizen: widget.citizen,
+              timestampCitizen: widget.citizen.data[currentDate])
           .openCIS()
           .whenComplete(() {
         _setProcessing(false);
@@ -479,8 +478,8 @@ class _HomepageState extends State<Homepage> {
     _setProcessing(true);
     await Future.delayed(Duration(seconds: 1), () {
       PDFHandler(
-              citizen: widget.patient,
-              timestampCitizen: widget.patient.data[date])
+              citizen: widget.citizen,
+              timestampCitizen: widget.citizen.data[currentDate])
           .downloadCIS()
           .whenComplete(() {
         _setProcessing(false);
@@ -492,8 +491,8 @@ class _HomepageState extends State<Homepage> {
     _setProcessing(true);
     await Future.delayed(Duration(seconds: 1), () {
       PDFHandler(
-              citizen: widget.patient,
-              timestampCitizen: widget.patient.data[date])
+              citizen: widget.citizen,
+              timestampCitizen: widget.citizen.data[currentDate])
           .printCIS()
           .whenComplete(() {
         _setProcessing(false);
@@ -505,8 +504,8 @@ class _HomepageState extends State<Homepage> {
     _setProcessing(true);
     await Future.delayed(Duration(seconds: 1), () {
       PDFHandler(
-              citizen: widget.patient,
-              timestampCitizen: widget.patient.data[date])
+              citizen: widget.citizen,
+              timestampCitizen: widget.citizen.data[currentDate])
           .shareCIS()
           .whenComplete(() {
         _setProcessing(false);

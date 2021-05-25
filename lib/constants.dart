@@ -4,6 +4,9 @@ String datiSalvavita = "DATI SALVAVITA";
 String space = " ";
 String aCapo = "\n";
 String colon = ":";
+String cittadino = "cittadino";
+String volontario = "volontario";
+String medico = "medico";
 
 List<Image> images = [
   Image.asset("assets/images/summary.png"),

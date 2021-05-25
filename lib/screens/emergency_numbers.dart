@@ -52,6 +52,10 @@ class EmergencyNumbers extends StatelessWidget {
   Widget _buildContacts() {
     return ListView(
       children: [
+        Padding(
+          padding: const EdgeInsets.all(8.0),
+          child: Image.asset("assets/images/contacts.png"),
+        ),
         NumbersCard(Icon(Icons.local_hospital), "Andrea Calici",
             "Medico di base", "3927713177", "andrea.calici19@gmail.com"),
         NumbersCard(Icon(Icons.work), "Davide Laffi", "Volontario comunale",
@@ -63,6 +67,10 @@ class EmergencyNumbers extends StatelessWidget {
   Widget _buildEmergency() {
     return ListView(
       children: [
+        Padding(
+          padding: const EdgeInsets.all(8.0),
+          child: Image.asset("assets/images/emergency.png"),
+        ),
         EmergencyNumberTile(
             Icon(HumanitarianIcons.community_building), "112", "Carabinieri"),
         EmergencyNumberTile(

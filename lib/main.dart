@@ -32,12 +32,12 @@ class Initialization extends StatelessWidget {
       builder: (context, snapshot) {
         if (snapshot.hasError) {
           print("Error");
-          return CircularProgressIndicator();
+          return Scaffold(body: Center(child: CircularProgressIndicator()));
         }
         if (snapshot.connectionState == ConnectionState.done) {
           return Wrapper();
         }
-        return CircularProgressIndicator();
+        return Scaffold(body: Center(child: CircularProgressIndicator()));
       },
     );
   }

@@ -1,5 +1,6 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:thesis/constants.dart';
 import 'package:thesis/model/end_user.dart';
 import 'package:thesis/model/citizen.dart';
 import 'package:thesis/screens/emergency_numbers.dart';
@@ -19,7 +20,7 @@ class _WrapperState extends State<Wrapper> {
 
   @override
   void initState() {
-    /* User user = FirebaseAuth.instance.currentUser;
+    User user = FirebaseAuth.instance.currentUser;
     if (user == null) {
       setState(() {
         logged = false;
@@ -28,8 +29,9 @@ class _WrapperState extends State<Wrapper> {
       setState(() {
         logged = true;
       });
-    } */
-    FirebaseAuth.instance.authStateChanges().listen((User user) {
+    }
+    // da usare per versione web probabilmente
+    /* FirebaseAuth.instance.authStateChanges().listen((User user) {
       if (user == null) {
         setState(() {
           logged = false;
@@ -39,7 +41,7 @@ class _WrapperState extends State<Wrapper> {
           logged = true;
         });
       }
-    });
+    }); */
     super.initState();
   }
 
@@ -51,35 +53,35 @@ class _WrapperState extends State<Wrapper> {
           builder: (context, snapshot) {
             if (snapshot.hasData) {
               EndUser endUser = snapshot.data;
-              if (snapshot.data.userType == "cittadino") {
+              if (snapshot.data.userType == cittadino) {
                 return FutureBuilder<Citizen>(
                     future: DatabaseService().getCitizen(endUser.cf),
                     builder: (context, snapshot) {
                       if (snapshot.hasData) {
-                        Citizen patient = snapshot.data;
-                        return Homepage(patient, openQRCodeScanner,
+                        Citizen citizen = snapshot.data;
+                        return Homepage(citizen, openQRCodeScanner,
                             openEmergencyNumbersLogged, logout);
                       } else {
                         return Scaffold(
                             body: Center(child: CircularProgressIndicator()));
                       }
                     });
-              } else if (snapshot.data.userType == "volontario") {
+              } else if (snapshot.data.userType == volontario) {
                 return FutureBuilder<List<Citizen>>(
                     future: DatabaseService().getCitizensList(endUser.cf),
                     builder: (context, snapshot) {
                       if (snapshot.hasData) {
-                        List<Citizen> patients = snapshot.data;
-                        DatabaseService().populateCitizensData(patients);
-                        return Volunteer(patients, logout);
+                        List<Citizen> citizens = snapshot.data;
+                        DatabaseService().populateCitizensData(citizens);
+                        return Volunteer(citizens, logout);
                       } else {
                         return Scaffold(
                             body: Center(child: CircularProgressIndicator()));
                       }
                     });
               } else {
-                return Scaffold(
-                    body: Center(child: CircularProgressIndicator()));
+                return Login(setLogged, openQRCodeScanner,
+                    openEmergencyNumbersNotLogged);
               }
             } else {
               return Scaffold(body: Center(child: CircularProgressIndicator()));

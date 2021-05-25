@@ -482,8 +482,6 @@ class PDFHandler {
         (await rootBundle.load('assets/logos/omceo.jpg')).buffer.asUint8List();
     final ice =
         (await rootBundle.load('assets/logos/ice.png')).buffer.asUint8List();
-    final http.Response profileImage = await http.get(Uri.parse(
-        'https://firebasestorage.googleapis.com/v0/b/digital-healthcare-it.appspot.com/o/profile_image%2FUnknown_person.jpg?alt=media&token=0807cbb4-d08a-461d-9006-44530fede5b2'));
     List<Uint8List> photosList;
     citizens.forEach((element) async {
       http.Response profileImage = await http.get(Uri.parse(element.photoURL));

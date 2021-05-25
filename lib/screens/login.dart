@@ -9,7 +9,7 @@ class Login extends StatelessWidget {
   final openEmergencyNumbers;
   Login(this.setLogged, this.openQRCodeScanner, this.openEmergencyNumbers);
 
-  Duration get loginTime => Duration(milliseconds: 1500);
+  Duration get loginTime => Duration(milliseconds: 1000);
 
   Future<String> _authUser(LoginData data) {
     return Future.delayed(loginTime).then((_) async {

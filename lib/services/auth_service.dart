@@ -1,4 +1,5 @@
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:thesis/constants.dart';
 import 'package:thesis/model/end_user.dart';
 import 'package:thesis/services/database_service.dart';
 
@@ -10,7 +11,11 @@ class AuthService {
       await FirebaseAuth.instance
           .signInWithEmailAndPassword(email: email, password: password);
       EndUser endUser = await DatabaseService().getUser();
-      return endUser.userType == "medico" ? false : true;
+      if (endUser.userType == medico) {
+        FirebaseAuth.instance.signOut();
+        return false;
+      }
+      return true;
     } on FirebaseAuthException catch (e) {
       print(e.toString());
       return false;

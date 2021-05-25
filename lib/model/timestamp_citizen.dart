@@ -1,9 +1,6 @@
 import 'package:thesis/constants.dart';
 
 class TimestampCitizen {
-  //String name;
-  //String surname;
-  //String birthday;
   String bloodGroup;
   String bloodFactor;
   String contactOne;
@@ -135,7 +132,6 @@ class TimestampCitizen {
     };
   }
 
-  //da definire l'ordinamento dei dati
   Map<String, dynamic> toMapIta() {
     return {
       'Nome': nome + " " + cognome,
@@ -181,37 +177,3 @@ class TimestampCitizen {
             information;
   }
 }
-
-/* TimestampCitizen createPatient() {
-  return TimestampCitizen(
-      nome: "Andrea",
-      cognome: "Calici",
-      dataNascita: "19/04/1996",
-      bloodGroup: "A",
-      bloodFactor: "-",
-      contactOne: "Mamma",
-      phoneNumberOne: 333,
-      contactTwo: "Papà",
-      phoneNumberTwo: 444,
-      pathologies: ["Patologia1", "Patologia2"],
-      allergies: "Graminacee",
-      information:
-          "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Ut ac molestie lorem, eget semper odio. In purus lacus, scelerisque quis nisl ac, maximus cursus orci. Vestibulum vitae libero erat.");
-}
-
-TimestampCitizen createPatientWithName(String name, String surname) {
-  return TimestampCitizen(
-      nome: name,
-      cognome: surname,
-      dataNascita: "19/04/1996",
-      bloodGroup: "A",
-      bloodFactor: "-",
-      contactOne: "Mamma",
-      phoneNumberOne: 333,
-      contactTwo: "Papà",
-      phoneNumberTwo: 444,
-      pathologies: ["Patologia1", "Patologia2"],
-      allergies: "Graminacee",
-      information:
-          "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Ut ac molestie lorem, eget semper odio. In purus lacus, scelerisque quis nisl ac, maximus cursus orci. Vestibulum vitae libero erat.");
-} */
