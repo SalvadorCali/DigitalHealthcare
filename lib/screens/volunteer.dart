@@ -2,15 +2,16 @@ import 'package:flutter/material.dart';
 import "dart:async";
 import 'package:material_floating_search_bar/material_floating_search_bar.dart';
 import 'package:thesis/constants.dart';
-import 'package:thesis/model/patient.dart';
-import 'package:thesis/model/searched_patient.dart';
+import 'package:thesis/model/citizen.dart';
+import 'package:thesis/model/searched_citizen.dart';
+import 'package:thesis/model/timestamp_citizen.dart';
 import 'package:thesis/services/pdf_handler.dart';
 import 'package:thesis/widgets/appbar_button.dart';
 import 'package:thesis/widgets/volunteer_card.dart';
 import 'package:unicorndial/unicorndial.dart';
 
 class Volunteer extends StatefulWidget {
-  final List<Patient> patients;
+  final List<Citizen> patients;
   final changeScreen;
   const Volunteer(this.patients, this.changeScreen);
 
@@ -21,11 +22,13 @@ class Volunteer extends StatefulWidget {
 class _VolunteerState extends State<Volunteer> {
   List<String> qrCodeDataList = [];
   List<String> namesList = [];
+  List<String> photosList = [];
   List<String> dateList = [];
-  List<SearchedPatient> patients = [];
-  List<SearchedPatient> queryResult = [];
-  List<SearchedPatient> bodyPatients = [];
-  bool loading = false;
+  List<SearchedCitizen> patients = [];
+  List<SearchedCitizen> queryResult = [];
+  List<SearchedCitizen> bodyPatients = [];
+  List<Citizen> citizens = [];
+  List<TimestampCitizen> timestampCitizens = [];
 
   @override
   void initState() {
@@ -36,7 +39,7 @@ class _VolunteerState extends State<Volunteer> {
   _initializePatient() {
     setState(() {
       widget.patients.forEach((element) {
-        patients.add(SearchedPatient(element, false));
+        patients.add(SearchedCitizen(element, false));
       });
     });
   }
@@ -53,7 +56,7 @@ class _VolunteerState extends State<Volunteer> {
             AppBarButton(Icon(Icons.logout), widget.changeScreen),
           ],
         ),
-        body: loading ? LinearProgressIndicator() : _searchScreen());
+        body: _searchScreen());
   }
 
   Widget _searchScreen() {
@@ -72,8 +75,8 @@ class _VolunteerState extends State<Volunteer> {
                 itemCount: bodyPatients.length,
                 itemBuilder: (context, index) {
                   return bodyPatients[index].body
-                      ? VolunteerCard(bodyPatients[index].patient, index,
-                          _setDate, _removeElement)
+                      ? VolunteerCard(bodyPatients[index].citizen, index,
+                          _getDate, _setDate, _removeElement)
                       : SizedBox.shrink();
                 },
               ),
@@ -101,10 +104,10 @@ class _VolunteerState extends State<Volunteer> {
           setState(() {
             queryResult = patients
                 .where((element) =>
-                    element.patient.fullName
+                    element.citizen.fullName
                         .toLowerCase()
                         .contains(query.toLowerCase()) ||
-                    element.patient.tin
+                    element.citizen.cf
                         .toLowerCase()
                         .contains(query.toLowerCase()))
                 .toList();
@@ -146,8 +149,8 @@ class _VolunteerState extends State<Volunteer> {
     List<Widget> widgets = [];
     queryResult.forEach((element) {
       widgets.add(ListTile(
-        title: Text(element.patient.fullName),
-        subtitle: Text(element.patient.tin),
+        title: Text(element.citizen.fullName),
+        subtitle: Text(element.citizen.cf),
         trailing: element.body
             ? SizedBox.shrink()
             : ElevatedButton(
@@ -155,14 +158,20 @@ class _VolunteerState extends State<Volunteer> {
                   setState(() {
                     element.body = true;
                     bodyPatients.add(element);
-                    namesList.add(element.patient.fullName);
-                    dateList.add(element.patient.data.keys.last);
+                    citizens.add(element.citizen);
+                    //namesList.add(element.citizen.fullName);
+                    //photosList.add(element.citizen.photoURL);
+                    dateList.add(element.citizen.data.keys.last);
                   });
                 },
                 child: Text("Aggiungi")),
       ));
     });
     return widgets;
+  }
+
+  String _getDate(int index, String newDate) {
+    return dateList[index];
   }
 
   _setDate(int index, String newDate) {
@@ -174,15 +183,17 @@ class _VolunteerState extends State<Volunteer> {
   _removeElement(String tin) {
     bool exit = false;
     for (int i = 0; i < bodyPatients.length; i++) {
-      if (bodyPatients[i].patient.tin == tin) {
+      if (bodyPatients[i].citizen.cf == tin) {
         setState(() {
           patients.forEach((member) {
-            if (member.patient.tin == tin) {
+            if (member.citizen.cf == tin) {
               member.body = false;
             }
           });
           bodyPatients.remove(bodyPatients[i]);
-          namesList.remove(namesList[i]);
+          citizens.remove(citizens[i]);
+          //namesList.remove(namesList[i]);
+          //photosList.remove(photosList[i]);
           dateList.remove(dateList[i]);
           exit = true;
         });
@@ -223,7 +234,7 @@ class _VolunteerState extends State<Volunteer> {
   generateMultipleBadge() {
     _createData();
     Future.delayed(Duration(seconds: 1), () async {
-      await PDFHandler(qrDataList: qrCodeDataList)
+      await PDFHandler(citizens: citizens, timestampCitizens: timestampCitizens)
           .openMultipleBadge()
           .whenComplete(() {
         _resetData();
@@ -234,9 +245,7 @@ class _VolunteerState extends State<Volunteer> {
   generateMultipleCIS() {
     _createData();
     Future.delayed(Duration(seconds: 1), () async {
-      await PDFHandler(
-              qrDataList: qrCodeDataList,
-              patient: bodyPatients[0].patient.data[dateList[0]])
+      await PDFHandler(citizens: citizens, timestampCitizens: timestampCitizens)
           .openMultipleCIS()
           .whenComplete(() {
         _resetData();
@@ -247,7 +256,7 @@ class _VolunteerState extends State<Volunteer> {
   generateMultipleBracelet() async {
     _createData();
     await Future.delayed(Duration(seconds: 1), () {
-      PDFHandler(qrDataList: qrCodeDataList, names: namesList)
+      PDFHandler(citizens: citizens, timestampCitizens: timestampCitizens)
           .openMultipleBracelet()
           .whenComplete(() {
         _resetData();
@@ -256,29 +265,20 @@ class _VolunteerState extends State<Volunteer> {
   }
 
   _createData() {
-    /* setState(() {
-      loading = true;
-    });
- */
     _showLoadingDialog();
     for (int i = 0; i < bodyPatients.length; i++) {
-      qrCodeDataList.add(
-          bodyPatients[i].patient.data[dateList[i]].getLifeSavingInformation());
+      timestampCitizens.add(bodyPatients[i].citizen.data[dateList[i]]);
+      citizens.add(bodyPatients[i].citizen);
+      /* qrCodeDataList.add(
+          bodyPatients[i].citizen.data[dateList[i]].getLifeSavingInformation()); */
     }
   }
 
   _resetData() {
-    qrCodeDataList.clear();
+    timestampCitizens.clear();
+    citizens.clear();
+    //qrCodeDataList.clear();
     Navigator.of(context).pop();
-    /* setState(() {
-      loading = false;
-    }); */
-  }
-
-  _setLoading(bool status) {
-    setState(() {
-      loading = status;
-    });
   }
 
   Future<void> _showLoadingDialog() async {

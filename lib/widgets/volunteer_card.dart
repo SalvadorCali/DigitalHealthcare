@@ -1,16 +1,17 @@
 import 'package:flutter/material.dart';
 import 'package:thesis/constants.dart';
-import 'package:thesis/model/patient.dart';
+import 'package:thesis/model/citizen.dart';
 import 'package:thesis/services/pdf_handler.dart';
 import 'package:thesis/widgets/function_button.dart';
 
 class VolunteerCard extends StatefulWidget {
-  final Patient patient;
+  final Citizen patient;
   final int index;
+  final getDate;
   final setDate;
   final removePatient;
   const VolunteerCard(
-      this.patient, this.index, this.setDate, this.removePatient);
+      this.patient, this.index, this.getDate, this.setDate, this.removePatient);
 
   @override
   _VolunteerCardState createState() => _VolunteerCardState();
@@ -57,7 +58,7 @@ class _VolunteerCardState extends State<VolunteerCard> {
               ],
             ),
             title: Text(widget.patient.fullName),
-            subtitle: Text(widget.patient.tin),
+            subtitle: Text(widget.patient.cf),
           ),
           Divider(),
           ListTile(
@@ -96,26 +97,24 @@ class _VolunteerCardState extends State<VolunteerCard> {
 
   printBadge() async {
     await PDFHandler(
-            qrData: widget.patient.data[currentDate].getLifeSavingInformation(),
-            patient: widget.patient.data[currentDate])
+            citizen: widget.patient,
+            timestampCitizen: widget.patient.data[currentDate])
         .printBadge();
   }
 
   printCIS() async {
     await PDFHandler(
-            qrData: widget.patient.data[currentDate].getLifeSavingInformation(),
-            patient: widget.patient.data[currentDate])
+            citizen: widget.patient,
+            timestampCitizen: widget.patient.data[currentDate])
         .printCIS();
   }
 
   printBracelet() async {
-    await PDFHandler(
-            qrData: widget.patient.data[currentDate].getLifeSavingInformation(),
-            patient: widget.patient.data[currentDate])
+    await PDFHandler(timestampCitizen: widget.patient.data[currentDate])
         .printBracelet();
   }
 
   remove() {
-    widget.removePatient(widget.patient.tin);
+    widget.removePatient(widget.patient.cf);
   }
 }

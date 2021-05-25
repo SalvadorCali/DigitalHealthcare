@@ -1,7 +1,7 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:thesis/model/end_user.dart';
-import 'package:thesis/model/patient.dart';
+import 'package:thesis/model/citizen.dart';
 import 'package:thesis/screens/emergency_numbers.dart';
 import 'package:thesis/screens/homepage.dart';
 import 'package:thesis/screens/login.dart';
@@ -51,35 +51,35 @@ class _WrapperState extends State<Wrapper> {
           builder: (context, snapshot) {
             if (snapshot.hasData) {
               EndUser endUser = snapshot.data;
-              print(endUser.id);
-              print(endUser.tin);
-              if (snapshot.data.isUser) {
-                return FutureBuilder<Patient>(
-                    future: DatabaseService().getPatient(endUser.tin),
+              if (snapshot.data.userType == "cittadino") {
+                return FutureBuilder<Citizen>(
+                    future: DatabaseService().getCitizen(endUser.cf),
                     builder: (context, snapshot) {
                       if (snapshot.hasData) {
-                        Patient patient = snapshot.data;
+                        Citizen patient = snapshot.data;
                         return Homepage(patient, openQRCodeScanner,
                             openEmergencyNumbersLogged, logout);
                       } else {
-                        print("Here");
                         return Scaffold(
                             body: Center(child: CircularProgressIndicator()));
                       }
                     });
-              } else {
-                return FutureBuilder<List<Patient>>(
-                    future: DatabaseService().getPatientsList(endUser.tin),
+              } else if (snapshot.data.userType == "volontario") {
+                return FutureBuilder<List<Citizen>>(
+                    future: DatabaseService().getCitizensList(endUser.cf),
                     builder: (context, snapshot) {
                       if (snapshot.hasData) {
-                        List<Patient> patients = snapshot.data;
-                        DatabaseService().populatePatientsData(patients);
+                        List<Citizen> patients = snapshot.data;
+                        DatabaseService().populateCitizensData(patients);
                         return Volunteer(patients, logout);
                       } else {
                         return Scaffold(
                             body: Center(child: CircularProgressIndicator()));
                       }
                     });
+              } else {
+                return Scaffold(
+                    body: Center(child: CircularProgressIndicator()));
               }
             } else {
               return Scaffold(body: Center(child: CircularProgressIndicator()));

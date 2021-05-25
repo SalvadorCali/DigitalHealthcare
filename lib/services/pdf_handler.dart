@@ -6,6 +6,7 @@ import 'package:flutter/services.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:open_file/open_file.dart';
 import 'package:path/path.dart' as _path;
+import 'package:thesis/model/citizen.dart';
 import 'package:universal_html/html.dart' as html;
 import 'package:path_provider/path_provider.dart';
 import 'package:pdf/pdf.dart';
@@ -13,8 +14,9 @@ import 'package:pdf/widgets.dart';
 import 'package:permission_handler/permission_handler.dart';
 import 'package:printing/printing.dart';
 import 'package:thesis/constants.dart';
-import 'package:thesis/model/timestamp_patient.dart';
+import 'package:thesis/model/timestamp_citizen.dart';
 import 'package:url_launcher/url_launcher.dart';
+import 'package:http/http.dart' as http;
 
 class PDFHandler {
   //A4: 297mm x 210mm
@@ -25,12 +27,16 @@ class PDFHandler {
   final String badge = "badge";
 
   final pdf = Document();
-  final TimestampPatient patient;
-  final String qrData;
-  final List<String> qrDataList;
-  final List<String> names;
+  final Citizen citizen;
+  final TimestampCitizen timestampCitizen;
+  final List<Citizen> citizens;
+  final List<TimestampCitizen> timestampCitizens;
 
-  PDFHandler({this.patient, this.qrData, this.qrDataList, this.names});
+  PDFHandler(
+      {this.citizens,
+      this.timestampCitizens,
+      this.citizen,
+      this.timestampCitizen});
 
   printQRCode() async {
     await _createQRCode();
@@ -51,9 +57,9 @@ class PDFHandler {
                     Padding(
                         padding: EdgeInsets.all(8),
                         child: Text(
-                            "Codice QR di ${patient.name} ${patient.surname}")),
+                            "Codice QR di ${timestampCitizen.nome} ${timestampCitizen.cognome}")),
                     BarcodeWidget(
-                      data: qrData,
+                      data: timestampCitizen.getLifeSavingInformation(),
                       width: 150,
                       height: 150,
                       barcode: Barcode.qrCode(),
@@ -111,7 +117,7 @@ class PDFHandler {
 
   List<Widget> _createPSS() {
     List<Widget> widgets = [];
-    patient.toMapIta().forEach((key, value) {
+    timestampCitizen.toMapIta().forEach((key, value) {
       widgets.add(Text("$key: $value"));
     });
     return widgets;
@@ -199,7 +205,7 @@ class PDFHandler {
                     child: Padding(
                         padding: EdgeInsets.all(2),
                         child: BarcodeWidget(
-                          data: qrData,
+                          data: timestampCitizen.getLifeSavingInformation(),
                           width: (PdfPageFormat.a4.width / 1.83) / 7,
                           height: PdfPageFormat.a4.height / 13.68,
                           barcode: Barcode.qrCode(),
@@ -246,7 +252,7 @@ class PDFHandler {
   List<Widget> generateBracelets(
       municipioTre, comuneMilano, mvi, polimi, areu, centodiciotto) {
     List<Widget> widgets = [];
-    for (int i = 0; i < 10; i++) {
+    for (int i = 0; i < timestampCitizens.length; i++) {
       widgets.add(Row(children: [
         Container(
             decoration:
@@ -262,7 +268,7 @@ class PDFHandler {
                 child: Padding(
                     padding: EdgeInsets.all(2),
                     child: BarcodeWidget(
-                      data: qrDataList[0],
+                      data: timestampCitizens[0].getLifeSavingInformation(),
                       width: (PdfPageFormat.a4.width / 1.83) / 7,
                       height: PdfPageFormat.a4.height / 13.68,
                       barcode: Barcode.qrCode(),
@@ -271,7 +277,7 @@ class PDFHandler {
               _braceletLogo(areu),
               _braceletLogo(centodiciotto),
             ])),
-        Padding(padding: EdgeInsets.all(8), child: Text(names[0]))
+        Padding(padding: EdgeInsets.all(8), child: Text(citizens[0].fullName))
       ]));
       widgets.add(
         SizedBox(height: 10),
@@ -339,14 +345,14 @@ class PDFHandler {
         (await rootBundle.load('assets/logos/mvi.png')).buffer.asUint8List();
     final ice =
         (await rootBundle.load('assets/logos/ice.png')).buffer.asUint8List();
-    final profile = (await rootBundle.load('assets/images/profile.jpeg'))
-        .buffer
-        .asUint8List();
+    final http.Response profileImage =
+        await http.get(Uri.parse(citizen.photoURL));
+    final profile = profileImage.bodyBytes;
     pdf.addPage(Page(
         pageFormat: PdfPageFormat.a4,
         margin: EdgeInsets.all(0),
         build: (Context context) {
-          return _blockFour(mvi, ice, profile, qrData);
+          return _blockFour(mvi, ice, profile, timestampCitizen);
         }));
   }
 
@@ -355,17 +361,22 @@ class PDFHandler {
         (await rootBundle.load('assets/logos/mvi.png')).buffer.asUint8List();
     final ice =
         (await rootBundle.load('assets/logos/ice.png')).buffer.asUint8List();
-    final profile = (await rootBundle.load('assets/images/profile.jpeg'))
-        .buffer
-        .asUint8List();
-    qrDataList.forEach((element) {
+
+    List<Uint8List> photosList;
+    citizens.forEach((element) async {
+      http.Response profileImage = await http.get(Uri.parse(element.photoURL));
+      Uint8List profile = profileImage.bodyBytes;
+      photosList.add(profile);
+    });
+
+    for (int i = 0; i < timestampCitizens.length; i++) {
       pdf.addPage(Page(
           pageFormat: PdfPageFormat.a4,
           margin: EdgeInsets.all(0),
           build: (Context context) {
-            return _blockFour(mvi, ice, profile, element);
+            return _blockFour(mvi, ice, photosList[i], timestampCitizens[i]);
           }));
-    });
+    }
   }
 
   //cis
@@ -431,9 +442,9 @@ class PDFHandler {
         (await rootBundle.load('assets/logos/omceo.jpg')).buffer.asUint8List();
     final ice =
         (await rootBundle.load('assets/logos/ice.png')).buffer.asUint8List();
-    final profile = (await rootBundle.load('assets/images/profile.jpeg'))
-        .buffer
-        .asUint8List();
+    final http.Response profileImage =
+        await http.get(Uri.parse(citizen.photoURL));
+    final profile = profileImage.bodyBytes;
 
     pdf.addPage(Page(
         pageFormat: PdfPageFormat.a4,
@@ -447,7 +458,7 @@ class PDFHandler {
                 _blockOne(centodiciotto, centododici),
                 _blockTwo(comuneMilano, mvi, areu, simeu, omceo),
                 _blockThree(),
-                _blockFour(mvi, ice, profile, qrData),
+                _blockFour(mvi, ice, profile, timestampCitizen),
               ]);
         }));
   }
@@ -471,10 +482,16 @@ class PDFHandler {
         (await rootBundle.load('assets/logos/omceo.jpg')).buffer.asUint8List();
     final ice =
         (await rootBundle.load('assets/logos/ice.png')).buffer.asUint8List();
-    final profile = (await rootBundle.load('assets/images/profile.jpeg'))
-        .buffer
-        .asUint8List();
-    qrDataList.forEach((element) {
+    final http.Response profileImage = await http.get(Uri.parse(
+        'https://firebasestorage.googleapis.com/v0/b/digital-healthcare-it.appspot.com/o/profile_image%2FUnknown_person.jpg?alt=media&token=0807cbb4-d08a-461d-9006-44530fede5b2'));
+    List<Uint8List> photosList;
+    citizens.forEach((element) async {
+      http.Response profileImage = await http.get(Uri.parse(element.photoURL));
+      Uint8List profile = profileImage.bodyBytes;
+      photosList.add(profile);
+    });
+
+    for (int i = 0; i < timestampCitizens.length; i++) {
       pdf.addPage(Page(
           pageFormat: PdfPageFormat.a4,
           margin: EdgeInsets.all(0),
@@ -487,10 +504,10 @@ class PDFHandler {
                   _blockOne(centodiciotto, centododici),
                   _blockTwo(comuneMilano, mvi, areu, simeu, omceo),
                   _blockThree(),
-                  _blockFour(mvi, ice, profile, element),
+                  _blockFour(mvi, ice, photosList[i], timestampCitizens[i]),
                 ]);
           }));
-    });
+    }
   }
 
   Container _blockOne(centodiciotto, centododici) {
@@ -751,7 +768,8 @@ class PDFHandler {
         ]));
   }
 
-  Container _blockFour(mvi, ice, profile, String data) {
+  Container _blockFour(
+      mvi, ice, Uint8List photo, TimestampCitizen timestampCitizenBlock) {
     return Container(
         decoration: BoxDecoration(border: Border.all(color: PdfColors.black)),
         width: PdfPageFormat.a4.width / 2,
@@ -831,10 +849,12 @@ class PDFHandler {
                         child: Column(
                             mainAxisAlignment: MainAxisAlignment.center,
                             children: [
-                              Text("ICE1: 39239233392",
+                              Text(
+                                  "ICE1: ${timestampCitizenBlock.phoneNumberOne.toString()}",
                                   style: TextStyle(
                                       fontSize: 18, color: PdfColors.orange)),
-                              Text("ICE2: 39239233392",
+                              Text(
+                                  "ICE2: ${timestampCitizenBlock.phoneNumberTwo.toString()}",
                                   style: TextStyle(
                                       fontSize: 18, color: PdfColors.orange))
                             ])),
@@ -843,8 +863,8 @@ class PDFHandler {
                       child: Container(
                           height: (PdfPageFormat.a4.height / 10),
                           width: (PdfPageFormat.a4.width / 10),
-                          child: Image(MemoryImage(profile),
-                              fit: BoxFit.fitWidth)),
+                          child:
+                              Image(MemoryImage(photo), fit: BoxFit.fitWidth)),
                     )
                   ])),
           Container(
@@ -852,7 +872,7 @@ class PDFHandler {
               child:
                   Row(mainAxisAlignment: MainAxisAlignment.center, children: [
                 BarcodeWidget(
-                  data: data,
+                  data: timestampCitizenBlock.getLifeSavingInformation(),
                   width: (PdfPageFormat.a4.width / 10) * 2,
                   height: (PdfPageFormat.a4.height / 10) * 2,
                   barcode: Barcode.qrCode(),
@@ -863,7 +883,7 @@ class PDFHandler {
 
   List<Widget> _createKeys() {
     List<Widget> widgets = [];
-    patient.toMapIta().forEach((key, value) {
+    timestampCitizen.toMapIta().forEach((key, value) {
       widgets.add(Text("$key", style: TextStyle(fontWeight: FontWeight.bold)));
     });
     return widgets;
@@ -871,7 +891,7 @@ class PDFHandler {
 
   List<Widget> _createValues() {
     List<Widget> widgets = [];
-    patient.toMapIta().forEach((key, value) {
+    timestampCitizen.toMapIta().forEach((key, value) {
       widgets.add(Text("$value"));
     });
     return widgets;

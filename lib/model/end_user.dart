@@ -1,8 +1,9 @@
 class EndUser {
-  String id;
-  String tin;
+  String uid;
+  String cf;
   String email;
-  bool isUser;
+  String photoURL;
+  String userType;
 
-  EndUser({this.id, this.tin, this.email, this.isUser});
+  EndUser({this.uid, this.cf, this.email, this.photoURL, this.userType});
 }

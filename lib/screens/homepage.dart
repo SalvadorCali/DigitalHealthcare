@@ -1,7 +1,7 @@
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:thesis/constants.dart';
-import 'package:thesis/model/patient.dart';
+import 'package:thesis/model/citizen.dart';
 import 'package:thesis/services/pdf_handler.dart';
 import 'package:thesis/services/qr_code_handler.dart';
 import 'package:thesis/widgets/appbar_button.dart';
@@ -11,7 +11,7 @@ import 'package:thesis/widgets/function_card.dart';
 import 'package:thesis/widgets/processing_indicator.dart';
 
 class Homepage extends StatefulWidget {
-  final Patient patient;
+  final Citizen patient;
   final openQRCodeScanner;
   final openEmergencyNumbers;
   final changeScreen;
@@ -23,7 +23,6 @@ class Homepage extends StatefulWidget {
 }
 
 class _HomepageState extends State<Homepage> {
-  bool processing = false;
   String qrCodeData;
   String qrCodeCovid;
   String date;
@@ -130,119 +129,117 @@ class _HomepageState extends State<Homepage> {
   }
 
   Widget _functionalitiesScreen() {
-    return processing
-        ? ProcessingIndicator("Generazione PDF")
-        : (kIsWeb &&
-                MediaQuery.of(context).size.width >
-                    MediaQuery.of(context).size.height)
-            ? ListView(
+    return (kIsWeb &&
+            MediaQuery.of(context).size.width >
+                MediaQuery.of(context).size.height)
+        ? ListView(
+            children: [
+              Row(
                 children: [
-                  Row(
-                    children: [
-                      Flexible(
-                        child: FunctionCard(
-                            icons[0],
-                            images[0],
-                            functionalities[0],
-                            subtitles[0],
-                            descriptions[0],
-                            openData,
-                            downloadData,
-                            printData,
-                            shareData),
-                      ),
-                      Flexible(
-                        child: FunctionCard(
-                            icons[1],
-                            images[1],
-                            functionalities[1],
-                            subtitles[1],
-                            descriptions[1],
-                            openBadge,
-                            downloadBadge,
-                            printBadge,
-                            shareBadge),
-                      ),
-                    ],
+                  Flexible(
+                    child: FunctionCard(
+                        icons[0],
+                        images[0],
+                        functionalities[0],
+                        subtitles[0],
+                        descriptions[0],
+                        openData,
+                        downloadData,
+                        printData,
+                        shareData),
                   ),
-                  Row(
-                    children: [
-                      Flexible(
-                        child: FunctionCard(
-                            icons[2],
-                            images[2],
-                            functionalities[2],
-                            subtitles[2],
-                            descriptions[2],
-                            openCIS,
-                            downloadCIS,
-                            printCIS,
-                            shareCIS),
-                      ),
-                      Flexible(
-                        child: FunctionCard(
-                            icons[3],
-                            images[3],
-                            functionalities[3],
-                            subtitles[3],
-                            descriptions[3],
-                            openBracelet,
-                            downloadBracelet,
-                            printBracelet,
-                            shareBracelet),
-                      ),
-                    ],
-                  )
+                  Flexible(
+                    child: FunctionCard(
+                        icons[1],
+                        images[1],
+                        functionalities[1],
+                        subtitles[1],
+                        descriptions[1],
+                        openBadge,
+                        downloadBadge,
+                        printBadge,
+                        shareBadge),
+                  ),
+                ],
+              ),
+              Row(
+                children: [
+                  Flexible(
+                    child: FunctionCard(
+                        icons[2],
+                        images[2],
+                        functionalities[2],
+                        subtitles[2],
+                        descriptions[2],
+                        openCIS,
+                        downloadCIS,
+                        printCIS,
+                        shareCIS),
+                  ),
+                  Flexible(
+                    child: FunctionCard(
+                        icons[3],
+                        images[3],
+                        functionalities[3],
+                        subtitles[3],
+                        descriptions[3],
+                        openBracelet,
+                        downloadBracelet,
+                        printBracelet,
+                        shareBracelet),
+                  ),
                 ],
               )
-            : Center(
-                child: Scrollbar(
-                  child: ListView(
-                    children: [
-                      FunctionCard(
-                          icons[0],
-                          images[0],
-                          functionalities[0],
-                          subtitles[0],
-                          descriptions[0],
-                          openData,
-                          downloadData,
-                          printData,
-                          shareData),
-                      FunctionCard(
-                          icons[1],
-                          images[1],
-                          functionalities[1],
-                          subtitles[1],
-                          descriptions[1],
-                          openBadge,
-                          downloadBadge,
-                          printBadge,
-                          shareBadge),
-                      FunctionCard(
-                          icons[2],
-                          images[2],
-                          functionalities[2],
-                          subtitles[2],
-                          descriptions[2],
-                          openCIS,
-                          downloadCIS,
-                          printCIS,
-                          shareCIS),
-                      FunctionCard(
-                          icons[3],
-                          images[3],
-                          functionalities[3],
-                          subtitles[3],
-                          descriptions[3],
-                          openBracelet,
-                          downloadBracelet,
-                          printBracelet,
-                          shareBracelet),
-                    ],
-                  ),
-                ),
-              );
+            ],
+          )
+        : Center(
+            child: Scrollbar(
+              child: ListView(
+                children: [
+                  FunctionCard(
+                      icons[0],
+                      images[0],
+                      functionalities[0],
+                      subtitles[0],
+                      descriptions[0],
+                      openData,
+                      downloadData,
+                      printData,
+                      shareData),
+                  FunctionCard(
+                      icons[1],
+                      images[1],
+                      functionalities[1],
+                      subtitles[1],
+                      descriptions[1],
+                      openBadge,
+                      downloadBadge,
+                      printBadge,
+                      shareBadge),
+                  FunctionCard(
+                      icons[2],
+                      images[2],
+                      functionalities[2],
+                      subtitles[2],
+                      descriptions[2],
+                      openCIS,
+                      downloadCIS,
+                      printCIS,
+                      shareCIS),
+                  FunctionCard(
+                      icons[3],
+                      images[3],
+                      functionalities[3],
+                      subtitles[3],
+                      descriptions[3],
+                      openBracelet,
+                      downloadBracelet,
+                      printBracelet,
+                      shareBracelet),
+                ],
+              ),
+            ),
+          );
   }
 
   Widget _covidScreen() {
@@ -296,134 +293,228 @@ class _HomepageState extends State<Homepage> {
 
   //callback functions
   openQRCode() async {
-    await QRCodeHandler().openQRCode(qrCodeData);
+    _setProcessing(true);
+    await Future.delayed(Duration(seconds: 1), () {
+      QRCodeHandler().openQRCode(qrCodeData).whenComplete(() {
+        _setProcessing(false);
+      });
+    });
   }
 
   saveQRCodeToGallery() async {
-    await QRCodeHandler().saveQRCodeToGallery(qrCodeData);
+    _setProcessing(true);
+    await Future.delayed(Duration(seconds: 1), () {
+      QRCodeHandler().saveQRCodeToGallery(qrCodeData).whenComplete(() {
+        _setProcessing(false);
+      });
+    });
   }
 
   printQRCode() async {
-    await PDFHandler(qrData: qrCodeData, patient: widget.patient.data[date])
-        .printQRCode();
+    _setProcessing(true);
+    await Future.delayed(Duration(seconds: 1), () {
+      PDFHandler(timestampCitizen: widget.patient.data[date])
+          .printQRCode()
+          .whenComplete(() {
+        _setProcessing(false);
+      });
+    });
   }
 
   openData() async {
     _setProcessing(true);
-    await PDFHandler(qrData: qrCodeData, patient: widget.patient.data[date])
-        .openData();
-    _setProcessing(false);
+    await Future.delayed(Duration(seconds: 1), () {
+      PDFHandler(timestampCitizen: widget.patient.data[date])
+          .openData()
+          .whenComplete(() {
+        _setProcessing(false);
+      });
+    });
   }
 
   downloadData() async {
     _setProcessing(true);
-    await PDFHandler(qrData: qrCodeData, patient: widget.patient.data[date])
-        .downloadData();
-    _setProcessing(false);
+    await Future.delayed(Duration(seconds: 1), () {
+      PDFHandler(timestampCitizen: widget.patient.data[date])
+          .downloadData()
+          .whenComplete(() {
+        _setProcessing(false);
+      });
+    });
   }
 
   printData() async {
     _setProcessing(true);
-    await PDFHandler(qrData: qrCodeData, patient: widget.patient.data[date])
-        .printData();
-    _setProcessing(false);
+    await Future.delayed(Duration(seconds: 1), () {
+      PDFHandler(timestampCitizen: widget.patient.data[date])
+          .printData()
+          .whenComplete(() {
+        _setProcessing(false);
+      });
+    });
   }
 
   shareData() async {
     _setProcessing(true);
-    await PDFHandler(qrData: qrCodeData, patient: widget.patient.data[date])
-        .shareData();
-    _setProcessing(false);
+    await Future.delayed(Duration(seconds: 1), () {
+      PDFHandler(timestampCitizen: widget.patient.data[date])
+          .shareData()
+          .whenComplete(() {
+        _setProcessing(false);
+      });
+    });
   }
 
   openBracelet() async {
     _setProcessing(true);
-    await PDFHandler(qrData: qrCodeData, patient: widget.patient.data[date])
-        .openBracelet();
-    _setProcessing(false);
+    await Future.delayed(Duration(seconds: 1), () {
+      PDFHandler(timestampCitizen: widget.patient.data[date])
+          .openBracelet()
+          .whenComplete(() {
+        _setProcessing(false);
+      });
+    });
   }
 
   downloadBracelet() async {
     _setProcessing(true);
-    await PDFHandler(qrData: qrCodeData, patient: widget.patient.data[date])
-        .downloadBracelet();
-    _setProcessing(false);
+    await Future.delayed(Duration(seconds: 1), () {
+      PDFHandler(timestampCitizen: widget.patient.data[date])
+          .downloadBracelet()
+          .whenComplete(() {
+        _setProcessing(false);
+      });
+    });
   }
 
   printBracelet() async {
     _setProcessing(true);
-    await PDFHandler(qrData: qrCodeData, patient: widget.patient.data[date])
-        .printBracelet();
-    _setProcessing(false);
+    await Future.delayed(Duration(seconds: 1), () {
+      PDFHandler(timestampCitizen: widget.patient.data[date])
+          .printBracelet()
+          .whenComplete(() {
+        _setProcessing(false);
+      });
+    });
   }
 
   shareBracelet() async {
     _setProcessing(true);
-    await PDFHandler(qrData: qrCodeData, patient: widget.patient.data[date])
-        .shareBracelet();
-    _setProcessing(false);
+    await Future.delayed(Duration(seconds: 1), () {
+      PDFHandler(timestampCitizen: widget.patient.data[date])
+          .shareBracelet()
+          .whenComplete(() {
+        _setProcessing(false);
+      });
+    });
   }
 
   openBadge() async {
     _setProcessing(true);
-    await PDFHandler(qrData: qrCodeData, patient: widget.patient.data[date])
-        .openBadge();
-    _setProcessing(false);
+    await Future.delayed(Duration(seconds: 1), () {
+      PDFHandler(
+              citizen: widget.patient,
+              timestampCitizen: widget.patient.data[date])
+          .openBadge()
+          .whenComplete(() {
+        _setProcessing(false);
+      });
+    });
   }
 
   downloadBadge() async {
     _setProcessing(true);
-    await PDFHandler(qrData: qrCodeData, patient: widget.patient.data[date])
-        .downloadBadge();
-    _setProcessing(false);
+    await Future.delayed(Duration(seconds: 1), () {
+      PDFHandler(
+              citizen: widget.patient,
+              timestampCitizen: widget.patient.data[date])
+          .downloadBadge()
+          .whenComplete(() {
+        _setProcessing(false);
+      });
+    });
   }
 
   printBadge() async {
     _setProcessing(true);
-    await PDFHandler(qrData: qrCodeData, patient: widget.patient.data[date])
-        .printBadge();
-    _setProcessing(false);
+    await Future.delayed(Duration(seconds: 1), () {
+      PDFHandler(
+              citizen: widget.patient,
+              timestampCitizen: widget.patient.data[date])
+          .printBadge()
+          .whenComplete(() {
+        _setProcessing(false);
+      });
+    });
   }
 
   shareBadge() async {
     _setProcessing(true);
-    await PDFHandler(qrData: qrCodeData, patient: widget.patient.data[date])
-        .shareBadge();
-    _setProcessing(false);
+    await Future.delayed(Duration(seconds: 1), () {
+      PDFHandler(
+              citizen: widget.patient,
+              timestampCitizen: widget.patient.data[date])
+          .shareBadge()
+          .whenComplete(() {
+        _setProcessing(false);
+      });
+    });
   }
 
   openCIS() async {
     _setProcessing(true);
-    await PDFHandler(qrData: qrCodeData, patient: widget.patient.data[date])
-        .openCIS();
-    _setProcessing(false);
+    await Future.delayed(Duration(seconds: 1), () {
+      PDFHandler(
+              citizen: widget.patient,
+              timestampCitizen: widget.patient.data[date])
+          .openCIS()
+          .whenComplete(() {
+        _setProcessing(false);
+      });
+    });
   }
 
   downloadCIS() async {
     _setProcessing(true);
-    await PDFHandler(qrData: qrCodeData, patient: widget.patient.data[date])
-        .downloadCIS();
-    _setProcessing(false);
+    await Future.delayed(Duration(seconds: 1), () {
+      PDFHandler(
+              citizen: widget.patient,
+              timestampCitizen: widget.patient.data[date])
+          .downloadCIS()
+          .whenComplete(() {
+        _setProcessing(false);
+      });
+    });
   }
 
   printCIS() async {
     _setProcessing(true);
-    await PDFHandler(qrData: qrCodeData, patient: widget.patient.data[date])
-        .printCIS();
-    _setProcessing(false);
+    await Future.delayed(Duration(seconds: 1), () {
+      PDFHandler(
+              citizen: widget.patient,
+              timestampCitizen: widget.patient.data[date])
+          .printCIS()
+          .whenComplete(() {
+        _setProcessing(false);
+      });
+    });
   }
 
   shareCIS() async {
     _setProcessing(true);
-    await PDFHandler(qrData: qrCodeData, patient: widget.patient.data[date])
-        .shareCIS();
-    _setProcessing(false);
+    await Future.delayed(Duration(seconds: 1), () {
+      PDFHandler(
+              citizen: widget.patient,
+              timestampCitizen: widget.patient.data[date])
+          .shareCIS()
+          .whenComplete(() {
+        _setProcessing(false);
+      });
+    });
   }
 
   _setProcessing(bool status) {
-    setState(() {
-      processing = status;
-    });
+    status ? _showLoadingDialog() : Navigator.of(context).pop();
   }
 
   Future<void> _showLoadingDialog() async {
@@ -439,7 +530,6 @@ class _HomepageState extends State<Homepage> {
                   padding: const EdgeInsets.all(8.0),
                   child: Icon(Icons.upload_file),
                 ),
-                //Image.asset("assets/images/loading.gif"),
                 Center(child: Text('Generazione documento in corso...')),
               ],
             ),

@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_barcode_scanner/flutter_barcode_scanner.dart';
-import 'package:thesis/model/timestamp_patient.dart';
+import 'package:thesis/model/timestamp_citizen.dart';
 import 'package:thesis/widgets/function_button.dart';
 
 class QRCodeScanner extends StatefulWidget {
@@ -26,14 +26,14 @@ class _QRCodeScannerState extends State<QRCodeScanner> {
 
   @override
   Widget build(BuildContext context) {
-    TimestampPatient patient = createPatient();
-    qrCodeDataFake = patient.getLifeSavingInformation();
+    //TimestampCitizen patient = createPatient();
+    //qrCodeDataFake = patient.getLifeSavingInformation();
     return Scaffold(
       appBar: AppBar(
         automaticallyImplyLeading: true,
         title: Text("QR Code Scanner"),
       ),
-      body: _createCard(),
+      body: _buildBody(),
     );
   }
 
@@ -44,16 +44,20 @@ class _QRCodeScannerState extends State<QRCodeScanner> {
       children: [
         (qrCodeData != "")
             ? (qrCodeData != "-1")
-                ? Text(qrCodeData)
-                : Text("")
-            : Text(""),
+                ? _createCard()
+                : Text("Errore nella scansione dei dati...")
+            : Padding(
+                padding: const EdgeInsets.all(8.0),
+                child: Image.asset("assets/images/scan_qr.jpg"),
+              ),
+        Text("Esegui la scansione di un codice QR:"),
         FunctionButton(_scanQRCode, Icon(Icons.qr_code_scanner), "Scan"),
       ],
     ));
   }
 
   Widget _createCard() {
-    List<String> patientList = qrCodeDataFake.split("\n");
+    List<String> patientList = qrCodeData.split("\n");
     return Column(
       children: [
         Card(

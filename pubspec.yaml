@@ -54,6 +54,7 @@ dependencies:
   uiblock: ^2.0.0
   threading: ^0.0.10
   syncfusion_flutter_pdf: ^19.1.58-beta
+  http: ^0.13.3
 
 dev_dependencies:
   change_app_package_name: ^0.1.2
