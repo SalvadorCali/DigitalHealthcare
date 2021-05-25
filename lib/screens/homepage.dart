@@ -100,6 +100,7 @@ class _HomepageState extends State<Homepage> {
     setState(() {
       date = widget.patient.data.keys.last;
       qrCodeData = widget.patient.data[date].getLifeSavingInformation();
+      print(qrCodeData);
       qrCodeCovid = widget.patient.data[date].getLifeSavingInformation();
     });
   }

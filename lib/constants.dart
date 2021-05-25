@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 
-String datiSalvavita = "DATI SALVAVITA\n";
+String datiSalvavita = "DATI SALVAVITA";
 String space = " ";
 String aCapo = "\n";
 String colon = ":";

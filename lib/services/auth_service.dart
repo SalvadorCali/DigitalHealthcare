@@ -1,4 +1,6 @@
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:thesis/model/end_user.dart';
+import 'package:thesis/services/database_service.dart';
 
 class AuthService {
   FirebaseAuth auth = FirebaseAuth.instance;
@@ -7,7 +9,8 @@ class AuthService {
     try {
       await FirebaseAuth.instance
           .signInWithEmailAndPassword(email: email, password: password);
-      return true;
+      EndUser endUser = await DatabaseService().getUser();
+      return endUser.userType == "medico" ? false : true;
     } on FirebaseAuthException catch (e) {
       print(e.toString());
       return false;

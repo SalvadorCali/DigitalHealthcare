@@ -18,7 +18,7 @@
         </intent>
     </queries>
    <application
-        android:label="thesis"
+        android:label="Digital Healthcare"
         android:icon="@mipmap/ic_launcher"
         android:requestLegacyExternalStorage="true">
         <activity

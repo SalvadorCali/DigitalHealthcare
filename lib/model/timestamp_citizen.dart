@@ -150,33 +150,35 @@ class TimestampCitizen {
   }
 
   String getLifeSavingInformation() {
-    return datiSalvavita +
+    return /* datiSalvavita +
+        aCapo +
+         */
         nome +
-        space +
-        cognome +
-        aCapo +
-        dataNascita +
-        aCapo +
-        bloodGroup +
-        bloodFactor +
-        aCapo +
-        contactOne +
-        colon +
-        space +
-        phoneNumberOne.toString() +
-        aCapo +
-        contactTwo +
-        colon +
-        space +
-        phoneNumberTwo.toString() +
-        aCapo +
-        pathologies[0] +
-        aCapo +
-        pathologies[1] +
-        aCapo +
-        allergies +
-        aCapo +
-        information;
+            space +
+            cognome +
+            aCapo +
+            dataNascita +
+            aCapo +
+            bloodGroup +
+            bloodFactor +
+            aCapo +
+            contactOne +
+            colon +
+            space +
+            phoneNumberOne.toString() +
+            aCapo +
+            contactTwo +
+            colon +
+            space +
+            phoneNumberTwo.toString() +
+            aCapo +
+            pathologies[0] +
+            aCapo +
+            pathologies[1] +
+            aCapo +
+            allergies +
+            aCapo +
+            information;
   }
 }
 
