@@ -4,6 +4,7 @@ String datiSalvavita = "DATI SALVAVITA";
 String space = " ";
 String aCapo = "\n";
 String colon = ":";
+String dash = "-";
 String cittadino = "cittadino";
 String volontario = "volontario";
 String medico = "medico";
@@ -37,6 +38,16 @@ List<Icon> icons = [
   Icon(Icons.portrait),
   Icon(Icons.calendar_view_day),
 ];
+
+String fromStringToDate(String date) {
+  List<String> splittedDate = date.split("-");
+  print(splittedDate);
+  return splittedDate[2] +
+      " " +
+      _getMonth(int.parse(splittedDate[1])) +
+      " " +
+      splittedDate[0];
+}
 
 String fromMillisecondsToDate(String date) {
   int dateInt = int.parse(date);

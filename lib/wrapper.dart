@@ -73,7 +73,7 @@ class _WrapperState extends State<Wrapper> {
                       if (snapshot.hasData) {
                         List<Citizen> citizens = snapshot.data;
                         DatabaseService().populateCitizensData(citizens);
-                        return Volunteer(citizens, logout);
+                        return Volunteer(endUser, citizens, logout);
                       } else {
                         return Scaffold(
                             body: Center(child: CircularProgressIndicator()));

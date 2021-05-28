@@ -38,6 +38,12 @@ class _HomepageState extends State<Homepage> {
         length: 3,
         child: Scaffold(
             appBar: AppBar(
+              leading: Padding(
+                padding: const EdgeInsets.all(8.0),
+                child: CircleAvatar(
+                  backgroundImage: NetworkImage(widget.citizen.photoURL),
+                ),
+              ),
               title: Text("Homepage"),
               actions: [
                 AppBarButton(Icon(Icons.contact_phone_outlined),
@@ -88,7 +94,6 @@ class _HomepageState extends State<Homepage> {
         setState(() {
           currentDate = value;
           qrCodeData = widget.citizen.data[value].getLifeSavingInformation();
-          qrCodeCovid = widget.citizen.data[value].getLifeSavingInformation();
         });
       },
     );
@@ -98,8 +103,7 @@ class _HomepageState extends State<Homepage> {
     setState(() {
       currentDate = widget.citizen.data.keys.last;
       qrCodeData = widget.citizen.data[currentDate].getLifeSavingInformation();
-      //da modificare inserendo i dati covid
-      qrCodeCovid = widget.citizen.data[currentDate].getLifeSavingInformation();
+      qrCodeCovid = widget.citizen.getCovidQRCode();
     });
   }
 
@@ -249,27 +253,12 @@ class _HomepageState extends State<Homepage> {
             children: [
               Container(
                   width: MediaQuery.of(context).size.width / 2,
-                  child: _qrCodeScreen(qrCodeData)),
+                  child: _qrCodeScreen(qrCodeCovid)),
               Flexible(
                 child: Scrollbar(
                   child: ListView(
                     children: [
-                      CovidTile("Tampone", DateTime.now(),
-                          "https://andreacalici.com/"),
-                      CovidTile("Tampone", DateTime.now(),
-                          "https://andreacalici.files.wordpress.com/2021/03/aamas.pdf"),
-                      CovidTile("Tampone", DateTime.now(),
-                          "https://andreacalici.files.wordpress.com/2021/03/aamas.pdf"),
-                      CovidTile("Tampone", DateTime.now(),
-                          "https://andreacalici.files.wordpress.com/2021/03/aamas.pdf"),
-                      CovidTile("Tampone", DateTime.now(),
-                          "https://andreacalici.com/"),
-                      CovidTile("Tampone", DateTime.now(),
-                          "https://andreacalici.files.wordpress.com/2021/03/aamas.pdf"),
-                      CovidTile("Tampone", DateTime.now(),
-                          "https://andreacalici.files.wordpress.com/2021/03/aamas.pdf"),
-                      CovidTile("Tampone", DateTime.now(),
-                          "https://andreacalici.files.wordpress.com/2021/03/aamas.pdf"),
+                      ..._createTiles(),
                     ],
                   ),
                 ),
@@ -277,18 +266,21 @@ class _HomepageState extends State<Homepage> {
             ],
           )
         : ListView(
-            children: [
-              _qrCodeScreen(qrCodeData),
-              CovidTile(
-                  "Vaccinazione", DateTime.now(), "https://andreacalici.com/"),
-              CovidTile("Tampone", DateTime.now(),
-                  "https://andreacalici.files.wordpress.com/2021/03/aamas.pdf"),
-              CovidTile("Sierologico", DateTime.now(),
-                  "https://andreacalici.files.wordpress.com/2021/03/aamas.pdf"),
-              CovidTile("Tampone", DateTime.now(),
-                  "https://andreacalici.files.wordpress.com/2021/03/aamas.pdf"),
-            ],
+            children: [_qrCodeScreen(qrCodeCovid), ..._createTiles()],
           );
+  }
+
+  List<Widget> _createTiles() {
+    List<Widget> widgets = [];
+    widget.citizen.covid.forEach((key, value) {
+      if (value.tipologia == "Vaccinazione") {
+        widgets.add(CovidTile("${value.tipologia} ${value.nomeVaccino}",
+            value.esito, key, value.link));
+      } else {
+        widgets.add(CovidTile(value.tipologia, value.esito, key, value.link));
+      }
+    });
+    return widgets;
   }
 
   //callback functions

@@ -3,6 +3,7 @@ import "dart:async";
 import 'package:material_floating_search_bar/material_floating_search_bar.dart';
 import 'package:thesis/constants.dart';
 import 'package:thesis/model/citizen.dart';
+import 'package:thesis/model/end_user.dart';
 import 'package:thesis/model/searched_citizen.dart';
 import 'package:thesis/model/timestamp_citizen.dart';
 import 'package:thesis/services/pdf_handler.dart';
@@ -11,9 +12,10 @@ import 'package:thesis/widgets/volunteer_card.dart';
 import 'package:unicorndial/unicorndial.dart';
 
 class Volunteer extends StatefulWidget {
+  final EndUser volunteer;
   final List<Citizen> patients;
   final changeScreen;
-  const Volunteer(this.patients, this.changeScreen);
+  const Volunteer(this.volunteer, this.patients, this.changeScreen);
 
   @override
   _VolunteerState createState() => _VolunteerState();
@@ -51,6 +53,12 @@ class _VolunteerState extends State<Volunteer> {
             ? _buildFloatingButton()
             : SizedBox.shrink(),
         appBar: AppBar(
+          leading: Padding(
+            padding: const EdgeInsets.all(8.0),
+            child: CircleAvatar(
+              backgroundImage: NetworkImage(widget.volunteer.photoURL),
+            ),
+          ),
           title: Text("Homepage"),
           actions: [
             AppBarButton(Icon(Icons.logout), widget.changeScreen),

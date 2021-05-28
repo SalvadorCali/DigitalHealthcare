@@ -22,9 +22,6 @@ class NumbersCard extends StatelessWidget {
             trailing: icon,
           ),
           Divider(),
-          /* ListTile(
-            title: Text("Contatti"),
-          ), */
           ListTile(
             leading: Icon(Icons.phone),
             title: Text(

@@ -3,6 +3,7 @@ import 'package:thesis/constants.dart';
 import 'package:thesis/model/citizen.dart';
 import 'package:thesis/services/pdf_handler.dart';
 import 'package:thesis/widgets/function_button.dart';
+import 'package:url_launcher/url_launcher.dart';
 
 class VolunteerCard extends StatefulWidget {
   final Citizen patient;
@@ -78,6 +79,23 @@ class _VolunteerCardState extends State<VolunteerCard> {
                 FunctionButton(printBracelet, Icon(Icons.print), "Stampa"),
           ),
           Divider(),
+          ListTile(
+            leading: Icon(Icons.phone),
+            title: Text(
+              widget.patient.data[currentDate].telefono,
+              style: TextStyle(color: Theme.of(context).primaryColor),
+            ),
+            onTap: _launchPhone,
+          ),
+          ListTile(
+            leading: Icon(Icons.mail),
+            title: Text(
+              widget.patient.data[currentDate].email,
+              style: TextStyle(color: Theme.of(context).primaryColor),
+            ),
+            onTap: _launchEmail,
+          ),
+          Divider(),
           Padding(
             padding: const EdgeInsets.fromLTRB(16, 8, 16, 16),
             child: Row(
@@ -112,6 +130,16 @@ class _VolunteerCardState extends State<VolunteerCard> {
   printBracelet() async {
     await PDFHandler(timestampCitizen: widget.patient.data[currentDate])
         .printBracelet();
+  }
+
+  _launchPhone() async {
+    String url = 'tel:' + widget.patient.data[currentDate].telefono;
+    await canLaunch(url) ? await launch(url) : throw 'Could not launch';
+  }
+
+  _launchEmail() async {
+    String url = 'mailto:' + widget.patient.data[currentDate].email;
+    await canLaunch(url) ? await launch(url) : throw 'Could not launch';
   }
 
   remove() {

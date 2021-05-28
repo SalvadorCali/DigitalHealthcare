@@ -25,6 +25,7 @@ class PDFHandler {
   final String bracelet = "braccialetto";
   final String cis = "cis";
   final String badge = "badge";
+  final String greenPass = "green_pass";
 
   final pdf = Document();
   final Citizen citizen;
@@ -847,12 +848,10 @@ class PDFHandler {
                         child: Column(
                             mainAxisAlignment: MainAxisAlignment.center,
                             children: [
-                              Text(
-                                  "ICE1: ${timestampCitizenBlock.phoneNumberOne.toString()}",
+                              Text("ICE1: ${timestampCitizenBlock.telefono1}",
                                   style: TextStyle(
                                       fontSize: 18, color: PdfColors.orange)),
-                              Text(
-                                  "ICE2: ${timestampCitizenBlock.phoneNumberTwo.toString()}",
+                              Text("ICE2: ${timestampCitizenBlock.telefono2}",
                                   style: TextStyle(
                                       fontSize: 18, color: PdfColors.orange))
                             ])),
