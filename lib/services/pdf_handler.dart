@@ -103,23 +103,95 @@ class PDFHandler {
   }
 
   _createData() {
-    pdf.addPage(Page(
+    pdf.addPage(MultiPage(
         pageFormat: PdfPageFormat.a4,
         build: (Context context) {
-          return Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                Text("Profilo sanitario sintetico".toUpperCase()),
-                Text(aCapo),
-                ..._createPSS(),
-              ]);
+          return [
+            Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
+              Text("Profilo sanitario sintetico".toUpperCase(),
+                  style: TextStyle(fontWeight: FontWeight.bold, fontSize: 18)),
+              Text(aCapo),
+              ..._createPSS(),
+            ])
+          ];
         }));
   }
 
   List<Widget> _createPSS() {
     List<Widget> widgets = [];
-    timestampCitizen.toMapIta().forEach((key, value) {
-      widgets.add(Text("$key: $value"));
+    widgets.add(
+        Text("DATI PERSONALI", style: TextStyle(fontWeight: FontWeight.bold)));
+    timestampCitizen.toMapPSSSectionZero().forEach((key, value) {
+      widgets.add(RichText(
+          text: TextSpan(
+              text: "$key: ",
+              style: TextStyle(fontWeight: FontWeight.bold),
+              children: <TextSpan>[
+            TextSpan(
+              text: (value != "" && value != []) ? "$value" : "-",
+              style: TextStyle(fontWeight: FontWeight.normal),
+            )
+          ])));
+    });
+    widgets.add(Text(aCapo));
+    widgets.add(Text("ESENZIONI, RETI DI PATOLOGIE E STATO PAZIENTE",
+        style: TextStyle(fontWeight: FontWeight.bold)));
+    timestampCitizen.toMapPSSSectionOne().forEach((key, value) {
+      widgets.add(RichText(
+          text: TextSpan(
+              text: "$key: ",
+              style: TextStyle(fontWeight: FontWeight.bold),
+              children: <TextSpan>[
+            TextSpan(
+              text: (value != "" && value != []) ? "$value" : "-",
+              style: TextStyle(fontWeight: FontWeight.normal),
+            )
+          ])));
+    });
+    widgets.add(Text(aCapo));
+    widgets.add(Text("ALLERGIE E TERAPIE",
+        style: TextStyle(fontWeight: FontWeight.bold)));
+    timestampCitizen.toMapPSSSectionTwo().forEach((key, value) {
+      widgets.add(RichText(
+          text: TextSpan(
+              text: "$key: ",
+              style: TextStyle(fontWeight: FontWeight.bold),
+              children: <TextSpan>[
+            TextSpan(
+              text: (value != "" && value != []) ? "$value" : "-",
+              style: TextStyle(fontWeight: FontWeight.normal),
+            )
+          ])));
+    });
+    widgets.add(Text(aCapo));
+    widgets.add(Text("CAREGIVE, PATOLOGIE E GRAVIDANZE",
+        style: TextStyle(fontWeight: FontWeight.bold)));
+    timestampCitizen.toMapPSSSectionThree().forEach((key, value) {
+      widgets.add(RichText(
+          text: TextSpan(
+              text: "$key: ",
+              style: TextStyle(fontWeight: FontWeight.bold),
+              children: <TextSpan>[
+            TextSpan(
+              text: (value != "" && value != []) ? "$value" : "-",
+              style: TextStyle(fontWeight: FontWeight.normal),
+            )
+          ])));
+    });
+    widgets.add(Text(aCapo));
+    widgets.add(Text("PARAMETRI DI MONITORAGGIO E INFORMAZIONI",
+        style: TextStyle(fontWeight: FontWeight.bold)));
+    timestampCitizen.toMapPSSSectionFour().forEach((key, value) {
+      widgets.add(RichText(
+          text: TextSpan(
+              text: "$key: ",
+              style: TextStyle(fontWeight: FontWeight.bold),
+              children: <TextSpan>[
+            TextSpan(
+              text: (value != "" && value != []) ? "$value" : "-",
+              style: TextStyle(fontWeight: FontWeight.normal),
+            )
+          ])));
     });
     return widgets;
   }

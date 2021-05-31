@@ -126,31 +126,96 @@ class TimestampCitizen {
       this.vaccinazioni,
       this.viveSolo});
 
-  Map<String, dynamic> toMap() {
+  Map<String, String> toMapPSSSectionZero() {
     return {
-      'name': nome,
-      'surname': cognome,
-      'birthday': dataNascita,
-      'bloodGroup': gruppoSanguigno,
-      'bloodFactor': fattoreRH,
-      'contactOne': contatto1,
-      'phoneNumberOne': telefono1,
-      'contactTwo': contatto2,
-      'phoneNumberTwo': telefono2,
-      'pathologies': patologieCronicheRilevanti,
-      'allergies': allergieCutaneeRespiratorieSistemiche,
+      'Nome': nome + " " + cognome,
+      'Codice fiscale': cf,
+      'Numero carta d\'idendità': numeroCartaIdentita,
+      'Sesso': sesso,
+      'Data di nascita': dataNascita,
+      'Comune di nascita': comuneNascita,
+      'Provincia di nascita': provinciaNascita,
+      'Indirizzo di domicilio': indirizzoDomicilio,
+      'Comune di domicilio': comuneDomicilio,
+      'Provincia di domicilio': provinciaDomicilio,
+      'CAP': cap,
+      'Email': email,
+      'Telefono': telefono,
+      'Pec': pec
     };
   }
 
-  Map<String, dynamic> toMapIta() {
+  Map<String, String> toMapPSSSectionOne() {
+    return {
+      'Codici di esenzione': codiceEsenzione,
+      'Reti di patologie': retiPatologieAssistito,
+      'Capacità motoria': capacitaMotoriaAssistito,
+      'Attività lavorativa': attivitaLavorativa,
+      'Patologie croniche': fromListToString(patologieCronicheRilevanti),
+      'Organi mancanti': organiMancanti,
+      'Trapianti': trapianti,
+      'Rilevanti malformazioni': rilevantiMalformazioni,
+    };
+  }
+
+  Map<String, String> toMapPSSSectionTwo() {
+    return {
+      'Reazioni avverse a farmaci e/o alimenti': reazioniAvverseFarmaciAlimenti,
+      'Allergie cutanee, respiratorie e sistemiche':
+          allergieCutaneeRespiratorieSistemiche,
+      'Allergie a veleno di imenotteri': allergieVelenoImenotteri,
+      'Terapie farmacologiche croniche': terapieFarmacologicheCroniche,
+      'Anamnesi famigliari': anamnesiFamigliari,
+      'Terapie farmacologiche': terapieFarmacologiche,
+      'Fattori di rischio': fattoriRischio,
+      'Protesi': protesi,
+      'Ausili': ausili,
+      'Vaccinazioni': vaccinazioni,
+    };
+  }
+
+  Map<String, String> toMapPSSSectionThree() {
+    return {
+      'Contatto di emergenza 1': contatto1 + " - " + telefono1,
+      'Contatto di emergenza 2': contatto2 + " - " + telefono2,
+      'Contatto caregiver': contattoCareGiver + " - " + telefonoCareGiver,
+      'Donazione organi': donazioneOrgani,
+      'Gravidanze e parti': gravidanzeParti,
+      'Patologie croniche rilevanti':
+          fromListToString(patologieCronicheRilevanti),
+    };
+  }
+
+  Map<String, String> toMapPSSSectionFour() {
+    return {
+      'Altezza': altezza,
+      'Peso': peso,
+      'Pressione arteriosa': pressioneArteriosa,
+      'BMI': bmi,
+      'Assistenza domiciliare integrata (ADI)': adi,
+      'Assistenza domiciliare programmata (ADP)': adp,
+      'Gruppo sanguigno': gruppoSanguigno + fattoreRH,
+      'Codice ATS': codiceATS,
+      'Area utenza': areaUtenza,
+      'Comune di rilascio': comuneRilascio,
+      'Data di scadenza': dataScadenza,
+      'Patologie in atto': fromListToString(patologieInAtto),
+      'Servizio o associazione': servizioAssociazione,
+      'viveSolo': viveSolo
+    };
+  }
+
+  Map<String, String> toMapIta() {
     return {
       'Nome': nome + " " + cognome,
       'Data di nascita': dataNascita,
       'Gruppo sanguigno': gruppoSanguigno + fattoreRH,
       'Contatto ICE1': contatto1 + "-" + telefono1,
       'Contatto ICE2': contatto2 + "-" + telefono2,
-      'Patologie': patologieCronicheRilevanti,
-      'Allergie': allergieCutaneeRespiratorieSistemiche
+      'Allergie': allergieCutaneeRespiratorieSistemiche,
+      'Patologie in atto:': fromListToString(patologieInAtto),
+      'Patologie croniche': fromListToString(patologieCronicheRilevanti),
+      'Terapie': terapieFarmacologicheCroniche
     };
   }
 
@@ -179,10 +244,16 @@ class TimestampCitizen {
         space +
         telefono2 +
         aCapo +
-        "Patologie: " +
-        patologieCronicheRilevanti.toString() +
-        aCapo +
         "Allergie: " +
-        allergieCutaneeRespiratorieSistemiche;
+        allergieCutaneeRespiratorieSistemiche +
+        aCapo +
+        "Patologie in atto: " +
+        fromListToString(patologieInAtto) +
+        aCapo +
+        "Patologie croniche: " +
+        fromListToString(patologieCronicheRilevanti) +
+        aCapo +
+        "Terapie: " +
+        terapieFarmacologicheCroniche;
   }
 }

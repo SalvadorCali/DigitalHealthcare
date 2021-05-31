@@ -114,22 +114,40 @@ class _VolunteerCardState extends State<VolunteerCard> {
   }
 
   printBadge() async {
-    await PDFHandler(
-            citizen: widget.patient,
-            timestampCitizen: widget.patient.data[currentDate])
-        .printBadge();
+    _showLoadingDialog();
+    await Future.delayed(Duration(seconds: 1), () {
+      PDFHandler(
+              citizen: widget.patient,
+              timestampCitizen: widget.patient.data[currentDate])
+          .printBadge()
+          .whenComplete(() {
+        Navigator.of(context).pop();
+      });
+    });
   }
 
   printCIS() async {
-    await PDFHandler(
-            citizen: widget.patient,
-            timestampCitizen: widget.patient.data[currentDate])
-        .printCIS();
+    _showLoadingDialog();
+    await Future.delayed(Duration(seconds: 1), () {
+      PDFHandler(
+              citizen: widget.patient,
+              timestampCitizen: widget.patient.data[currentDate])
+          .printCIS()
+          .whenComplete(() {
+        Navigator.of(context).pop();
+      });
+    });
   }
 
   printBracelet() async {
-    await PDFHandler(timestampCitizen: widget.patient.data[currentDate])
-        .printBracelet();
+    _showLoadingDialog();
+    await Future.delayed(Duration(seconds: 1), () {
+      PDFHandler(timestampCitizen: widget.patient.data[currentDate])
+          .printBracelet()
+          .whenComplete(() {
+        Navigator.of(context).pop();
+      });
+    });
   }
 
   _launchPhone() async {
@@ -144,5 +162,28 @@ class _VolunteerCardState extends State<VolunteerCard> {
 
   remove() {
     widget.removePatient(widget.patient.cf);
+  }
+
+  Future<void> _showLoadingDialog() async {
+    return showDialog<void>(
+      context: context,
+      barrierDismissible: false,
+      builder: (BuildContext context) {
+        return AlertDialog(
+          content: SingleChildScrollView(
+            child: ListBody(
+              children: <Widget>[
+                Padding(
+                  padding: const EdgeInsets.all(8.0),
+                  child: Icon(Icons.upload_file),
+                ),
+                //Image.asset("assets/images/loading.gif"),
+                Center(child: Text('Generazione documento in corso...')),
+              ],
+            ),
+          ),
+        );
+      },
+    );
   }
 }

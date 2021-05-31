@@ -18,7 +18,7 @@ class Citizen {
   }
 
   String getCovidQRCode() {
-    String qrCode = "GREEN PASS" + aCapo + "Nome: " + fullName + aCapo;
+    String qrCode = greenPass + aCapo + "Nome: " + fullName + aCapo;
     covid.forEach((key, value) {
       qrCode = qrCode + value.getCovidInformation();
     });

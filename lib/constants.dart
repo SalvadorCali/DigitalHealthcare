@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 
 String datiSalvavita = "DATI SALVAVITA";
+String greenPass = "GREEN PASS";
 String space = " ";
 String aCapo = "\n";
 String colon = ":";
@@ -38,6 +39,18 @@ List<Icon> icons = [
   Icon(Icons.portrait),
   Icon(Icons.calendar_view_day),
 ];
+
+String fromListToString(List<String> list) {
+  String returnedString = "";
+  for (int i = 0; i < list.length; i++) {
+    if (i == list.length - 1) {
+      returnedString = returnedString + list[i];
+    } else {
+      returnedString = returnedString + list[i] + ", ";
+    }
+  }
+  return returnedString;
+}
 
 String fromStringToDate(String date) {
   List<String> splittedDate = date.split("-");

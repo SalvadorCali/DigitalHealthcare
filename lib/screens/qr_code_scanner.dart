@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_barcode_scanner/flutter_barcode_scanner.dart';
+import 'package:thesis/constants.dart';
 import 'package:thesis/widgets/function_button.dart';
 
 class QRCodeScanner extends StatefulWidget {
@@ -43,10 +44,12 @@ class _QRCodeScannerState extends State<QRCodeScanner> {
         (qrCodeData != "")
             ? (qrCodeData != "-1")
                 ? _createCard()
+                //se c'è errore mostro scritta di errore
                 : Padding(
                     padding: const EdgeInsets.all(8.0),
                     child: Image.asset("assets/images/scan_qr_error.jpg"),
                   )
+            //se vuoto mostro solo immagine
             : Padding(
                 padding: const EdgeInsets.all(8.0),
                 child: Image.asset("assets/images/scan_qr.jpg"),
@@ -59,8 +62,11 @@ class _QRCodeScannerState extends State<QRCodeScanner> {
 
   Widget _createCard() {
     List<String> patientList = qrCodeData.split("\n");
-    if (patientList.length != 9) {
-      return Text("Errore nella scansione dei dati...");
+    if (patientList[0] != datiSalvavita && patientList[0] != greenPass) {
+      return Padding(
+        padding: const EdgeInsets.all(8.0),
+        child: Image.asset("assets/images/scan_qr_error.jpg"),
+      );
     }
     return Column(
       children: [
@@ -68,57 +74,42 @@ class _QRCodeScannerState extends State<QRCodeScanner> {
           clipBehavior: Clip.antiAlias,
           child: Container(
             child: Padding(
-              padding: const EdgeInsets.all(8.0),
-              child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: List.generate(patientList.length, (index) {
-                    if (index == 3 || index == 5 || index == 8) {
-                      return Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: [
-                          Divider(),
-                          Padding(
-                            padding: const EdgeInsets.all(8.0),
-                            child: RichText(
-                              text: TextSpan(
-                                text: '${information[index]}: ',
-                                style: TextStyle(
-                                    fontWeight: FontWeight.bold,
-                                    color: Colors.black),
-                                children: <TextSpan>[
-                                  TextSpan(
-                                    text: patientList[index],
-                                    style: TextStyle(
-                                        fontWeight: FontWeight.normal,
-                                        color: Colors.black),
-                                  ),
+                padding: const EdgeInsets.all(8.0),
+                child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: patientList[0] == datiSalvavita
+                        ? List.generate(patientList.length, (index) {
+                            if (index == 4 || index == 6) {
+                              return Column(
+                                crossAxisAlignment: CrossAxisAlignment.start,
+                                children: [
+                                  Divider(),
+                                  Padding(
+                                      padding: const EdgeInsets.all(8.0),
+                                      child: Text(patientList[index]))
                                 ],
-                              ),
-                            ),
-                          )
-                        ],
-                      );
-                    }
-                    return Padding(
-                      padding: const EdgeInsets.all(8.0),
-                      child: RichText(
-                        text: TextSpan(
-                          text: '${information[index]}: ',
-                          style: TextStyle(
-                              fontWeight: FontWeight.bold, color: Colors.black),
-                          children: <TextSpan>[
-                            TextSpan(
-                              text: patientList[index],
-                              style: TextStyle(
-                                  fontWeight: FontWeight.normal,
-                                  color: Colors.black),
-                            ),
-                          ],
-                        ),
-                      ),
-                    );
-                  })),
-            ),
+                              );
+                            }
+                            return Padding(
+                                padding: const EdgeInsets.all(8.0),
+                                child: Text(patientList[index]));
+                          })
+                        : List.generate(patientList.length - 1, (index) {
+                            if (index == 1 || index == 2) {
+                              return Column(
+                                crossAxisAlignment: CrossAxisAlignment.start,
+                                children: [
+                                  Divider(),
+                                  Padding(
+                                      padding: const EdgeInsets.all(8.0),
+                                      child: Text(patientList[index]))
+                                ],
+                              );
+                            }
+                            return Padding(
+                                padding: const EdgeInsets.all(8.0),
+                                child: Text(patientList[index]));
+                          }))),
           ),
         ),
       ],
