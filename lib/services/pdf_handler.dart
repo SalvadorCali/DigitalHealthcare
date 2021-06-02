@@ -1,5 +1,6 @@
 import 'dart:io';
 import 'dart:typed_data';
+import 'package:flutter/material.dart' as material;
 import 'package:downloads_path_provider/downloads_path_provider.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/services.dart';
@@ -341,7 +342,7 @@ class PDFHandler {
                 child: Padding(
                     padding: EdgeInsets.all(2),
                     child: BarcodeWidget(
-                      data: timestampCitizens[0].getLifeSavingInformation(),
+                      data: timestampCitizens[i].getLifeSavingInformation(),
                       width: (PdfPageFormat.a4.width / 1.83) / 7,
                       height: PdfPageFormat.a4.height / 13.68,
                       barcode: Barcode.qrCode(),
@@ -350,7 +351,7 @@ class PDFHandler {
               _braceletLogo(areu),
               _braceletLogo(centodiciotto),
             ])),
-        Padding(padding: EdgeInsets.all(8), child: Text(citizens[0].fullName))
+        Padding(padding: EdgeInsets.all(8), child: Text(citizens[i].fullName))
       ]));
       widgets.add(
         SizedBox(height: 10),
@@ -435,12 +436,18 @@ class PDFHandler {
     final ice =
         (await rootBundle.load('assets/logos/ice.png')).buffer.asUint8List();
 
-    List<Uint8List> photosList;
-    citizens.forEach((element) async {
+    /* citizens.forEach((element) async {
       http.Response profileImage = await http.get(Uri.parse(element.photoURL));
       Uint8List profile = profileImage.bodyBytes;
       photosList.add(profile);
-    });
+    }); */
+    List<Uint8List> photosList = [];
+    for (int i = 0; i < citizens.length; i++) {
+      http.Response profileImage =
+          await http.get(Uri.parse(citizens[i].photoURL));
+      Uint8List profile = profileImage.bodyBytes;
+      photosList.add(profile);
+    }
 
     for (int i = 0; i < timestampCitizens.length; i++) {
       pdf.addPage(Page(
@@ -530,7 +537,7 @@ class PDFHandler {
               children: [
                 _blockOne(centodiciotto, centododici),
                 _blockTwo(comuneMilano, mvi, areu, simeu, omceo),
-                _blockThree(),
+                _blockThree(timestampCitizen),
                 _blockFour(mvi, ice, profile, timestampCitizen),
               ]);
         }));
@@ -555,12 +562,13 @@ class PDFHandler {
         (await rootBundle.load('assets/logos/omceo.jpg')).buffer.asUint8List();
     final ice =
         (await rootBundle.load('assets/logos/ice.png')).buffer.asUint8List();
-    List<Uint8List> photosList;
-    citizens.forEach((element) async {
-      http.Response profileImage = await http.get(Uri.parse(element.photoURL));
+    List<Uint8List> photosList = [];
+    for (int i = 0; i < citizens.length; i++) {
+      http.Response profileImage =
+          await http.get(Uri.parse(citizens[i].photoURL));
       Uint8List profile = profileImage.bodyBytes;
       photosList.add(profile);
-    });
+    }
 
     for (int i = 0; i < timestampCitizens.length; i++) {
       pdf.addPage(Page(
@@ -574,7 +582,7 @@ class PDFHandler {
                 children: [
                   _blockOne(centodiciotto, centododici),
                   _blockTwo(comuneMilano, mvi, areu, simeu, omceo),
-                  _blockThree(),
+                  _blockThree(timestampCitizens[i]),
                   _blockFour(mvi, ice, photosList[i], timestampCitizens[i]),
                 ]);
           }));
@@ -776,7 +784,7 @@ class PDFHandler {
         ]));
   }
 
-  Container _blockThree() {
+  Container _blockThree(TimestampCitizen tsCitizen) {
     return Container(
         width: PdfPageFormat.a4.width / 2,
         height: PdfPageFormat.a4.height / 2,
@@ -800,14 +808,14 @@ class PDFHandler {
                           child: Column(
                               mainAxisAlignment: MainAxisAlignment.start,
                               crossAxisAlignment: CrossAxisAlignment.start,
-                              children: [..._createKeys()]),
+                              children: [..._createKeys(tsCitizen)]),
                         ),
                         Container(
                           width: PdfPageFormat.a4.width / 4 - 8,
                           child: Column(
                               mainAxisAlignment: MainAxisAlignment.start,
                               crossAxisAlignment: CrossAxisAlignment.start,
-                              children: [..._createValues()]),
+                              children: [..._createValues(tsCitizen)]),
                         ),
                       ])),
             ]),
@@ -950,18 +958,19 @@ class PDFHandler {
         ]));
   }
 
-  List<Widget> _createKeys() {
+  List<Widget> _createKeys(TimestampCitizen tsCitizen) {
     List<Widget> widgets = [];
-    timestampCitizen.toMapIta().forEach((key, value) {
+    tsCitizen.toMapIta().forEach((key, value) {
       widgets.add(Text("$key", style: TextStyle(fontWeight: FontWeight.bold)));
     });
     return widgets;
   }
 
-  List<Widget> _createValues() {
+  List<Widget> _createValues(TimestampCitizen tsCitizen) {
     List<Widget> widgets = [];
-    timestampCitizen.toMapIta().forEach((key, value) {
+    tsCitizen.toMapIta().forEach((key, value) {
       widgets.add(Text("$value"));
+      print("a $value");
     });
     return widgets;
   }

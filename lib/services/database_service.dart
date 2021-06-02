@@ -1,9 +1,11 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:thesis/constants.dart';
+import 'package:thesis/model/doctor.dart';
 import 'package:thesis/model/end_user.dart';
 import 'package:thesis/model/citizen.dart';
 import 'package:thesis/model/timestamp_citizen.dart';
 import 'package:thesis/model/timestamp_covid.dart';
+import 'package:thesis/model/volunteer.dart';
 import 'package:thesis/services/auth_service.dart';
 
 class DatabaseService {
@@ -12,6 +14,10 @@ class DatabaseService {
       FirebaseFirestore.instance.collection('users');
   final CollectionReference citizens =
       FirebaseFirestore.instance.collection('citizens');
+  final CollectionReference volunteers =
+      FirebaseFirestore.instance.collection('volunteers');
+  final CollectionReference doctors =
+      FirebaseFirestore.instance.collection('doctors');
 
   Future<EndUser> getUser() {
     return users
@@ -29,24 +35,48 @@ class DatabaseService {
         userType: snapshot.data()['userType']);
   }
 
-  Future<Citizen> getCitizen(String tin) async {
+  Future<List<dynamic>> getCitizen(String tin) async {
+    List<dynamic> citizenData = [];
     String name;
     String surname;
     String photoURL;
+    String cfVolunteer;
+    String cfDoctor;
+    Volunteer volunteer;
+    Doctor doctor;
     Map<String, TimestampCitizen> citizenMap;
     Map<String, TimestampCovid> covidMap;
     await citizens.doc(tin).get().then((value) => {
           name = value["nome"],
           surname = value["cognome"],
-          photoURL = value["photoURL"]
+          photoURL = value["photoURL"],
+          cfVolunteer = value["CFVolontario"],
+          cfDoctor = value["CFMedico"]
         });
     await citizens.doc(tin).collection('data').get().then((value) {
       citizenMap = _citizenFromFirebase(value);
     });
     await citizens.doc(tin).collection('covid19').get().then((value) {
-      covidMap = _covidFromFirebase(value);
+      if (value.size != 0) {
+        covidMap = _covidFromFirebase(value);
+      }
     });
-    return Citizen(tin, name, surname, photoURL, citizenMap, covidMap);
+    citizenData.add(Citizen(tin, cfVolunteer, cfDoctor, name, surname, photoURL,
+        citizenMap, covidMap));
+    volunteer = await volunteers.doc(cfVolunteer).get().then((value) =>
+        Volunteer(value["CF"], value["nome"], value["cognome"], value["pec"],
+            value["telefono"]));
+    citizenData.add(volunteer);
+    doctor = await doctors.doc(cfDoctor).get().then((value) => Doctor(
+        value["CF"],
+        value["nome"],
+        value["cognome"],
+        value["pec"],
+        value["telefono"]));
+    citizenData.add(doctor);
+    return citizenData;
+    /* return Citizen(tin, cfVolunteer, cfDoctor, name, surname, photoURL,
+        citizenMap, covidMap); */
   }
 
   Map<String, TimestampCitizen> _citizenFromFirebase(QuerySnapshot snapshot) {
@@ -139,8 +169,8 @@ class DatabaseService {
     Map<String, TimestampCovid> covidMap = Map();
     return citizens.where("CFVolontario", isEqualTo: tin).get().then((value) =>
         value.docs
-            .map((e) => Citizen(e.id, e["nome"], e["cognome"], e["photoURL"],
-                citizensMap, covidMap))
+            .map((e) => Citizen(e.id, e["CFVolontario"], e["CFMedico"],
+                e["nome"], e["cognome"], e["photoURL"], citizensMap, covidMap))
             .toList());
   }
 

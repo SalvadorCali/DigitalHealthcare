@@ -79,20 +79,28 @@ class _QRCodeScannerState extends State<QRCodeScanner> {
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: patientList[0] == datiSalvavita
                         ? List.generate(patientList.length, (index) {
-                            if (index == 4 || index == 6) {
+                            if (index == 1 || index == 4 || index == 6) {
                               return Column(
                                 crossAxisAlignment: CrossAxisAlignment.start,
                                 children: [
                                   Divider(),
                                   Padding(
                                       padding: const EdgeInsets.all(8.0),
-                                      child: Text(patientList[index]))
+                                      child: Text(
+                                        patientList[index],
+                                      ))
                                 ],
                               );
                             }
                             return Padding(
                                 padding: const EdgeInsets.all(8.0),
-                                child: Text(patientList[index]));
+                                child: Text(
+                                  patientList[index],
+                                  style: TextStyle(
+                                      fontWeight: index == 0
+                                          ? FontWeight.bold
+                                          : FontWeight.normal),
+                                ));
                           })
                         : List.generate(patientList.length - 1, (index) {
                             if (index == 1 || index == 2) {
@@ -108,7 +116,13 @@ class _QRCodeScannerState extends State<QRCodeScanner> {
                             }
                             return Padding(
                                 padding: const EdgeInsets.all(8.0),
-                                child: Text(patientList[index]));
+                                child: Text(
+                                  patientList[index],
+                                  style: TextStyle(
+                                      fontWeight: index == 0
+                                          ? FontWeight.bold
+                                          : FontWeight.normal),
+                                ));
                           }))),
           ),
         ),

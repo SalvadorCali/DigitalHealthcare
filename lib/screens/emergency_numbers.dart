@@ -1,12 +1,16 @@
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:humanitarian_icons/humanitarian_icons.dart';
+import 'package:thesis/model/doctor.dart';
+import 'package:thesis/model/volunteer.dart';
 import 'package:thesis/widgets/emergency_number_tile.dart';
 import 'package:thesis/widgets/numbers_card.dart';
 
 class EmergencyNumbers extends StatelessWidget {
+  final Volunteer volunteer;
+  final Doctor doctor;
   final bool logged;
-  EmergencyNumbers(this.logged);
+  EmergencyNumbers(this.logged, {this.volunteer, this.doctor});
 
   @override
   Widget build(BuildContext context) {
@@ -35,8 +39,8 @@ class EmergencyNumbers extends StatelessWidget {
               ),
               body: TabBarView(
                 children: [
-                  _buildContacts(),
-                  _buildEmergency(),
+                  _buildContacts(context),
+                  _buildEmergency(context),
                 ],
               ),
             ))
@@ -45,43 +49,106 @@ class EmergencyNumbers extends StatelessWidget {
               automaticallyImplyLeading: true,
               title: Text("Numeri di Emergenza"),
             ),
-            body: _buildEmergency(),
+            body: _buildEmergency(context),
           );
   }
 
-  Widget _buildContacts() {
-    return ListView(
-      children: [
-        Padding(
-          padding: const EdgeInsets.all(8.0),
-          child: Image.asset("assets/images/contacts.png"),
-        ),
-        NumbersCard(Icon(Icons.local_hospital), "Andrea Calici",
-            "Medico di base", "3927713177", "andrea.calici19@gmail.com"),
-        NumbersCard(Icon(Icons.work), "Davide Laffi", "Volontario comunale",
-            "3927713177", "andrea.calici19@gmail.com")
-      ],
-    );
+  Widget _buildContacts(context) {
+    return (kIsWeb &&
+            MediaQuery.of(context).size.width >
+                MediaQuery.of(context).size.height)
+        ? Row(
+            children: [
+              Padding(
+                padding: const EdgeInsets.all(8.0),
+                child: Image.asset("assets/images/contacts.png"),
+              ),
+              Flexible(
+                  child: Scrollbar(
+                child: ListView(
+                  children: [
+                    NumbersCard(
+                        Icon(Icons.local_hospital),
+                        doctor.fullName(),
+                        "Medico di base",
+                        doctor.telefono,
+                        "andrea.calici19@gmail.com"),
+                    NumbersCard(
+                        Icon(Icons.work),
+                        volunteer.fullName(),
+                        "Volontario comunale",
+                        volunteer.telefono,
+                        "andrea.calici19@gmail.com")
+                  ],
+                ),
+              ))
+            ],
+          )
+        : ListView(
+            children: [
+              Padding(
+                padding: const EdgeInsets.all(8.0),
+                child: Image.asset("assets/images/contacts.png"),
+              ),
+              NumbersCard(Icon(Icons.local_hospital), "Andrea Calici",
+                  "Medico di base", "3927713177", "andrea.calici19@gmail.com"),
+              NumbersCard(
+                  Icon(Icons.work),
+                  "Davide Laffi",
+                  "Volontario comunale",
+                  "3927713177",
+                  "andrea.calici19@gmail.com")
+            ],
+          );
   }
 
-  Widget _buildEmergency() {
-    return ListView(
-      children: [
-        Padding(
-          padding: const EdgeInsets.all(8.0),
-          child: Image.asset("assets/images/emergency.png"),
-        ),
-        EmergencyNumberTile(
-            Icon(HumanitarianIcons.community_building), "112", "Carabinieri"),
-        EmergencyNumberTile(
-            Icon(HumanitarianIcons.police_station), "113", "Polizia di Stato"),
-        EmergencyNumberTile(
-            Icon(HumanitarianIcons.fire), "115", "Vigili del Fuoco"),
-        EmergencyNumberTile(Icon(HumanitarianIcons.emergency_telecom), "117",
-            "Guardia di Finanza"),
-        EmergencyNumberTile(
-            Icon(HumanitarianIcons.ambulance), "118", "Emergenza Sanitaria"),
-      ],
-    );
+  Widget _buildEmergency(context) {
+    return (kIsWeb &&
+            MediaQuery.of(context).size.width >
+                MediaQuery.of(context).size.height)
+        ? Row(
+            children: [
+              Padding(
+                padding: const EdgeInsets.all(8.0),
+                child: Image.asset("assets/images/emergency.png"),
+              ),
+              Flexible(
+                  child: Scrollbar(
+                      child: ListView(
+                children: [
+                  EmergencyNumberTile(
+                      Icon(HumanitarianIcons.community_building),
+                      "112",
+                      "Carabinieri"),
+                  EmergencyNumberTile(Icon(HumanitarianIcons.police_station),
+                      "113", "Polizia di Stato"),
+                  EmergencyNumberTile(
+                      Icon(HumanitarianIcons.fire), "115", "Vigili del Fuoco"),
+                  EmergencyNumberTile(Icon(HumanitarianIcons.emergency_telecom),
+                      "117", "Guardia di Finanza"),
+                  EmergencyNumberTile(Icon(HumanitarianIcons.ambulance), "118",
+                      "Emergenza Sanitaria"),
+                ],
+              )))
+            ],
+          )
+        : ListView(
+            children: [
+              Padding(
+                padding: const EdgeInsets.all(8.0),
+                child: Image.asset("assets/images/emergency.png"),
+              ),
+              EmergencyNumberTile(Icon(HumanitarianIcons.community_building),
+                  "112", "Carabinieri"),
+              EmergencyNumberTile(Icon(HumanitarianIcons.police_station), "113",
+                  "Polizia di Stato"),
+              EmergencyNumberTile(
+                  Icon(HumanitarianIcons.fire), "115", "Vigili del Fuoco"),
+              EmergencyNumberTile(Icon(HumanitarianIcons.emergency_telecom),
+                  "117", "Guardia di Finanza"),
+              EmergencyNumberTile(Icon(HumanitarianIcons.ambulance), "118",
+                  "Emergenza Sanitaria"),
+            ],
+          );
   }
 }

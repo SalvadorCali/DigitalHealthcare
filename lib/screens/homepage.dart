@@ -2,6 +2,8 @@ import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:thesis/constants.dart';
 import 'package:thesis/model/citizen.dart';
+import 'package:thesis/model/doctor.dart';
+import 'package:thesis/model/volunteer.dart';
 import 'package:thesis/services/pdf_handler.dart';
 import 'package:thesis/services/qr_code_handler.dart';
 import 'package:thesis/widgets/appbar_button.dart';
@@ -11,11 +13,13 @@ import 'package:thesis/widgets/function_card.dart';
 
 class Homepage extends StatefulWidget {
   final Citizen citizen;
+  final Volunteer volunteer;
+  final Doctor doctor;
   final openQRCodeScanner;
   final openEmergencyNumbers;
   final changeScreen;
-  Homepage(this.citizen, this.openQRCodeScanner, this.openEmergencyNumbers,
-      this.changeScreen);
+  Homepage(this.citizen, this.volunteer, this.doctor, this.openQRCodeScanner,
+      this.openEmergencyNumbers, this.changeScreen);
 
   @override
   _HomepageState createState() => _HomepageState();
@@ -46,8 +50,7 @@ class _HomepageState extends State<Homepage> {
               ),
               title: Text("Homepage"),
               actions: [
-                AppBarButton(Icon(Icons.contact_phone_outlined),
-                    widget.openEmergencyNumbers),
+                AppBarButton(Icon(Icons.contact_phone_outlined), openContacts),
                 kIsWeb
                     ? SizedBox.shrink()
                     : AppBarButton(
@@ -503,6 +506,10 @@ class _HomepageState extends State<Homepage> {
         _setProcessing(false);
       });
     });
+  }
+
+  openContacts() {
+    widget.openEmergencyNumbers(widget.volunteer, widget.doctor);
   }
 
   _setProcessing(bool status) {

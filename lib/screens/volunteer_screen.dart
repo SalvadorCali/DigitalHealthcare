@@ -11,17 +11,17 @@ import 'package:thesis/widgets/appbar_button.dart';
 import 'package:thesis/widgets/volunteer_card.dart';
 import 'package:unicorndial/unicorndial.dart';
 
-class Volunteer extends StatefulWidget {
+class VolunteerScreen extends StatefulWidget {
   final EndUser volunteer;
   final List<Citizen> patients;
   final changeScreen;
-  const Volunteer(this.volunteer, this.patients, this.changeScreen);
+  const VolunteerScreen(this.volunteer, this.patients, this.changeScreen);
 
   @override
-  _VolunteerState createState() => _VolunteerState();
+  _VolunteerScreenState createState() => _VolunteerScreenState();
 }
 
-class _VolunteerState extends State<Volunteer> {
+class _VolunteerScreenState extends State<VolunteerScreen> {
   List<String> qrCodeDataList = [];
   List<String> namesList = [];
   List<String> photosList = [];
@@ -277,6 +277,7 @@ class _VolunteerState extends State<Volunteer> {
     for (int i = 0; i < bodyPatients.length; i++) {
       timestampCitizens.add(bodyPatients[i].citizen.data[dateList[i]]);
       citizens.add(bodyPatients[i].citizen);
+      print(citizens);
       /* qrCodeDataList.add(
           bodyPatients[i].citizen.data[dateList[i]].getLifeSavingInformation()); */
     }
