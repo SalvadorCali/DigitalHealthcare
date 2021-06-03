@@ -71,13 +71,13 @@ class EmergencyNumbers extends StatelessWidget {
                         Icon(Icons.local_hospital),
                         doctor.fullName(),
                         "Medico di base",
-                        doctor.telefono,
+                        doctor.telefono ?? "Non fornito",
                         "andrea.calici19@gmail.com"),
                     NumbersCard(
                         Icon(Icons.work),
                         volunteer.fullName(),
                         "Volontario comunale",
-                        volunteer.telefono,
+                        volunteer.telefono ?? "Non fornito",
                         "andrea.calici19@gmail.com")
                   ],
                 ),
@@ -90,13 +90,17 @@ class EmergencyNumbers extends StatelessWidget {
                 padding: const EdgeInsets.all(8.0),
                 child: Image.asset("assets/images/contacts.png"),
               ),
-              NumbersCard(Icon(Icons.local_hospital), "Andrea Calici",
-                  "Medico di base", "3927713177", "andrea.calici19@gmail.com"),
+              NumbersCard(
+                  Icon(Icons.local_hospital),
+                  doctor.fullName(),
+                  "Medico di base",
+                  doctor.telefono ?? "Non fornito",
+                  "andrea.calici19@gmail.com"),
               NumbersCard(
                   Icon(Icons.work),
-                  "Davide Laffi",
+                  volunteer.fullName(),
                   "Volontario comunale",
-                  "3927713177",
+                  volunteer.telefono ?? "Non fornito",
                   "andrea.calici19@gmail.com")
             ],
           );

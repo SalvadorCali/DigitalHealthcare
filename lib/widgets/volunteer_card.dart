@@ -177,7 +177,6 @@ class _VolunteerCardState extends State<VolunteerCard> {
                   padding: const EdgeInsets.all(8.0),
                   child: Icon(Icons.upload_file),
                 ),
-                //Image.asset("assets/images/loading.gif"),
                 Center(child: Text('Generazione documento in corso...')),
               ],
             ),

@@ -75,8 +75,6 @@ class DatabaseService {
         value["telefono"]));
     citizenData.add(doctor);
     return citizenData;
-    /* return Citizen(tin, cfVolunteer, cfDoctor, name, surname, photoURL,
-        citizenMap, covidMap); */
   }
 
   Map<String, TimestampCitizen> _citizenFromFirebase(QuerySnapshot snapshot) {

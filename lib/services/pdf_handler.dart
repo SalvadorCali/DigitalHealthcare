@@ -1,6 +1,5 @@
 import 'dart:io';
 import 'dart:typed_data';
-import 'package:flutter/material.dart' as material;
 import 'package:downloads_path_provider/downloads_path_provider.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/services.dart';
@@ -129,7 +128,7 @@ class PDFHandler {
               style: TextStyle(fontWeight: FontWeight.bold),
               children: <TextSpan>[
             TextSpan(
-              text: (value != "" && value != []) ? "$value" : "-",
+              text: (value != "") ? "$value" : "-",
               style: TextStyle(fontWeight: FontWeight.normal),
             )
           ])));
@@ -144,7 +143,7 @@ class PDFHandler {
               style: TextStyle(fontWeight: FontWeight.bold),
               children: <TextSpan>[
             TextSpan(
-              text: (value != "" && value != []) ? "$value" : "-",
+              text: (value != "") ? "$value" : "-",
               style: TextStyle(fontWeight: FontWeight.normal),
             )
           ])));
@@ -159,7 +158,7 @@ class PDFHandler {
               style: TextStyle(fontWeight: FontWeight.bold),
               children: <TextSpan>[
             TextSpan(
-              text: (value != "" && value != []) ? "$value" : "-",
+              text: (value != "") ? "$value" : "-",
               style: TextStyle(fontWeight: FontWeight.normal),
             )
           ])));
@@ -174,7 +173,7 @@ class PDFHandler {
               style: TextStyle(fontWeight: FontWeight.bold),
               children: <TextSpan>[
             TextSpan(
-              text: (value != "" && value != []) ? "$value" : "-",
+              text: (value != "") ? "$value" : "-",
               style: TextStyle(fontWeight: FontWeight.normal),
             )
           ])));
@@ -189,7 +188,7 @@ class PDFHandler {
               style: TextStyle(fontWeight: FontWeight.bold),
               children: <TextSpan>[
             TextSpan(
-              text: (value != "" && value != []) ? "$value" : "-",
+              text: (value != "") ? "$value" : "-",
               style: TextStyle(fontWeight: FontWeight.normal),
             )
           ])));
@@ -436,11 +435,6 @@ class PDFHandler {
     final ice =
         (await rootBundle.load('assets/logos/ice.png')).buffer.asUint8List();
 
-    /* citizens.forEach((element) async {
-      http.Response profileImage = await http.get(Uri.parse(element.photoURL));
-      Uint8List profile = profileImage.bodyBytes;
-      photosList.add(profile);
-    }); */
     List<Uint8List> photosList = [];
     for (int i = 0; i < citizens.length; i++) {
       http.Response profileImage =
@@ -970,7 +964,6 @@ class PDFHandler {
     List<Widget> widgets = [];
     tsCitizen.toMapIta().forEach((key, value) {
       widgets.add(Text("$value"));
-      print("a $value");
     });
     return widgets;
   }

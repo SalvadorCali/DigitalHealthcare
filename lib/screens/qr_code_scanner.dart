@@ -26,8 +26,6 @@ class _QRCodeScannerState extends State<QRCodeScanner> {
 
   @override
   Widget build(BuildContext context) {
-    //TimestampCitizen patient = createPatient();
-    //qrCodeDataFake = patient.getLifeSavingInformation();
     return Scaffold(
       appBar: AppBar(
         automaticallyImplyLeading: true,
@@ -44,12 +42,10 @@ class _QRCodeScannerState extends State<QRCodeScanner> {
         (qrCodeData != "")
             ? (qrCodeData != "-1")
                 ? _createCard()
-                //se c'è errore mostro scritta di errore
                 : Padding(
                     padding: const EdgeInsets.all(8.0),
                     child: Image.asset("assets/images/scan_qr_error.jpg"),
                   )
-            //se vuoto mostro solo immagine
             : Padding(
                 padding: const EdgeInsets.all(8.0),
                 child: Image.asset("assets/images/scan_qr.jpg"),

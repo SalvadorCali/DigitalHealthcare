@@ -167,8 +167,6 @@ class _VolunteerScreenState extends State<VolunteerScreen> {
                     element.body = true;
                     bodyPatients.add(element);
                     citizens.add(element.citizen);
-                    //namesList.add(element.citizen.fullName);
-                    //photosList.add(element.citizen.photoURL);
                     dateList.add(element.citizen.data.keys.last);
                   });
                 },
@@ -200,8 +198,6 @@ class _VolunteerScreenState extends State<VolunteerScreen> {
           });
           bodyPatients.remove(bodyPatients[i]);
           citizens.remove(citizens[i]);
-          //namesList.remove(namesList[i]);
-          //photosList.remove(photosList[i]);
           dateList.remove(dateList[i]);
           exit = true;
         });
@@ -277,16 +273,12 @@ class _VolunteerScreenState extends State<VolunteerScreen> {
     for (int i = 0; i < bodyPatients.length; i++) {
       timestampCitizens.add(bodyPatients[i].citizen.data[dateList[i]]);
       citizens.add(bodyPatients[i].citizen);
-      print(citizens);
-      /* qrCodeDataList.add(
-          bodyPatients[i].citizen.data[dateList[i]].getLifeSavingInformation()); */
     }
   }
 
   _resetData() {
     timestampCitizens.clear();
     citizens.clear();
-    //qrCodeDataList.clear();
     Navigator.of(context).pop();
   }
 
@@ -303,7 +295,6 @@ class _VolunteerScreenState extends State<VolunteerScreen> {
                   padding: const EdgeInsets.all(8.0),
                   child: Icon(Icons.upload_file),
                 ),
-                //Image.asset("assets/images/loading.gif"),
                 Center(child: Text('Generazione documento in corso...')),
               ],
             ),

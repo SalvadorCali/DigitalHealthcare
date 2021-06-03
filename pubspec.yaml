@@ -50,7 +50,6 @@ dependencies:
   qr_utils: ^0.1.5
   unicorndial: ^1.1.5 # per creare speed dial
   http: ^0.13.3 # per ottenere dal web le immagini per i pdf
-  image_whisperer: ^0.11.1
 
 dev_dependencies:
   change_app_package_name: ^0.1.2

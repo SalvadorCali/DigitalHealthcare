@@ -54,7 +54,6 @@ String fromListToString(List<String> list) {
 
 String fromStringToDate(String date) {
   List<String> splittedDate = date.split("-");
-  print(splittedDate);
   return splittedDate[2] +
       " " +
       _getMonth(int.parse(splittedDate[1])) +

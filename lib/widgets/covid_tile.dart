@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:thesis/constants.dart';
 import 'package:thesis/services/pdf_handler.dart';
 import 'package:thesis/widgets/function_button.dart';
 

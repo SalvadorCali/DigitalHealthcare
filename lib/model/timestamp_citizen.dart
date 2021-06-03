@@ -1,23 +1,13 @@
 import 'package:thesis/constants.dart';
 
 class TimestampCitizen {
-  /* String bloodGroup; //gruppo sanguigno
-  String bloodFactor; //fattore RH
-  String contactOne;
-  int phoneNumberOne;
-  String contactTwo;
-  int phoneNumberTwo;
-  List<String> pathologies; //croniche
-  String allergies;
-  String information; */
-
   String adi;
   String adp;
   String bmi;
   String cap;
   String cf;
-  String allergieCutaneeRespiratorieSistemiche; //allergie
-  String allergieVelenoImenotteri; //allergie
+  String allergieCutaneeRespiratorieSistemiche;
+  String allergieVelenoImenotteri;
   String altezza;
   String anamnesiFamigliari;
   String areaUtenza;
@@ -45,15 +35,15 @@ class TimestampCitizen {
   String nome;
   String numeroCartaIdentita;
   String organiMancanti;
-  List<String> patologieCronicheRilevanti; //patologie
-  List<String> patologieInAtto; //patologie
+  List<String> patologieCronicheRilevanti;
+  List<String> patologieInAtto;
   String pec;
   String peso;
   String pressioneArteriosa;
   String protesi;
   String provinciaDomicilio;
   String provinciaNascita;
-  String reazioniAvverseFarmaciAlimenti; //allergie
+  String reazioniAvverseFarmaciAlimenti;
   String retiPatologieAssistito;
   String rilevantiMalformazioni;
   String servizioAssociazione;
@@ -206,7 +196,6 @@ class TimestampCitizen {
   }
 
   Map<String, String> toMapIta() {
-    print("heree");
     return {
       'Nome': nome + " " + cognome,
       'Data di nascita': dataNascita,
