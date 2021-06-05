@@ -7,6 +7,7 @@ import 'package:fluttertoast/fluttertoast.dart';
 import 'package:open_file/open_file.dart';
 import 'package:path/path.dart' as _path;
 import 'package:thesis/model/citizen.dart';
+import 'package:thesis/model/timestamp_covid.dart';
 import 'package:universal_html/html.dart' as html;
 import 'package:path_provider/path_provider.dart';
 import 'package:pdf/pdf.dart';
@@ -25,6 +26,7 @@ class PDFHandler {
   final String bracelet = "braccialetto";
   final String cis = "cis";
   final String badge = "badge";
+  final String sheet = "scheda";
   final String greenPass = "green_pass";
 
   final pdf = Document();
@@ -67,6 +69,143 @@ class PDFHandler {
                     )
                   ])));
         }));
+  }
+
+  openGreenPass() async {
+    await _createGreenPass();
+    if (kIsWeb) {
+      await _openPDFWeb(greenPass);
+    } else {
+      await _savePDF(greenPass);
+      await _openPDF(greenPass);
+    }
+  }
+
+  downloadGreenPass() async {
+    await _createGreenPass();
+    if (kIsWeb) {
+      await _downloadPDFWeb(greenPass);
+    } else {
+      await _downloadPDF(greenPass);
+    }
+  }
+
+  printGreenPass() async {
+    await _createGreenPass();
+    await _printPDF(greenPass);
+  }
+
+  _createGreenPass() async {
+    pdf.addPage(Page(
+        pageFormat: PdfPageFormat.a4,
+        margin: EdgeInsets.all(0),
+        build: (Context context) {
+          return ListView(
+              children: [_greenPassOne(), _greenPassTwo(timestampCitizen)]);
+        }));
+  }
+
+  Widget _greenPassOne() {
+    return Padding(
+        padding: EdgeInsets.fromLTRB(16, 0, 16, 8),
+        child: Container(
+            color: PdfColors.green,
+            child: Row(mainAxisAlignment: MainAxisAlignment.center, children: [
+              Text("Green Pass", style: TextStyle(color: PdfColors.white)),
+            ])));
+  }
+
+  Widget _greenPassTwo(TimestampCitizen tsCitizen) {
+    return Padding(
+        padding: EdgeInsets.symmetric(horizontal: 16),
+        child: Container(
+            decoration:
+                BoxDecoration(border: Border.all(color: PdfColors.black)),
+            child: Column(children: [
+              _partOneGP(tsCitizen),
+              Divider(color: PdfColors.black),
+              _partTwoGP(tsCitizen),
+            ])));
+  }
+
+  Widget _partOneGP(TimestampCitizen tsCitizen) {
+    return Padding(
+        padding: EdgeInsets.symmetric(vertical: 16),
+        child: Padding(
+            padding: EdgeInsets.symmetric(horizontal: 16),
+            child:
+                Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
+              Padding(
+                  padding: EdgeInsets.fromLTRB(0, 0, 0, 8),
+                  child: Text("INFORMAZIONI PERSONALI",
+                      style: TextStyle(fontWeight: FontWeight.bold))),
+              Row(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: [
+                    Column(children: [
+                      Row(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            Container(
+                              child: Column(
+                                  mainAxisAlignment: MainAxisAlignment.start,
+                                  crossAxisAlignment: CrossAxisAlignment.start,
+                                  children: [
+                                    ..._createKeysSheet(
+                                        tsCitizen.toMapPSSSectionZero())
+                                  ]),
+                            ),
+                            SizedBox(width: 30),
+                            Container(
+                              child: Column(
+                                  mainAxisAlignment: MainAxisAlignment.start,
+                                  crossAxisAlignment: CrossAxisAlignment.start,
+                                  children: [
+                                    ..._createValuesSheet(
+                                        tsCitizen.toMapPSSSectionZero())
+                                  ]),
+                            ),
+                          ])
+                    ]),
+                    BarcodeWidget(
+                      data: tsCitizen.getLifeSavingInformation(),
+                      width: (PdfPageFormat.a4.width / 14) * 3,
+                      height: (PdfPageFormat.a4.width / 14) * 3,
+                      barcode: Barcode.qrCode(),
+                    )
+                  ])
+            ])));
+  }
+
+  Widget _partTwoGP(TimestampCitizen tsCitizen) {
+    return Padding(
+        padding: EdgeInsets.symmetric(vertical: 16),
+        child: Padding(
+            padding: EdgeInsets.symmetric(horizontal: 16),
+            child:
+                Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
+              Padding(
+                  padding: EdgeInsets.fromLTRB(0, 0, 0, 8),
+                  child: Text("INFORMAZIONI COVID",
+                      style: TextStyle(fontWeight: FontWeight.bold))),
+              Row(mainAxisAlignment: MainAxisAlignment.spaceBetween, children: [
+                Container(
+                  child: Column(
+                      mainAxisAlignment: MainAxisAlignment.start,
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [..._createValuesGreenPass(citizen.covid)]),
+                ),
+              ])
+            ])));
+  }
+
+  List<Widget> _createValuesGreenPass(Map<String, TimestampCovid> map) {
+    List<Widget> widgets = [];
+    map.forEach((key, value) {
+      widgets.add(Text("${value.getCovidInformation()}"));
+    });
+    return widgets;
   }
 
   openData() async {
@@ -367,6 +506,340 @@ class PDFHandler {
           padding: EdgeInsets.all(2),
           child: Image(MemoryImage(image), fit: BoxFit.fitWidth),
         ));
+  }
+
+  openSheet() async {
+    await _createSheet();
+    if (kIsWeb) {
+      await _openPDFWeb(sheet);
+    } else {
+      await _savePDF(sheet);
+      await _openPDF(sheet);
+    }
+  }
+
+  openMultipleSheet() async {
+    await _createMultipleSheet();
+    if (kIsWeb) {
+      await _openPDFWeb(sheet);
+    } else {
+      await _savePDF(sheet);
+      await _openPDF(sheet);
+    }
+  }
+
+  downloadSheet() async {
+    await _createSheet();
+    if (kIsWeb) {
+      await _downloadPDFWeb(sheet);
+    } else {
+      await _downloadPDF(sheet);
+    }
+  }
+
+  shareSheet() async {
+    await _createSheet();
+    if (kIsWeb) {
+      await _sharePDFWeb(sheet);
+    } else {
+      await _sharePDF(sheet);
+    }
+  }
+
+  printSheet() async {
+    await _createSheet();
+    await _printPDF(sheet);
+  }
+
+  _createSheet() async {
+    final comuneMilano =
+        (await rootBundle.load('assets/logos/comune_milano.png'))
+            .buffer
+            .asUint8List();
+    final mvi =
+        (await rootBundle.load('assets/logos/mvi.png')).buffer.asUint8List();
+    final http.Response profileImage =
+        await http.get(Uri.parse(citizen.photoURL));
+    final profile = profileImage.bodyBytes;
+    pdf.addPage(Page(
+        pageFormat: PdfPageFormat.a4,
+        margin: EdgeInsets.all(0),
+        build: (Context context) {
+          return ListView(children: [
+            _sheetOne(comuneMilano, mvi),
+            _sheetTwo(profile, timestampCitizen)
+          ]);
+        }));
+  }
+
+  _createMultipleSheet() async {
+    final comuneMilano =
+        (await rootBundle.load('assets/logos/comune_milano.png'))
+            .buffer
+            .asUint8List();
+    final mvi =
+        (await rootBundle.load('assets/logos/mvi.png')).buffer.asUint8List();
+    List<Uint8List> photosList = [];
+    for (int i = 0; i < citizens.length; i++) {
+      http.Response profileImage =
+          await http.get(Uri.parse(citizens[i].photoURL));
+      Uint8List profile = profileImage.bodyBytes;
+      photosList.add(profile);
+    }
+
+    for (int i = 0; i < timestampCitizens.length; i++) {
+      pdf.addPage(Page(
+          pageFormat: PdfPageFormat.a4,
+          margin: EdgeInsets.all(0),
+          build: (Context context) {
+            return ListView(children: [
+              _sheetOne(comuneMilano, mvi),
+              _sheetTwo(photosList[i], timestampCitizens[i])
+            ]);
+          }));
+    }
+  }
+
+  Widget _sheetOne(comuneMilano, mvi) {
+    return Padding(
+        padding: EdgeInsets.symmetric(horizontal: 16),
+        child: Column(children: [
+          Row(mainAxisAlignment: MainAxisAlignment.spaceAround, children: [
+            Container(
+                width: (PdfPageFormat.a4.width / 1.83) / 7,
+                height: PdfPageFormat.a4.height / 13.68,
+                child: Padding(
+                  padding: EdgeInsets.all(2),
+                  child: Image(MemoryImage(comuneMilano), fit: BoxFit.fitWidth),
+                )),
+            Column(children: [
+              Container(
+                  color: PdfColors.red,
+                  height: 8,
+                  width: PdfPageFormat.a4.width / 10 * 8),
+              Text("cittadini più coinvolti & più sicuri".toUpperCase()),
+            ]),
+            Container(
+                width: (PdfPageFormat.a4.width / 1.83) / 7,
+                height: PdfPageFormat.a4.height / 13.68,
+                child: Padding(
+                  padding: EdgeInsets.all(2),
+                  child: Image(MemoryImage(mvi), fit: BoxFit.fitWidth),
+                ))
+          ]),
+          Padding(
+              padding: EdgeInsets.fromLTRB(0, 0, 0, 8),
+              child: Container(
+                  color: PdfColors.lightBlue,
+                  child: Row(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: [
+                        Text("Scheda Salvavita"),
+                      ])))
+        ]));
+  }
+
+  Widget _sheetTwo(profile, TimestampCitizen tsCitizen) {
+    return Padding(
+        padding: EdgeInsets.symmetric(horizontal: 16),
+        child: Container(
+            decoration:
+                BoxDecoration(border: Border.all(color: PdfColors.black)),
+            child: Column(children: [
+              _partOne(tsCitizen),
+              Divider(color: PdfColors.black),
+              _partTwo(tsCitizen, profile),
+              Divider(color: PdfColors.black),
+              _partThree(tsCitizen),
+              Divider(color: PdfColors.black),
+              _partFour(tsCitizen),
+            ])));
+  }
+
+  Widget _partOne(TimestampCitizen tsCitizen) {
+    return Padding(
+        padding: EdgeInsets.symmetric(vertical: 16),
+        child: Padding(
+            padding: EdgeInsets.symmetric(horizontal: 16),
+            child:
+                Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
+              Padding(
+                  padding: EdgeInsets.fromLTRB(0, 0, 0, 8),
+                  child: Text("INFORMAZIONI PERSONALI",
+                      style: TextStyle(fontWeight: FontWeight.bold))),
+              Row(mainAxisAlignment: MainAxisAlignment.spaceBetween, children: [
+                Column(children: [
+                  Row(crossAxisAlignment: CrossAxisAlignment.start, children: [
+                    Container(
+                      child: Column(
+                          mainAxisAlignment: MainAxisAlignment.start,
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            ..._createKeysSheet(
+                                tsCitizen.toMapSheetSectionOne())
+                          ]),
+                    ),
+                    SizedBox(width: 30),
+                    Container(
+                      child: Column(
+                          mainAxisAlignment: MainAxisAlignment.start,
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            ..._createValuesSheet(
+                                tsCitizen.toMapSheetSectionOne())
+                          ]),
+                    ),
+                  ])
+                ]),
+                BarcodeWidget(
+                  data: tsCitizen.getLifeSavingInformation(),
+                  width: (PdfPageFormat.a4.width / 14) * 2,
+                  height: (PdfPageFormat.a4.width / 14) * 2,
+                  barcode: Barcode.qrCode(),
+                )
+              ])
+            ])));
+  }
+
+  Widget _partTwo(TimestampCitizen tsCitizen, profile) {
+    return Padding(
+        padding: EdgeInsets.symmetric(vertical: 16),
+        child: Padding(
+            padding: EdgeInsets.symmetric(horizontal: 16),
+            child:
+                Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
+              Padding(
+                  padding: EdgeInsets.fromLTRB(0, 0, 0, 8),
+                  child: Text("DATI ATS - MILANO",
+                      style: TextStyle(fontWeight: FontWeight.bold))),
+              Row(mainAxisAlignment: MainAxisAlignment.spaceBetween, children: [
+                Column(children: [
+                  Row(crossAxisAlignment: CrossAxisAlignment.start, children: [
+                    Container(
+                      child: Column(
+                          mainAxisAlignment: MainAxisAlignment.start,
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            ..._createKeysSheet(
+                                tsCitizen.toMapSheetSectionTwo())
+                          ]),
+                    ),
+                    SizedBox(width: 30),
+                    Container(
+                      child: Column(
+                          mainAxisAlignment: MainAxisAlignment.start,
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            ..._createValuesSheet(
+                                tsCitizen.toMapSheetSectionTwo())
+                          ]),
+                    ),
+                  ])
+                ]),
+                Container(
+                    width: 60,
+                    height: 60,
+                    child: Padding(
+                      padding: EdgeInsets.all(2),
+                      child: Image(MemoryImage(profile), fit: BoxFit.fitWidth),
+                    ))
+              ])
+            ])));
+  }
+
+  Widget _partThree(TimestampCitizen tsCitizen) {
+    return Padding(
+        padding: EdgeInsets.symmetric(vertical: 16),
+        child: Padding(
+            padding: EdgeInsets.symmetric(horizontal: 16),
+            child:
+                Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
+              Padding(
+                  padding: EdgeInsets.fromLTRB(0, 0, 0, 8),
+                  child: Text("CONTATTI DI EMERGENZA - ICE",
+                      style: TextStyle(fontWeight: FontWeight.bold))),
+              Row(mainAxisAlignment: MainAxisAlignment.spaceBetween, children: [
+                Column(children: [
+                  Row(crossAxisAlignment: CrossAxisAlignment.start, children: [
+                    Container(
+                      child: Column(
+                          mainAxisAlignment: MainAxisAlignment.start,
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            ..._createKeysSheet(
+                                tsCitizen.toMapSheetSectionThree())
+                          ]),
+                    ),
+                    SizedBox(width: 30),
+                    Container(
+                      child: Column(
+                          mainAxisAlignment: MainAxisAlignment.start,
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            ..._createValuesSheet(
+                                tsCitizen.toMapSheetSectionThree())
+                          ]),
+                    ),
+                  ])
+                ]),
+              ])
+            ])));
+  }
+
+  Widget _partFour(TimestampCitizen tsCitizen) {
+    return Padding(
+        padding: EdgeInsets.symmetric(vertical: 8),
+        child: Padding(
+            padding: EdgeInsets.symmetric(horizontal: 16),
+            child:
+                Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
+              Padding(
+                padding: EdgeInsets.fromLTRB(0, 0, 0, 8),
+                child: Text("INFORMAZIONI MEDICHE SALVAVITA",
+                    style: TextStyle(fontWeight: FontWeight.bold)),
+              ),
+              Row(mainAxisAlignment: MainAxisAlignment.spaceBetween, children: [
+                Column(children: [
+                  Row(crossAxisAlignment: CrossAxisAlignment.start, children: [
+                    Container(
+                      child: Column(
+                          mainAxisAlignment: MainAxisAlignment.start,
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            ..._createKeysSheet(
+                                tsCitizen.toMapSheetSectionFour())
+                          ]),
+                    ),
+                    SizedBox(width: 30),
+                    Container(
+                      child: Column(
+                          mainAxisAlignment: MainAxisAlignment.start,
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            ..._createValuesSheet(
+                                tsCitizen.toMapSheetSectionFour())
+                          ]),
+                    ),
+                  ])
+                ]),
+              ])
+            ])));
+  }
+
+  List<Widget> _createKeysSheet(Map<String, String> map) {
+    List<Widget> widgets = [];
+    map.forEach((key, value) {
+      widgets.add(Text("$key:"));
+    });
+    return widgets;
+  }
+
+  List<Widget> _createValuesSheet(Map<String, String> map) {
+    List<Widget> widgets = [];
+    map.forEach((key, value) {
+      widgets.add(Text("$value"));
+    });
+    return widgets;
   }
 
   //badge

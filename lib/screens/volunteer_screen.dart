@@ -227,10 +227,17 @@ class _VolunteerScreenState extends State<VolunteerScreen> {
         UnicornButton(
           currentButton: FloatingActionButton(
             mini: true,
-            onPressed: generateMultipleBracelet,
+            onPressed: generateMultipleSheet,
             child: icons[3],
           ),
-        )
+        ),
+        UnicornButton(
+          currentButton: FloatingActionButton(
+            mini: true,
+            onPressed: generateMultipleBracelet,
+            child: icons[4],
+          ),
+        ),
       ],
     );
   }
@@ -262,6 +269,17 @@ class _VolunteerScreenState extends State<VolunteerScreen> {
     await Future.delayed(Duration(seconds: 1), () {
       PDFHandler(citizens: citizens, timestampCitizens: timestampCitizens)
           .openMultipleBracelet()
+          .whenComplete(() {
+        _resetData();
+      });
+    });
+  }
+
+  generateMultipleSheet() async {
+    _createData();
+    await Future.delayed(Duration(seconds: 1), () {
+      PDFHandler(citizens: citizens, timestampCitizens: timestampCitizens)
+          .openMultipleSheet()
           .whenComplete(() {
         _resetData();
       });

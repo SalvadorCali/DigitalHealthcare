@@ -75,7 +75,7 @@ class _HomepageState extends State<Homepage> {
               ),
             ),
             body: TabBarView(children: [
-              _qrCodeScreen(qrCodeData),
+              _qrCodeScreen(qrCodeData, false),
               _functionalitiesScreen(),
               _covidScreen()
             ])));
@@ -110,7 +110,7 @@ class _HomepageState extends State<Homepage> {
     });
   }
 
-  Widget _qrCodeScreen(String qrData) {
+  Widget _qrCodeScreen(String qrData, bool covid) {
     return Center(
       child: SingleChildScrollView(
         child: Column(
@@ -123,9 +123,12 @@ class _HomepageState extends State<Homepage> {
             ButtonBar(
               alignment: MainAxisAlignment.center,
               children: [
-                FunctionButton(openQRCode, Icon(Icons.image), "Apri"),
-                FunctionButton(saveQRCodeToGallery, Icon(Icons.save), "Salva"),
-                FunctionButton(printQRCode, Icon(Icons.print), "Stampa"),
+                FunctionButton(covid ? openGreenPass : openQRCode,
+                    Icon(Icons.image), "Apri"),
+                FunctionButton(covid ? downloadGreenPass : saveQRCodeToGallery,
+                    Icon(Icons.save), "Salva"),
+                FunctionButton(covid ? printGreenPass : printQRCode,
+                    Icon(Icons.print), "Stampa"),
               ],
             ),
           ],
@@ -189,13 +192,25 @@ class _HomepageState extends State<Homepage> {
                         functionalities[3],
                         subtitles[3],
                         descriptions[3],
+                        openSheet,
+                        downloadSheet,
+                        printSheet,
+                        shareSheet),
+                  ),
+                  Flexible(
+                    child: FunctionCard(
+                        icons[4],
+                        images[4],
+                        functionalities[4],
+                        subtitles[4],
+                        descriptions[4],
                         openBracelet,
                         downloadBracelet,
                         printBracelet,
                         shareBracelet),
                   ),
                 ],
-              )
+              ),
             ],
           )
         : Center(
@@ -238,6 +253,16 @@ class _HomepageState extends State<Homepage> {
                       functionalities[3],
                       subtitles[3],
                       descriptions[3],
+                      openSheet,
+                      downloadSheet,
+                      printSheet,
+                      shareSheet),
+                  FunctionCard(
+                      icons[4],
+                      images[4],
+                      functionalities[4],
+                      subtitles[4],
+                      descriptions[4],
                       openBracelet,
                       downloadBracelet,
                       printBracelet,
@@ -256,7 +281,7 @@ class _HomepageState extends State<Homepage> {
             children: [
               Container(
                   width: MediaQuery.of(context).size.width / 2,
-                  child: _qrCodeScreen(qrCodeCovid)),
+                  child: _qrCodeScreen(qrCodeCovid, true)),
               Flexible(
                 child: Scrollbar(
                   child: ListView(
@@ -269,7 +294,7 @@ class _HomepageState extends State<Homepage> {
             ],
           )
         : ListView(
-            children: [_qrCodeScreen(qrCodeCovid), ..._createTiles()],
+            children: [_qrCodeScreen(qrCodeCovid, true), ..._createTiles()],
           );
   }
 
@@ -310,6 +335,45 @@ class _HomepageState extends State<Homepage> {
     await Future.delayed(Duration(seconds: 1), () {
       PDFHandler(timestampCitizen: widget.citizen.data[currentDate])
           .printQRCode()
+          .whenComplete(() {
+        _setProcessing(false);
+      });
+    });
+  }
+
+  openGreenPass() async {
+    _setProcessing(true);
+    await Future.delayed(Duration(seconds: 1), () {
+      PDFHandler(
+              citizen: widget.citizen,
+              timestampCitizen: widget.citizen.data[currentDate])
+          .openGreenPass()
+          .whenComplete(() {
+        _setProcessing(false);
+      });
+    });
+  }
+
+  downloadGreenPass() async {
+    _setProcessing(true);
+    await Future.delayed(Duration(seconds: 1), () {
+      PDFHandler(
+              citizen: widget.citizen,
+              timestampCitizen: widget.citizen.data[currentDate])
+          .downloadGreenPass()
+          .whenComplete(() {
+        _setProcessing(false);
+      });
+    });
+  }
+
+  printGreenPass() async {
+    _setProcessing(true);
+    await Future.delayed(Duration(seconds: 1), () {
+      PDFHandler(
+              citizen: widget.citizen,
+              timestampCitizen: widget.citizen.data[currentDate])
+          .printGreenPass()
           .whenComplete(() {
         _setProcessing(false);
       });
@@ -502,6 +566,58 @@ class _HomepageState extends State<Homepage> {
               citizen: widget.citizen,
               timestampCitizen: widget.citizen.data[currentDate])
           .shareCIS()
+          .whenComplete(() {
+        _setProcessing(false);
+      });
+    });
+  }
+
+  openSheet() async {
+    _setProcessing(true);
+    await Future.delayed(Duration(seconds: 1), () {
+      PDFHandler(
+              citizen: widget.citizen,
+              timestampCitizen: widget.citizen.data[currentDate])
+          .openSheet()
+          .whenComplete(() {
+        _setProcessing(false);
+      });
+    });
+  }
+
+  downloadSheet() async {
+    _setProcessing(true);
+    await Future.delayed(Duration(seconds: 1), () {
+      PDFHandler(
+              citizen: widget.citizen,
+              timestampCitizen: widget.citizen.data[currentDate])
+          .downloadSheet()
+          .whenComplete(() {
+        _setProcessing(false);
+      });
+    });
+  }
+
+  printSheet() async {
+    _setProcessing(true);
+    await Future.delayed(Duration(seconds: 1), () {
+      PDFHandler(
+              citizen: widget.citizen,
+              timestampCitizen: widget.citizen.data[currentDate])
+          .printSheet()
+          .whenComplete(() {
+        _setProcessing(false);
+      });
+    });
+  }
+
+  shareSheet() async {
+    _setProcessing(true);
+    await Future.delayed(Duration(seconds: 1), () {
+      PDFHandler(
+              citizen: widget.citizen,
+              timestampCitizen: widget.citizen.data[currentDate])
+          .shareSheet()
           .whenComplete(() {
         _setProcessing(false);
       });

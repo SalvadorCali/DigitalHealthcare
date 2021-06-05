@@ -120,7 +120,7 @@ class TimestampCitizen {
     return {
       'Nome': nome + " " + cognome,
       'Codice fiscale': cf,
-      'Numero carta d\'idendità': numeroCartaIdentita,
+      'Numero carta d\'identità': numeroCartaIdentita,
       'Sesso': sesso,
       'Data di nascita': dataNascita,
       'Comune di nascita': comuneNascita,
@@ -192,6 +192,49 @@ class TimestampCitizen {
       'Patologie in atto': fromListToString(patologieInAtto),
       'Servizio o associazione': servizioAssociazione,
       'viveSolo': viveSolo
+    };
+  }
+
+  Map<String, String> toMapSheetSectionOne() {
+    return {
+      'Nome e Cognome': nome + "fsvs " + cognome,
+      'Data di nascita': dataNascita,
+      'Indirizzo': indirizzoDomicilio,
+      'Città': comuneDomicilio,
+      'C.I n°': numeroCartaIdentita,
+      'Comune di rilascio': comuneRilascio,
+      'Data di rilascio': dataNascita, //manca data di rilascio CI
+      'Codice Fiscale': cf
+    };
+  }
+
+  Map<String, String> toMapSheetSectionTwo() {
+    return {
+      'CRS n°': codiceATS, //manca CRS
+      'Codice di esenzione': codiceEsenzione,
+      'Codice ATS assistito': codiceATS,
+      'Medico Curante': medico,
+      'Telefono': telefonoCareGiver, //manca telefono
+      'Email': email, //manca email medico
+    };
+  }
+
+  Map<String, String> toMapSheetSectionThree() {
+    return {
+      'Nome e Cognome ICE 1': contatto1,
+      'Telefono 1': telefono1,
+      'Nome e Cognome ICE 2': contatto2,
+      'Telefono 2': telefono2
+    };
+  }
+
+  Map<String, String> toMapSheetSectionFour() {
+    return {
+      'Gruppo sanguigno': gruppoSanguigno,
+      'Fattore Rh': fattoreRH,
+      'Patologie': fromListToString(patologieCronicheRilevanti),
+      'Allergie ed intolleranze gravi': allergieCutaneeRespiratorieSistemiche,
+      'Informazioni importanti': "prova",
     };
   }
 

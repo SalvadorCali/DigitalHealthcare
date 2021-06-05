@@ -1,11 +1,11 @@
 {
-    "name": "thesis",
-    "short_name": "thesis",
+    "name": "Digital Healthcare",
+    "short_name": "Digital Healthcare",
     "start_url": ".",
     "display": "standalone",
     "background_color": "#0175C2",
     "theme_color": "#0175C2",
-    "description": "A new Flutter project.",
+    "description": "Applicazione mobile volta alla salvaguardia della salute dei cittadini.",
     "orientation": "portrait-primary",
     "prefer_related_applications": false,
     "icons": [

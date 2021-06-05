@@ -6,13 +6,13 @@ import 'package:thesis/widgets/function_button.dart';
 import 'package:url_launcher/url_launcher.dart';
 
 class VolunteerCard extends StatefulWidget {
-  final Citizen patient;
+  final Citizen citizen;
   final int index;
   final getDate;
   final setDate;
   final removePatient;
   const VolunteerCard(
-      this.patient, this.index, this.getDate, this.setDate, this.removePatient);
+      this.citizen, this.index, this.getDate, this.setDate, this.removePatient);
 
   @override
   _VolunteerCardState createState() => _VolunteerCardState();
@@ -23,7 +23,7 @@ class _VolunteerCardState extends State<VolunteerCard> {
 
   @override
   void initState() {
-    currentDate = widget.patient.data.keys.last;
+    currentDate = widget.citizen.data.keys.last;
     super.initState();
   }
 
@@ -41,7 +41,7 @@ class _VolunteerCardState extends State<VolunteerCard> {
                   icon: Icon(Icons.calendar_today),
                   initialValue: currentDate,
                   itemBuilder: (BuildContext context) {
-                    return widget.patient.data.keys.map((element) {
+                    return widget.citizen.data.keys.map((element) {
                       return PopupMenuItem(
                         value: element,
                         child: Text(element),
@@ -58,8 +58,8 @@ class _VolunteerCardState extends State<VolunteerCard> {
                 IconButton(icon: Icon(Icons.close), onPressed: remove),
               ],
             ),
-            title: Text(widget.patient.fullName),
-            subtitle: Text(widget.patient.cf),
+            title: Text(widget.citizen.fullName),
+            subtitle: Text(widget.citizen.cf),
           ),
           Divider(),
           ListTile(
@@ -75,6 +75,11 @@ class _VolunteerCardState extends State<VolunteerCard> {
           ListTile(
             leading: icons[3],
             title: Text(functionalities[3]),
+            trailing: FunctionButton(printSheet, Icon(Icons.print), "Stampa"),
+          ),
+          ListTile(
+            leading: icons[4],
+            title: Text(functionalities[4]),
             trailing:
                 FunctionButton(printBracelet, Icon(Icons.print), "Stampa"),
           ),
@@ -82,7 +87,7 @@ class _VolunteerCardState extends State<VolunteerCard> {
           ListTile(
             leading: Icon(Icons.phone),
             title: Text(
-              widget.patient.data[currentDate].telefono,
+              widget.citizen.data[currentDate].telefono,
               style: TextStyle(color: Theme.of(context).primaryColor),
             ),
             onTap: _launchPhone,
@@ -90,7 +95,7 @@ class _VolunteerCardState extends State<VolunteerCard> {
           ListTile(
             leading: Icon(Icons.mail),
             title: Text(
-              widget.patient.data[currentDate].email,
+              widget.citizen.data[currentDate].email,
               style: TextStyle(color: Theme.of(context).primaryColor),
             ),
             onTap: _launchEmail,
@@ -102,7 +107,7 @@ class _VolunteerCardState extends State<VolunteerCard> {
               mainAxisAlignment: MainAxisAlignment.start,
               children: [
                 Text(
-                  "Ultimo aggiornamento: ${widget.patient.data.keys.last}",
+                  "Ultimo aggiornamento: ${widget.citizen.data.keys.last}",
                   style: Theme.of(context).textTheme.caption,
                 ),
               ],
@@ -117,8 +122,8 @@ class _VolunteerCardState extends State<VolunteerCard> {
     _showLoadingDialog();
     await Future.delayed(Duration(seconds: 1), () {
       PDFHandler(
-              citizen: widget.patient,
-              timestampCitizen: widget.patient.data[currentDate])
+              citizen: widget.citizen,
+              timestampCitizen: widget.citizen.data[currentDate])
           .printBadge()
           .whenComplete(() {
         Navigator.of(context).pop();
@@ -130,8 +135,8 @@ class _VolunteerCardState extends State<VolunteerCard> {
     _showLoadingDialog();
     await Future.delayed(Duration(seconds: 1), () {
       PDFHandler(
-              citizen: widget.patient,
-              timestampCitizen: widget.patient.data[currentDate])
+              citizen: widget.citizen,
+              timestampCitizen: widget.citizen.data[currentDate])
           .printCIS()
           .whenComplete(() {
         Navigator.of(context).pop();
@@ -142,7 +147,7 @@ class _VolunteerCardState extends State<VolunteerCard> {
   printBracelet() async {
     _showLoadingDialog();
     await Future.delayed(Duration(seconds: 1), () {
-      PDFHandler(timestampCitizen: widget.patient.data[currentDate])
+      PDFHandler(timestampCitizen: widget.citizen.data[currentDate])
           .printBracelet()
           .whenComplete(() {
         Navigator.of(context).pop();
@@ -150,18 +155,31 @@ class _VolunteerCardState extends State<VolunteerCard> {
     });
   }
 
+  printSheet() async {
+    _showLoadingDialog();
+    await Future.delayed(Duration(seconds: 1), () {
+      PDFHandler(
+              citizen: widget.citizen,
+              timestampCitizen: widget.citizen.data[currentDate])
+          .printSheet()
+          .whenComplete(() {
+        Navigator.of(context).pop();
+      });
+    });
+  }
+
   _launchPhone() async {
-    String url = 'tel:' + widget.patient.data[currentDate].telefono;
+    String url = 'tel:' + widget.citizen.data[currentDate].telefono;
     await canLaunch(url) ? await launch(url) : throw 'Could not launch';
   }
 
   _launchEmail() async {
-    String url = 'mailto:' + widget.patient.data[currentDate].email;
+    String url = 'mailto:' + widget.citizen.data[currentDate].email;
     await canLaunch(url) ? await launch(url) : throw 'Could not launch';
   }
 
   remove() {
-    widget.removePatient(widget.patient.cf);
+    widget.removePatient(widget.citizen.cf);
   }
 
   Future<void> _showLoadingDialog() async {
