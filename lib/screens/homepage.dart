@@ -17,9 +17,9 @@ class Homepage extends StatefulWidget {
   final Doctor doctor;
   final openQRCodeScanner;
   final openEmergencyNumbers;
-  final changeScreen;
+  final logout;
   Homepage(this.citizen, this.volunteer, this.doctor, this.openQRCodeScanner,
-      this.openEmergencyNumbers, this.changeScreen);
+      this.openEmergencyNumbers, this.logout);
 
   @override
   _HomepageState createState() => _HomepageState();
@@ -50,13 +50,20 @@ class _HomepageState extends State<Homepage> {
               ),
               title: Text("Homepage"),
               actions: [
-                AppBarButton(Icon(Icons.contact_phone_outlined), openContacts),
+                Tooltip(
+                    message: "Numeri Utili",
+                    child: AppBarButton(
+                        Icon(Icons.contact_phone_outlined), openContacts)),
                 kIsWeb
                     ? SizedBox.shrink()
-                    : AppBarButton(
-                        Icon(Icons.qr_code_scanner), widget.openQRCodeScanner),
+                    : Tooltip(
+                        message: "QR Code Scanner",
+                        child: AppBarButton(Icon(Icons.qr_code_scanner),
+                            widget.openQRCodeScanner)),
                 _buildDateMenu(),
-                AppBarButton(Icon(Icons.logout), widget.changeScreen),
+                Tooltip(
+                    message: "Logout",
+                    child: AppBarButton(Icon(Icons.logout), widget.logout)),
               ],
               bottom: TabBar(
                 tabs: (kIsWeb &&
@@ -68,9 +75,18 @@ class _HomepageState extends State<Homepage> {
                         Tab(icon: Icon(Icons.coronavirus), text: "Covid19"),
                       ]
                     : [
-                        Tab(icon: Icon(Icons.qr_code)),
-                        Tab(icon: Icon(Icons.info)),
-                        Tab(icon: Icon(Icons.coronavirus)),
+                        Tab(
+                            icon: Tooltip(
+                                message: "Codice QR",
+                                child: Icon(Icons.qr_code))),
+                        Tab(
+                            icon: Tooltip(
+                                message: "Informazioni",
+                                child: Icon(Icons.info))),
+                        Tab(
+                            icon: Tooltip(
+                                message: "Covid19",
+                                child: Icon(Icons.coronavirus))),
                       ],
               ),
             ),
@@ -83,6 +99,7 @@ class _HomepageState extends State<Homepage> {
 
   PopupMenuButton _buildDateMenu() {
     return PopupMenuButton(
+      tooltip: "Storico",
       icon: Icon(Icons.calendar_today),
       initialValue: currentDate,
       itemBuilder: (BuildContext context) {
@@ -164,10 +181,10 @@ class _HomepageState extends State<Homepage> {
                         functionalities[1],
                         subtitles[1],
                         descriptions[1],
-                        openBadge,
-                        downloadBadge,
-                        printBadge,
-                        shareBadge),
+                        openSheet,
+                        downloadSheet,
+                        printSheet,
+                        shareSheet),
                   ),
                 ],
               ),
@@ -192,10 +209,10 @@ class _HomepageState extends State<Homepage> {
                         functionalities[3],
                         subtitles[3],
                         descriptions[3],
-                        openSheet,
-                        downloadSheet,
-                        printSheet,
-                        shareSheet),
+                        openBadge,
+                        downloadBadge,
+                        printBadge,
+                        shareBadge),
                   ),
                   Flexible(
                     child: FunctionCard(
@@ -233,10 +250,10 @@ class _HomepageState extends State<Homepage> {
                       functionalities[1],
                       subtitles[1],
                       descriptions[1],
-                      openBadge,
-                      downloadBadge,
-                      printBadge,
-                      shareBadge),
+                      openSheet,
+                      downloadSheet,
+                      printSheet,
+                      shareSheet),
                   FunctionCard(
                       icons[2],
                       images[2],
@@ -253,10 +270,10 @@ class _HomepageState extends State<Homepage> {
                       functionalities[3],
                       subtitles[3],
                       descriptions[3],
-                      openSheet,
-                      downloadSheet,
-                      printSheet,
-                      shareSheet),
+                      openBadge,
+                      downloadBadge,
+                      printBadge,
+                      shareBadge),
                   FunctionCard(
                       icons[4],
                       images[4],

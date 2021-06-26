@@ -213,7 +213,7 @@ class _VolunteerScreenState extends State<VolunteerScreen> {
         UnicornButton(
           currentButton: FloatingActionButton(
             mini: true,
-            onPressed: generateMultipleBadge,
+            onPressed: generateMultipleSheet,
             child: icons[1],
           ),
         ),
@@ -227,7 +227,7 @@ class _VolunteerScreenState extends State<VolunteerScreen> {
         UnicornButton(
           currentButton: FloatingActionButton(
             mini: true,
-            onPressed: generateMultipleSheet,
+            onPressed: generateMultipleBadge,
             child: icons[3],
           ),
         ),

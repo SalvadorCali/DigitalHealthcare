@@ -82,66 +82,92 @@ class DatabaseService {
     TimestampCitizen patient;
     snapshot.docs.forEach((element) {
       patient = TimestampCitizen(
-          adi: element["ADI"],
-          adp: element["ADP"],
-          bmi: element["BMI"],
-          cap: element["CAP"],
-          cf: element["CF"],
+          adi: element["ADI"] == "" ? "-" : element["ADI"],
+          adp: element["ADP"] == "" ? "-" : element["ADP"],
+          bmi: element["BMI"] == "" ? "-" : element["BMI"],
+          cap: element["CAP"] == "" ? "-" : element["CAP"],
+          cf: element["CF"] == "" ? "-" : element["CF"],
           allergieCutaneeRespiratorieSistemiche:
-              element["allergieCutaneeRespiratorieSistemiche"],
-          allergieVelenoImenotteri: element["allergieVelenoImenotteri"],
-          altezza: element["altezza"],
-          anamnesiFamigliari: element["anamnesiFamigliari"],
-          areaUtenza: element["areaUtenza"],
-          attivitaLavorativa: element["attivitaLavorativa"],
-          ausili: element["ausili"],
-          capacitaMotoriaAssistito: element["capacitaMotoriaAssistito"],
-          codiceATS: element["codiceATS"],
-          codiceEsenzione: element["codiceEsenzione"],
-          cognome: element["cognome"],
-          comuneDomicilio: element["comuneDomicilio"],
-          comuneNascita: element["comuneNascita"],
-          comuneRilascio: element["comuneRilascio"],
-          contatto1: element["contatto1"],
-          contatto2: element["contatto2"],
-          contattoCareGiver: element["contattoCareGiver"],
-          dataNascita: element["dataNascita"],
-          dataScadenza: element["dataScadenza"],
-          donazioneOrgani: element["donazioneOrgani"],
-          email: element["email"],
-          fattoreRH: element["fattoreRH"],
-          fattoriRischio: element["fattoriRischio"],
-          gravidanzeParti: element["gravidanzeParti"],
-          gruppoSanguigno: element["gruppoSanguigno"],
-          indirizzoDomicilio: element["indirizzoDomicilio"],
-          nome: element["nome"],
-          numeroCartaIdentita: element["numeroCartaIdentità"],
-          organiMancanti: element["organiMancanti"],
-          patologieCronicheRilevanti:
-              List.from(element["patologieCronicheRilevanti"]),
-          patologieInAtto: List.from(element["patologieInAtto"]),
-          pec: element["pec"],
-          peso: element["peso"],
-          pressioneArteriosa: element["pressioneArteriosa"],
-          protesi: element["protesi"],
-          provinciaDomicilio: element["provinciaDomicilio"],
-          provinciaNascita: element["provinciaNascita"],
-          reazioniAvverseFarmaciAlimenti:
-              element["reazioniAvverseFarmaciAlimenti"],
-          retiPatologieAssistito: element["retiPatologieAssistito"],
-          rilevantiMalformazioni: element["rilevantiMalformazioni"],
-          servizioAssociazione: element["servizioAssociazione"],
-          sesso: element["sesso"],
-          telefono: element["telefono"],
-          telefono1: element["telefono1"],
-          telefono2: element["telefono2"],
-          telefonoCareGiver: element["telefonoCareGiver"],
-          terapieFarmacologiche: element["terapieFarmacologiche"],
-          terapieFarmacologicheCroniche:
-              element["terapieFarmacologicheCroniche"],
-          trapianti: element["trapianti"],
-          vaccinazioni: element["vaccinazioni"],
-          viveSolo: element["viveSolo"]);
+              element["allergieCutaneeRespiratorieSistemiche"] == ""
+                  ? "-"
+                  : element["allergieCutaneeRespiratorieSistemiche"],
+          allergieVelenoImenotteri: element["allergieVelenoImenotteri"] == ""
+              ? "-"
+              : element["allergieVelenoImenotteri"],
+          altezza: element["altezza"] == "" ? "-" : element["altezza"],
+          anamnesiFamigliari: element["anamnesiFamigliari"] == ""
+              ? "-"
+              : element["anamnesiFamigliari"],
+          areaUtenza: element["areaUtenza"] == "" ? "-" : element["areaUtenza"],
+          attivitaLavorativa: element["attivitaLavorativa"] == ""
+              ? "-"
+              : element["attivitaLavorativa"],
+          ausili: element["ausili"] == "" ? "-" : element["ausili"],
+          capacitaMotoriaAssistito: element["capacitaMotoriaAssistito"] == ""
+              ? "-"
+              : element["capacitaMotoriaAssistito"],
+          codiceATS: element["codiceATS"] == "" ? "-" : element["codiceATS"],
+          codiceEsenzione: element["codiceEsenzione"] == ""
+              ? "-"
+              : element["codiceEsenzione"],
+          cognome: element["cognome"] == "" ? "-" : element["cognome"],
+          comuneDomicilio: element["comuneDomicilio"] == ""
+              ? "-"
+              : element["comuneDomicilio"],
+          comuneNascita:
+              element["comuneNascita"] == "" ? "-" : element["comuneNascita"],
+          comuneRilascio:
+              element["comuneRilascio"] == "" ? "-" : element["comuneRilascio"],
+          contatto1: element["contatto1"] == "" ? "-" : element["contatto1"],
+          contatto2: element["contatto2"] == "" ? "-" : element["contatto2"],
+          contattoCareGiver: element["contattoCareGiver"] == ""
+              ? "-"
+              : element["contattoCareGiver"],
+          dataNascita:
+              element["dataNascita"] == "" ? "-" : element["dataNascita"],
+          dataScadenza:
+              element["dataScadenza"] == "" ? "-" : element["dataScadenza"],
+          donazioneOrgani: element["donazioneOrgani"] == ""
+              ? "-"
+              : element["donazioneOrgani"],
+          email: element["email"] == "" ? "-" : element["email"],
+          fattoreRH: element["fattoreRH"] == "" ? "-" : element["fattoreRH"],
+          fattoriRischio:
+              element["fattoriRischio"] == "" ? "-" : element["fattoriRischio"],
+          gravidanzeParti: element["gravidanzeParti"] == ""
+              ? "-"
+              : element["gravidanzeParti"],
+          gruppoSanguigno: element["gruppoSanguigno"] == ""
+              ? "-"
+              : element["gruppoSanguigno"],
+          indirizzoDomicilio: element["indirizzoDomicilio"] == ""
+              ? "-"
+              : element["indirizzoDomicilio"],
+          nome: element["nome"] == "" ? "-" : element["nome"],
+          numeroCartaIdentita: element["numeroCartaIdentità"] == "" ? "-" : element["numeroCartaIdentità"],
+          organiMancanti: element["organiMancanti"] == "" ? "-" : element["organiMancanti"],
+          patologieCronicheRilevanti: List.from(element["patologieCronicheRilevanti"]).isEmpty ? ["-"] : List.from(element["patologieCronicheRilevanti"]),
+          patologieInAtto: List.from(element["patologieInAtto"]).isEmpty ? ["-"] : List.from(element["patologieInAtto"]),
+          pec: element["pec"] == "" ? "-" : element["pec"],
+          peso: element["peso"] == "" ? "-" : element["peso"],
+          pressioneArteriosa: element["pressioneArteriosa"] == "" ? "-" : element["pressioneArteriosa"],
+          protesi: element["protesi"] == "" ? "-" : element["protesi"],
+          provinciaDomicilio: element["provinciaDomicilio"] == "" ? "-" : element["provinciaDomicilio"],
+          provinciaNascita: element["provinciaNascita"] == "" ? "-" : element["provinciaNascita"],
+          reazioniAvverseFarmaciAlimenti: element["reazioniAvverseFarmaciAlimenti"] == "" ? "-" : element["reazioniAvverseFarmaciAlimenti"],
+          retiPatologieAssistito: element["retiPatologieAssistito"] == "" ? "-" : element["retiPatologieAssistito"],
+          rilevantiMalformazioni: element["rilevantiMalformazioni"] == "" ? "-" : element["rilevantiMalformazioni"],
+          servizioAssociazione: element["servizioAssociazione"] == "" ? "-" : element["servizioAssociazione"],
+          sesso: element["sesso"] == "" ? "-" : element["sesso"],
+          telefono: element["telefono"] == "" ? "-" : element["telefono"],
+          telefono1: element["telefono1"] == "" ? "-" : element["telefono1"],
+          telefono2: element["telefono2"] == "" ? "-" : element["telefono2"],
+          telefonoCareGiver: element["telefonoCareGiver"] == "" ? "-" : element["telefonoCareGiver"],
+          terapieFarmacologiche: element["terapieFarmacologiche"] == "" ? "-" : element["terapieFarmacologiche"],
+          terapieFarmacologicheCroniche: element["terapieFarmacologicheCroniche"] == "" ? "-" : element["terapieFarmacologicheCroniche"],
+          trapianti: element["trapianti"] == "" ? "-" : element["trapianti"],
+          vaccinazioni: element["vaccinazioni"] == "" ? "-" : element["vaccinazioni"],
+          viveSolo: element["viveSolo"] == "" ? "-" : element["viveSolo"]);
       data.addAll({fromMillisecondsToDate(element.id): patient});
     });
     return data;

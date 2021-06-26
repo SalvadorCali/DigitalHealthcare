@@ -1126,12 +1126,12 @@ class PDFHandler {
                       children: [
                         Text("*SAPP (Social APPlication)"),
                         Text("www.iltelefoninoiltuosalvavita.org"),
-                        SizedBox(height: 20),
+                        /* SizedBox(height: 20),
                         Row(
                             mainAxisAlignment: MainAxisAlignment.end,
                             children: [
                               Text("Empowered by G7 Soluzioni Informatiche")
-                            ]),
+                            ]), */
                       ])))
         ]));
   }
@@ -1287,7 +1287,7 @@ class PDFHandler {
                       ])),
             ]),
           ),
-          Container(
+          /* Container(
               width: PdfPageFormat.a4.width / 2,
               height: PdfPageFormat.a4.height / 10,
               child: Padding(
@@ -1310,7 +1310,7 @@ class PDFHandler {
                             style: TextStyle(fontSize: 8)),
                         SizedBox(height: 10),
                         Text("cdm10021501903", style: TextStyle(fontSize: 8)),
-                      ])))
+                      ]))) */
         ]));
   }
 

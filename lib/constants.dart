@@ -12,41 +12,41 @@ String medico = "medico";
 
 List<Image> images = [
   Image.asset("assets/images/summary.png"),
-  Image.asset("assets/images/badge.png"),
-  Image.asset("assets/images/cis.png"),
   Image.asset("assets/images/sheet.png"),
+  Image.asset("assets/images/cis.png"),
+  Image.asset("assets/images/badge.png"),
   Image.asset("assets/images/bracelet.png"),
 ];
 
 List<String> functionalities = [
   "Profilo Sanitario Sintetico",
-  "Badge",
-  "CIS",
   "Scheda",
+  "CIS",
+  "Badge",
   "Braccialetto",
 ];
 
 List<String> subtitles = [
   "Patient Summary",
-  "Badge Salvavita",
-  "Carta d'Identità Salvavita",
   "Scheda Salvavita",
+  "Carta d'Identità Salvavita",
+  "Badge Salvavita",
   "Braccialetto Salvavita",
 ];
 
 List<String> descriptions = [
   "Il Profilo Sanitario Sintetico (PSS) è il documento sanitario che riassume la storia clinica del paziente e la sua situazione corrente. Tale documento è creato ed aggiornato dal medico di famiglia.",
+  "La Scheda Salvavita contiene il QR code, la foto del cittadino, i dati dell'ATS, le informazioni personali e salvavita e i contatti di emergenza. Tale documento è stato pensato per essere inserito all'interno della Busta Rossa.",
+  "La C.I.S. è un tesserino cartaceo che riporta sulla facciata interna sinistra i dati anagrafici, i numeri di telefono da chiamare in caso di emergenza e le informazioni salvavita.",
   "Il badge contiene la foto del cittadino e un QR code che mostra tutte le informazioni salvavita. Il QR può essere letto dal soccorritore con il suo cellulare.",
-  "La C.I.S. è un tesserino cartaceo che riporta in chiaro sulla facciata interna sinistra i tuoi dati anagrafici, i numeri di telefono da chiamare in caso di emergenza e le informazioni salvavita.",
-  "La Scheda Salvavita contiene il QR code, la foto del cittadino, i dati dell'ATS, le informazioni personali e salvavita e i contatti di emergenza.",
   "Il Braccialetto Salvavita contiene il QR code e che segnala ai soccorritori che la persona che lo porta è dotata di una Carta d'Identità Salvavita.",
 ];
 
 List<Icon> icons = [
   Icon(Icons.person),
-  Icon(Icons.badge),
-  Icon(Icons.portrait),
   Icon(Icons.assignment_rounded),
+  Icon(Icons.portrait),
+  Icon(Icons.badge),
   Icon(Icons.calendar_view_day),
 ];
 

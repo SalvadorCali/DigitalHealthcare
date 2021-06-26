@@ -65,7 +65,7 @@ class _VolunteerCardState extends State<VolunteerCard> {
           ListTile(
             leading: icons[1],
             title: Text(functionalities[1]),
-            trailing: FunctionButton(printBadge, Icon(Icons.print), "Stampa"),
+            trailing: FunctionButton(printSheet, Icon(Icons.print), "Stampa"),
           ),
           ListTile(
             leading: icons[2],
@@ -75,7 +75,7 @@ class _VolunteerCardState extends State<VolunteerCard> {
           ListTile(
             leading: icons[3],
             title: Text(functionalities[3]),
-            trailing: FunctionButton(printSheet, Icon(Icons.print), "Stampa"),
+            trailing: FunctionButton(printBadge, Icon(Icons.print), "Stampa"),
           ),
           ListTile(
             leading: icons[4],

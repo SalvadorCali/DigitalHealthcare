@@ -32,7 +32,7 @@ class _WrapperState extends State<Wrapper> {
         logged = true;
       });
     }
-    // da usare per versione web probabilmente
+    // alternativa web che lancia eccezioni in fase di login
     /* FirebaseAuth.instance.authStateChanges().listen((User user) {
       if (user == null) {
         setState(() {
@@ -134,9 +134,49 @@ class _WrapperState extends State<Wrapper> {
   }
 
   logout() async {
-    await FirebaseAuth.instance.signOut();
+    _showLoadingDialog();
+    /* await FirebaseAuth.instance.signOut();
     setState(() {
       logged = false;
-    });
+    }); */
+  }
+
+  Future<void> _showLoadingDialog() async {
+    return showDialog<void>(
+      context: context,
+      barrierDismissible: true,
+      builder: (BuildContext context) {
+        return AlertDialog(
+          title: Text("Logout"),
+          content: SingleChildScrollView(
+            child: ListBody(
+              children: <Widget>[
+                Center(
+                    child: Text(
+                        'Vuoi eseguire il logout dal sistema e tornare alla schermata di login?')),
+              ],
+            ),
+          ),
+          actions: <Widget>[
+            TextButton(
+              child: const Text('INDIETRO'),
+              onPressed: () {
+                Navigator.of(context).pop();
+              },
+            ),
+            TextButton(
+              child: const Text('LOGOUT'),
+              onPressed: () async {
+                Navigator.of(context).pop();
+                await FirebaseAuth.instance.signOut();
+                setState(() {
+                  logged = false;
+                });
+              },
+            ),
+          ],
+        );
+      },
+    );
   }
 }

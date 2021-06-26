@@ -184,7 +184,7 @@ class TimestampCitizen {
       'BMI': bmi,
       'Assistenza domiciliare integrata (ADI)': adi,
       'Assistenza domiciliare programmata (ADP)': adp,
-      'Gruppo sanguigno': gruppoSanguigno + fattoreRH,
+      'Gruppo sanguigno': gruppoSanguigno + getFattoreRH(),
       'Codice ATS': codiceATS,
       'Area utenza': areaUtenza,
       'Comune di rilascio': comuneRilascio,
@@ -197,7 +197,7 @@ class TimestampCitizen {
 
   Map<String, String> toMapSheetSectionOne() {
     return {
-      'Nome e Cognome': nome + "fsvs " + cognome,
+      'Nome e Cognome': nome + " " + cognome,
       'Data di nascita': dataNascita,
       'Indirizzo': indirizzoDomicilio,
       'Città': comuneDomicilio,
@@ -233,8 +233,7 @@ class TimestampCitizen {
       'Gruppo sanguigno': gruppoSanguigno,
       'Fattore Rh': fattoreRH,
       'Patologie': fromListToString(patologieCronicheRilevanti),
-      'Allergie ed intolleranze gravi': allergieCutaneeRespiratorieSistemiche,
-      'Informazioni importanti': "prova",
+      'Allergie ed intolleranze gravi': allergieCutaneeRespiratorieSistemiche
     };
   }
 
@@ -242,11 +241,11 @@ class TimestampCitizen {
     return {
       'Nome': nome + " " + cognome,
       'Data di nascita': dataNascita,
-      'Gruppo sanguigno': gruppoSanguigno + fattoreRH,
-      'Contatto ICE1': contatto1 + "-" + telefono1,
-      'Contatto ICE2': contatto2 + "-" + telefono2,
+      'Gruppo sanguigno': gruppoSanguigno + getFattoreRH(),
+      'Contatto ICE1': telefono1,
+      'Contatto ICE2': telefono2,
       'Allergie': allergieCutaneeRespiratorieSistemiche,
-      'Patologie in atto:': fromListToString(patologieInAtto),
+      'Patologie in atto': fromListToString(patologieInAtto),
       'Patologie croniche': fromListToString(patologieCronicheRilevanti),
       'Terapie': terapieFarmacologicheCroniche
     };
@@ -265,7 +264,7 @@ class TimestampCitizen {
         aCapo +
         "Gruppo sanguigno: " +
         gruppoSanguigno +
-        fattoreRH +
+        getFattoreRH() +
         aCapo +
         contatto1 +
         colon +
@@ -288,5 +287,12 @@ class TimestampCitizen {
         aCapo +
         "Terapie: " +
         terapieFarmacologicheCroniche;
+  }
+
+  String getFattoreRH() {
+    if (fattoreRH == "Positivo")
+      return "+";
+    else
+      return "-";
   }
 }

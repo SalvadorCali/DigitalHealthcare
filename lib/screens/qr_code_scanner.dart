@@ -134,7 +134,6 @@ class _QRCodeScannerState extends State<QRCodeScanner> {
         true,
         ScanMode.QR,
       );
-      //final qrCode = await QrUtils.scanQR;
 
       if (!mounted) return;
 

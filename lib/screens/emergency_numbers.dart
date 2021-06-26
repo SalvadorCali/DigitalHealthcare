@@ -61,7 +61,7 @@ class EmergencyNumbers extends StatelessWidget {
             children: [
               Padding(
                 padding: const EdgeInsets.all(8.0),
-                child: Image.asset("assets/images/contacts.png"),
+                child: Image.asset("assets/images/contacts-web.png"),
               ),
               Flexible(
                   child: Scrollbar(
@@ -114,7 +114,7 @@ class EmergencyNumbers extends StatelessWidget {
             children: [
               Padding(
                 padding: const EdgeInsets.all(8.0),
-                child: Image.asset("assets/images/emergency.png"),
+                child: Image.asset("assets/images/emergency-web.png"),
               ),
               Flexible(
                   child: Scrollbar(
