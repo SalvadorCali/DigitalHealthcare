@@ -71,14 +71,20 @@ class EmergencyNumbers extends StatelessWidget {
                         Icon(Icons.local_hospital),
                         doctor.fullName(),
                         "Medico di base",
-                        doctor.telefono ?? "Non fornito",
-                        "andrea.calici19@gmail.com"),
+                        doctor.telefono == "-"
+                            ? "Non fornito"
+                            : doctor.telefono,
+                        doctor.email == "-" ? "Non fornito" : doctor.email),
                     NumbersCard(
                         Icon(Icons.work),
                         volunteer.fullName(),
                         "Volontario comunale",
-                        volunteer.telefono ?? "Non fornito",
-                        "andrea.calici19@gmail.com")
+                        volunteer.telefono == "-"
+                            ? "Non fornito"
+                            : volunteer.telefono,
+                        volunteer.email == "-"
+                            ? "Non fornito"
+                            : volunteer.email)
                   ],
                 ),
               ))
@@ -94,14 +100,16 @@ class EmergencyNumbers extends StatelessWidget {
                   Icon(Icons.local_hospital),
                   doctor.fullName(),
                   "Medico di base",
-                  doctor.telefono ?? "Non fornito",
-                  "andrea.calici19@gmail.com"),
+                  doctor.telefono == "-" ? "Non fornito" : doctor.telefono,
+                  doctor.email == "-" ? "Non fornito" : doctor.email),
               NumbersCard(
                   Icon(Icons.work),
                   volunteer.fullName(),
                   "Volontario comunale",
-                  volunteer.telefono ?? "Non fornito",
-                  "andrea.calici19@gmail.com")
+                  volunteer.telefono == "-"
+                      ? "Non fornito"
+                      : volunteer.telefono,
+                  volunteer.email == "-" ? "Non fornito" : volunteer.email)
             ],
           );
   }

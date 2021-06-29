@@ -6,6 +6,7 @@ class TimestampCitizen {
   String bmi;
   String cap;
   String cf;
+  String crs;
   String allergieCutaneeRespiratorieSistemiche;
   String allergieVelenoImenotteri;
   String altezza;
@@ -24,9 +25,11 @@ class TimestampCitizen {
   String contatto2;
   String contattoCareGiver;
   String dataNascita;
+  String dataRilascio;
   String dataScadenza;
   String donazioneOrgani;
   String email;
+  String emailMedico;
   String fattoreRH;
   String fattoriRischio;
   String gravidanzeParti;
@@ -52,6 +55,7 @@ class TimestampCitizen {
   String telefono1;
   String telefono2;
   String telefonoCareGiver;
+  String telefonoMedico;
   String terapieFarmacologiche;
   String terapieFarmacologicheCroniche;
   String trapianti;
@@ -64,6 +68,7 @@ class TimestampCitizen {
       this.bmi,
       this.cap,
       this.cf,
+      this.crs,
       this.allergieCutaneeRespiratorieSistemiche,
       this.allergieVelenoImenotteri,
       this.altezza,
@@ -82,9 +87,11 @@ class TimestampCitizen {
       this.contatto2,
       this.contattoCareGiver,
       this.dataNascita,
+      this.dataRilascio,
       this.dataScadenza,
       this.donazioneOrgani,
       this.email,
+      this.emailMedico,
       this.fattoreRH,
       this.fattoriRischio,
       this.gravidanzeParti,
@@ -110,11 +117,17 @@ class TimestampCitizen {
       this.telefono1,
       this.telefono2,
       this.telefonoCareGiver,
+      this.telefonoMedico,
       this.terapieFarmacologiche,
       this.terapieFarmacologicheCroniche,
       this.trapianti,
       this.vaccinazioni,
       this.viveSolo});
+
+  setDoctorsInfo(String email, String telefono) {
+    emailMedico = email;
+    telefonoMedico = telefono;
+  }
 
   Map<String, String> toMapPSSSectionZero() {
     return {
@@ -203,19 +216,19 @@ class TimestampCitizen {
       'Città': comuneDomicilio,
       'C.I n°': numeroCartaIdentita,
       'Comune di rilascio': comuneRilascio,
-      'Data di rilascio': dataNascita, //manca data di rilascio CI
+      'Data di rilascio': dataRilascio,
       'Codice Fiscale': cf
     };
   }
 
   Map<String, String> toMapSheetSectionTwo() {
     return {
-      'CRS n°': codiceATS, //manca CRS
+      'CRS n°': crs,
       'Codice di esenzione': codiceEsenzione,
       'Codice ATS assistito': codiceATS,
       'Medico Curante': medico,
-      'Telefono': telefonoCareGiver, //manca telefono
-      'Email': email, //manca email medico
+      'Telefono': telefonoMedico,
+      'Email': emailMedico
     };
   }
 
@@ -266,14 +279,14 @@ class TimestampCitizen {
         gruppoSanguigno +
         getFattoreRH() +
         aCapo +
+        "Contatto ICE1: " +
         contatto1 +
-        colon +
-        space +
+        dash +
         telefono1 +
         aCapo +
+        "Contatto ICE1: " +
         contatto2 +
-        colon +
-        space +
+        dash +
         telefono2 +
         aCapo +
         "Allergie: " +

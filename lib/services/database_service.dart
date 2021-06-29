@@ -47,11 +47,11 @@ class DatabaseService {
     Map<String, TimestampCitizen> citizenMap;
     Map<String, TimestampCovid> covidMap;
     await citizens.doc(tin).get().then((value) => {
-          name = value["nome"],
-          surname = value["cognome"],
-          photoURL = value["photoURL"],
-          cfVolunteer = value["CFVolontario"],
-          cfDoctor = value["CFMedico"]
+          name = getField(value, "nome"),
+          surname = getField(value, "cognome"),
+          photoURL = getField(value, "photoURL"),
+          cfVolunteer = getField(value, "CFVolontario"),
+          cfDoctor = getField(value, "CFMedico"),
         });
     await citizens.doc(tin).collection('data').get().then((value) {
       citizenMap = _citizenFromFirebase(value);
@@ -64,16 +64,26 @@ class DatabaseService {
     citizenData.add(Citizen(tin, cfVolunteer, cfDoctor, name, surname, photoURL,
         citizenMap, covidMap));
     volunteer = await volunteers.doc(cfVolunteer).get().then((value) =>
-        Volunteer(value["CF"], value["nome"], value["cognome"], value["pec"],
-            value["telefono"]));
+        Volunteer(
+            getField(value, "CF"),
+            getField(value, "nome"),
+            getField(value, "cognome"),
+            getField(value, "email"),
+            getField(value, "pec"),
+            getField(value, "telefono")));
     citizenData.add(volunteer);
     doctor = await doctors.doc(cfDoctor).get().then((value) => Doctor(
-        value["CF"],
-        value["nome"],
-        value["cognome"],
-        value["pec"],
-        value["telefono"]));
+        getField(value, "CF"),
+        getField(value, "nome"),
+        getField(value, "cognome"),
+        getField(value, "email"),
+        getField(value, "pec"),
+        getField(value, "telefono")));
     citizenData.add(doctor);
+    citizenData[0]
+        .data
+        .values
+        .forEach((v) => v.setDoctorsInfo(doctor.email, doctor.telefono));
     return citizenData;
   }
 
@@ -82,92 +92,73 @@ class DatabaseService {
     TimestampCitizen patient;
     snapshot.docs.forEach((element) {
       patient = TimestampCitizen(
-          adi: element["ADI"] == "" ? "-" : element["ADI"],
-          adp: element["ADP"] == "" ? "-" : element["ADP"],
-          bmi: element["BMI"] == "" ? "-" : element["BMI"],
-          cap: element["CAP"] == "" ? "-" : element["CAP"],
-          cf: element["CF"] == "" ? "-" : element["CF"],
-          allergieCutaneeRespiratorieSistemiche:
-              element["allergieCutaneeRespiratorieSistemiche"] == ""
-                  ? "-"
-                  : element["allergieCutaneeRespiratorieSistemiche"],
-          allergieVelenoImenotteri: element["allergieVelenoImenotteri"] == ""
-              ? "-"
-              : element["allergieVelenoImenotteri"],
-          altezza: element["altezza"] == "" ? "-" : element["altezza"],
-          anamnesiFamigliari: element["anamnesiFamigliari"] == ""
-              ? "-"
-              : element["anamnesiFamigliari"],
-          areaUtenza: element["areaUtenza"] == "" ? "-" : element["areaUtenza"],
-          attivitaLavorativa: element["attivitaLavorativa"] == ""
-              ? "-"
-              : element["attivitaLavorativa"],
-          ausili: element["ausili"] == "" ? "-" : element["ausili"],
-          capacitaMotoriaAssistito: element["capacitaMotoriaAssistito"] == ""
-              ? "-"
-              : element["capacitaMotoriaAssistito"],
-          codiceATS: element["codiceATS"] == "" ? "-" : element["codiceATS"],
-          codiceEsenzione: element["codiceEsenzione"] == ""
-              ? "-"
-              : element["codiceEsenzione"],
-          cognome: element["cognome"] == "" ? "-" : element["cognome"],
-          comuneDomicilio: element["comuneDomicilio"] == ""
-              ? "-"
-              : element["comuneDomicilio"],
-          comuneNascita:
-              element["comuneNascita"] == "" ? "-" : element["comuneNascita"],
-          comuneRilascio:
-              element["comuneRilascio"] == "" ? "-" : element["comuneRilascio"],
-          contatto1: element["contatto1"] == "" ? "-" : element["contatto1"],
-          contatto2: element["contatto2"] == "" ? "-" : element["contatto2"],
-          contattoCareGiver: element["contattoCareGiver"] == ""
-              ? "-"
-              : element["contattoCareGiver"],
-          dataNascita:
-              element["dataNascita"] == "" ? "-" : element["dataNascita"],
-          dataScadenza:
-              element["dataScadenza"] == "" ? "-" : element["dataScadenza"],
-          donazioneOrgani: element["donazioneOrgani"] == ""
-              ? "-"
-              : element["donazioneOrgani"],
-          email: element["email"] == "" ? "-" : element["email"],
-          fattoreRH: element["fattoreRH"] == "" ? "-" : element["fattoreRH"],
-          fattoriRischio:
-              element["fattoriRischio"] == "" ? "-" : element["fattoriRischio"],
-          gravidanzeParti: element["gravidanzeParti"] == ""
-              ? "-"
-              : element["gravidanzeParti"],
-          gruppoSanguigno: element["gruppoSanguigno"] == ""
-              ? "-"
-              : element["gruppoSanguigno"],
-          indirizzoDomicilio: element["indirizzoDomicilio"] == ""
-              ? "-"
-              : element["indirizzoDomicilio"],
-          nome: element["nome"] == "" ? "-" : element["nome"],
-          numeroCartaIdentita: element["numeroCartaIdentità"] == "" ? "-" : element["numeroCartaIdentità"],
-          organiMancanti: element["organiMancanti"] == "" ? "-" : element["organiMancanti"],
-          patologieCronicheRilevanti: List.from(element["patologieCronicheRilevanti"]).isEmpty ? ["-"] : List.from(element["patologieCronicheRilevanti"]),
-          patologieInAtto: List.from(element["patologieInAtto"]).isEmpty ? ["-"] : List.from(element["patologieInAtto"]),
-          pec: element["pec"] == "" ? "-" : element["pec"],
-          peso: element["peso"] == "" ? "-" : element["peso"],
-          pressioneArteriosa: element["pressioneArteriosa"] == "" ? "-" : element["pressioneArteriosa"],
-          protesi: element["protesi"] == "" ? "-" : element["protesi"],
-          provinciaDomicilio: element["provinciaDomicilio"] == "" ? "-" : element["provinciaDomicilio"],
-          provinciaNascita: element["provinciaNascita"] == "" ? "-" : element["provinciaNascita"],
-          reazioniAvverseFarmaciAlimenti: element["reazioniAvverseFarmaciAlimenti"] == "" ? "-" : element["reazioniAvverseFarmaciAlimenti"],
-          retiPatologieAssistito: element["retiPatologieAssistito"] == "" ? "-" : element["retiPatologieAssistito"],
-          rilevantiMalformazioni: element["rilevantiMalformazioni"] == "" ? "-" : element["rilevantiMalformazioni"],
-          servizioAssociazione: element["servizioAssociazione"] == "" ? "-" : element["servizioAssociazione"],
-          sesso: element["sesso"] == "" ? "-" : element["sesso"],
-          telefono: element["telefono"] == "" ? "-" : element["telefono"],
-          telefono1: element["telefono1"] == "" ? "-" : element["telefono1"],
-          telefono2: element["telefono2"] == "" ? "-" : element["telefono2"],
-          telefonoCareGiver: element["telefonoCareGiver"] == "" ? "-" : element["telefonoCareGiver"],
-          terapieFarmacologiche: element["terapieFarmacologiche"] == "" ? "-" : element["terapieFarmacologiche"],
-          terapieFarmacologicheCroniche: element["terapieFarmacologicheCroniche"] == "" ? "-" : element["terapieFarmacologicheCroniche"],
-          trapianti: element["trapianti"] == "" ? "-" : element["trapianti"],
-          vaccinazioni: element["vaccinazioni"] == "" ? "-" : element["vaccinazioni"],
-          viveSolo: element["viveSolo"] == "" ? "-" : element["viveSolo"]);
+        adi: getFieldQuery(element, "ADI"),
+        adp: getFieldQuery(element, "ADP"),
+        bmi: getFieldQuery(element, "BMI"),
+        cap: getFieldQuery(element, "CAP"),
+        cf: getFieldQuery(element, "CF"),
+        crs: getFieldQuery(element, "CRS"),
+        allergieCutaneeRespiratorieSistemiche:
+            getFieldQuery(element, "allergieCutaneeRespiratorieSistemiche"),
+        allergieVelenoImenotteri:
+            getFieldQuery(element, "allergieVelenoImenotteri"),
+        altezza: getFieldQuery(element, "altezza"),
+        anamnesiFamigliari: getFieldQuery(element, "anamnesiFamigliari"),
+        areaUtenza: getFieldQuery(element, "areaUtenza"),
+        attivitaLavorativa: getFieldQuery(element, "attivitaLavorativa"),
+        ausili: getFieldQuery(element, "ausili"),
+        capacitaMotoriaAssistito:
+            getFieldQuery(element, "capacitaMotoriaAssistito"),
+        codiceATS: getFieldQuery(element, "codiceATS"),
+        codiceEsenzione: getFieldQuery(element, "codiceEsenzione"),
+        cognome: getFieldQuery(element, "cognome"),
+        comuneDomicilio: getFieldQuery(element, "comuneDomicilio"),
+        comuneNascita: getFieldQuery(element, "comuneNascita"),
+        comuneRilascio: getFieldQuery(element, "comuneRilascio"),
+        contatto1: getFieldQuery(element, "contatto1"),
+        contatto2: getFieldQuery(element, "contatto2"),
+        contattoCareGiver: getFieldQuery(element, "contattoCareGiver"),
+        dataNascita: getFieldQuery(element, "dataNascita"),
+        dataRilascio: getFieldQuery(element, "dataRilascio"),
+        dataScadenza: getFieldQuery(element, "dataScadenza"),
+        donazioneOrgani: getFieldQuery(element, "donazioneOrgani"),
+        email: getFieldQuery(element, "email"),
+        fattoreRH: getFieldQuery(element, "fattoreRH"),
+        fattoriRischio: getFieldQuery(element, "fattoriRischio"),
+        gravidanzeParti: getFieldQuery(element, "gravidanzeParti"),
+        gruppoSanguigno: getFieldQuery(element, "gruppoSanguigno"),
+        indirizzoDomicilio: getFieldQuery(element, "indirizzoDomicilio"),
+        nome: getFieldQuery(element, "nome"),
+        numeroCartaIdentita: getFieldQuery(element, "numeroCartaIdentità"),
+        organiMancanti: getFieldQuery(element, "organiMancanti"),
+        patologieCronicheRilevanti:
+            getFieldListQuery(element, "patologieCronicheRilevanti"),
+        patologieInAtto: getFieldListQuery(element, "patologieInAtto"),
+        pec: getFieldQuery(element, "pec"),
+        peso: getFieldQuery(element, "peso"),
+        pressioneArteriosa: getFieldQuery(element, "pressioneArteriosa"),
+        protesi: getFieldQuery(element, "protesi"),
+        provinciaDomicilio: getFieldQuery(element, "provinciaDomicilio"),
+        provinciaNascita: getFieldQuery(element, "provinciaNascita"),
+        reazioniAvverseFarmaciAlimenti:
+            getFieldQuery(element, "reazioniAvverseFarmaciAlimenti"),
+        retiPatologieAssistito:
+            getFieldQuery(element, "retiPatologieAssistito"),
+        rilevantiMalformazioni:
+            getFieldQuery(element, "rilevantiMalformazioni"),
+        servizioAssociazione: getFieldQuery(element, "servizioAssociazione"),
+        sesso: getFieldQuery(element, "sesso"),
+        telefono: getFieldQuery(element, "telefono"),
+        telefono1: getFieldQuery(element, "telefono1"),
+        telefono2: getFieldQuery(element, "telefono2"),
+        telefonoCareGiver: getFieldQuery(element, "telefonoCareGiver"),
+        terapieFarmacologiche: getFieldQuery(element, "terapieFarmacologiche"),
+        terapieFarmacologicheCroniche:
+            getFieldQuery(element, "terapieFarmacologicheCroniche"),
+        trapianti: getFieldQuery(element, "trapianti"),
+        vaccinazioni: getFieldQuery(element, "vaccinazioni"),
+        viveSolo: getFieldQuery(element, "viveSolo"),
+      );
       data.addAll({fromMillisecondsToDate(element.id): patient});
     });
     return data;
@@ -178,11 +169,11 @@ class DatabaseService {
     TimestampCovid covid;
     snapshot.docs.forEach((element) {
       covid = TimestampCovid(
-          data: element["data"],
-          esito: element["esito"],
-          link: element["link"],
-          nomeVaccino: element["nomeVaccino"],
-          tipologia: element["tipologia"]);
+          data: getFieldQuery(element, "data"),
+          esito: getFieldQuery(element, "esito"),
+          link: getFieldQuery(element, "link"),
+          nomeVaccino: getFieldQuery(element, "nomeVaccino"),
+          tipologia: getFieldQuery(element, "tipologia"));
       data.addAll({fromStringToDate(covid.data): covid});
     });
     return data;
@@ -193,8 +184,15 @@ class DatabaseService {
     Map<String, TimestampCovid> covidMap = Map();
     return citizens.where("CFVolontario", isEqualTo: tin).get().then((value) =>
         value.docs
-            .map((e) => Citizen(e.id, e["CFVolontario"], e["CFMedico"],
-                e["nome"], e["cognome"], e["photoURL"], citizensMap, covidMap))
+            .map((e) => Citizen(
+                e.id,
+                getFieldQuery(e, "CFVolontario"),
+                getFieldQuery(e, "CFMedico"),
+                getFieldQuery(e, "nome"),
+                getFieldQuery(e, "cognome"),
+                getFieldQuery(e, "photoURL"),
+                citizensMap,
+                covidMap))
             .toList());
   }
 
@@ -212,5 +210,34 @@ class DatabaseService {
         element.covid = _covidFromFirebase(value);
       });
     });
+  }
+
+  String getField(DocumentSnapshot document, String field) {
+    try {
+      document.get(FieldPath([field]));
+    } catch (e) {
+      return "-";
+    }
+    return document[field] == "" ? "-" : document[field];
+  }
+
+  String getFieldQuery(QueryDocumentSnapshot document, String field) {
+    try {
+      document.get(FieldPath([field]));
+    } catch (e) {
+      return "-";
+    }
+    return document[field] == "" ? "-" : document[field];
+  }
+
+  List<String> getFieldListQuery(QueryDocumentSnapshot document, String field) {
+    try {
+      document.get(FieldPath([field]));
+    } catch (e) {
+      return ["-"];
+    }
+    return List.from(document[field]).isEmpty
+        ? ["-"]
+        : List.from(document[field]);
   }
 }

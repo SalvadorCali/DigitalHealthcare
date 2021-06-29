@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:fluttertoast/fluttertoast.dart';
 import 'package:url_launcher/url_launcher.dart';
 
 class NumbersCard extends StatelessWidget {
@@ -45,11 +46,19 @@ class NumbersCard extends StatelessWidget {
 
   _launchPhone() async {
     String url = 'tel:' + number;
-    await canLaunch(url) ? await launch(url) : throw 'Could not launch';
+    if (number == "Non fornito")
+      Fluttertoast.showToast(
+          msg: "Il contatto selezionato non è stato fornito!");
+    else
+      await canLaunch(url) ? await launch(url) : throw 'Could not launch';
   }
 
   _launchEmail() async {
     String url = 'mailto:' + email;
-    await canLaunch(url) ? await launch(url) : throw 'Could not launch';
+    if (email == "Non fornito")
+      Fluttertoast.showToast(
+          msg: "Il contatto selezionato non è stato fornito!");
+    else
+      await canLaunch(url) ? await launch(url) : throw 'Could not launch';
   }
 }

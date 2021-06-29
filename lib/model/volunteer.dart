@@ -4,6 +4,7 @@ class Volunteer {
   String cf;
   String nome;
   String cognome;
+  String email;
   String pec;
   String telefono;
 
@@ -11,6 +12,7 @@ class Volunteer {
     this.cf,
     this.nome,
     this.cognome,
+    this.email,
     this.pec,
     this.telefono,
   );

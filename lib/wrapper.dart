@@ -135,10 +135,6 @@ class _WrapperState extends State<Wrapper> {
 
   logout() async {
     _showLoadingDialog();
-    /* await FirebaseAuth.instance.signOut();
-    setState(() {
-      logged = false;
-    }); */
   }
 
   Future<void> _showLoadingDialog() async {
