@@ -36,6 +36,7 @@ class TimestampCitizen {
   String gruppoSanguigno;
   String indirizzoDomicilio;
   String nome;
+  String nomeMedico;
   String numeroCartaIdentita;
   String organiMancanti;
   List<String> patologieCronicheRilevanti;
@@ -98,6 +99,7 @@ class TimestampCitizen {
       this.gruppoSanguigno,
       this.indirizzoDomicilio,
       this.nome,
+      this.nomeMedico,
       this.numeroCartaIdentita,
       this.organiMancanti,
       this.patologieCronicheRilevanti,
@@ -124,7 +126,8 @@ class TimestampCitizen {
       this.vaccinazioni,
       this.viveSolo});
 
-  setDoctorsInfo(String email, String telefono) {
+  setDoctorsInfo(String nome, String email, String telefono) {
+    nomeMedico = nome;
     emailMedico = email;
     telefonoMedico = telefono;
   }
@@ -134,6 +137,8 @@ class TimestampCitizen {
       'Nome': nome + " " + cognome,
       'Codice fiscale': cf,
       'Numero carta d\'identità': numeroCartaIdentita,
+      'Comune di rilascio': comuneRilascio,
+      'Data di scadenza': dataScadenza,
       'Sesso': sesso,
       'Data di nascita': dataNascita,
       'Comune di nascita': comuneNascita,
@@ -200,8 +205,6 @@ class TimestampCitizen {
       'Gruppo sanguigno': gruppoSanguigno + getFattoreRH(),
       'Codice ATS': codiceATS,
       'Area utenza': areaUtenza,
-      'Comune di rilascio': comuneRilascio,
-      'Data di scadenza': dataScadenza,
       'Patologie in atto': fromListToString(patologieInAtto),
       'Servizio o associazione': servizioAssociazione,
       'viveSolo': viveSolo
@@ -226,7 +229,7 @@ class TimestampCitizen {
       'CRS n°': crs,
       'Codice di esenzione': codiceEsenzione,
       'Codice ATS assistito': codiceATS,
-      'Medico Curante': medico,
+      'Medico Curante': nomeMedico,
       'Telefono': telefonoMedico,
       'Email': emailMedico
     };

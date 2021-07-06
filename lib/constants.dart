@@ -24,6 +24,7 @@ List<String> functionalities = [
   "CIS",
   "Badge",
   "Braccialetto",
+  "Green Pass"
 ];
 
 List<String> subtitles = [
@@ -48,6 +49,7 @@ List<Icon> icons = [
   Icon(Icons.portrait),
   Icon(Icons.badge),
   Icon(Icons.calendar_view_day),
+  Icon(Icons.qr_code),
 ];
 
 String fromListToString(List<String> list) {

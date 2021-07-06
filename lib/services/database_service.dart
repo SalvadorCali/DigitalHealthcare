@@ -80,10 +80,8 @@ class DatabaseService {
         getField(value, "pec"),
         getField(value, "telefono")));
     citizenData.add(doctor);
-    citizenData[0]
-        .data
-        .values
-        .forEach((v) => v.setDoctorsInfo(doctor.email, doctor.telefono));
+    citizenData[0].data.values.forEach((v) => v.setDoctorsInfo(
+        doctor.nome + " " + doctor.cognome, doctor.email, doctor.telefono));
     return citizenData;
   }
 

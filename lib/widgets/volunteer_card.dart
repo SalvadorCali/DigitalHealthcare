@@ -61,29 +61,47 @@ class _VolunteerCardState extends State<VolunteerCard> {
             title: Text(widget.citizen.fullName),
             subtitle: Text(widget.citizen.cf),
           ),
-          Divider(),
-          ListTile(
-            leading: icons[1],
-            title: Text(functionalities[1]),
-            trailing: FunctionButton(printSheet, Icon(Icons.print), "Stampa"),
+          ExpansionTile(
+            title: Text("Documenti cittadino"),
+            leading: Icon(Icons.insert_drive_file),
+            children: [
+              ListTile(
+                leading: icons[0],
+                title: Text(subtitles[0]),
+                trailing:
+                    FunctionButton(printSheet, Icon(Icons.print), "Stampa"),
+              ),
+              ListTile(
+                leading: icons[1],
+                title: Text(functionalities[1]),
+                trailing:
+                    FunctionButton(printSheet, Icon(Icons.print), "Stampa"),
+              ),
+              ListTile(
+                leading: icons[2],
+                title: Text(functionalities[2]),
+                trailing: FunctionButton(printCIS, Icon(Icons.print), "Stampa"),
+              ),
+              ListTile(
+                leading: icons[3],
+                title: Text(functionalities[3]),
+                trailing:
+                    FunctionButton(printBadge, Icon(Icons.print), "Stampa"),
+              ),
+              ListTile(
+                leading: icons[4],
+                title: Text(functionalities[4]),
+                trailing:
+                    FunctionButton(printBracelet, Icon(Icons.print), "Stampa"),
+              ),
+              ListTile(
+                leading: icons[5],
+                title: Text(functionalities[5]),
+                trailing:
+                    FunctionButton(printBracelet, Icon(Icons.print), "Stampa"),
+              ),
+            ],
           ),
-          ListTile(
-            leading: icons[2],
-            title: Text(functionalities[2]),
-            trailing: FunctionButton(printCIS, Icon(Icons.print), "Stampa"),
-          ),
-          ListTile(
-            leading: icons[3],
-            title: Text(functionalities[3]),
-            trailing: FunctionButton(printBadge, Icon(Icons.print), "Stampa"),
-          ),
-          ListTile(
-            leading: icons[4],
-            title: Text(functionalities[4]),
-            trailing:
-                FunctionButton(printBracelet, Icon(Icons.print), "Stampa"),
-          ),
-          Divider(),
           ListTile(
             leading: Icon(Icons.phone),
             title: Text(
