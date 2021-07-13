@@ -132,15 +132,17 @@ class TimestampCitizen {
     telefonoMedico = telefono;
   }
 
+  //dati anagrafici
   Map<String, String> toMapPSSSectionZero() {
     return {
       'Nome': nome + " " + cognome,
+      'Data di nascita': dataNascita,
       'Codice fiscale': cf,
       'Numero carta d\'identità': numeroCartaIdentita,
       'Comune di rilascio': comuneRilascio,
       'Data di scadenza': dataScadenza,
+      'Carta regionale dei servizi': crs,
       'Sesso': sesso,
-      'Data di nascita': dataNascita,
       'Comune di nascita': comuneNascita,
       'Provincia di nascita': provinciaNascita,
       'Indirizzo di domicilio': indirizzoDomicilio,
@@ -149,65 +151,74 @@ class TimestampCitizen {
       'CAP': cap,
       'Email': email,
       'Telefono': telefono,
-      'Pec': pec
+      'Pec': pec,
+      'Attività lavorativa': attivitaLavorativa,
     };
   }
 
+  //dati personali
   Map<String, String> toMapPSSSectionOne() {
     return {
-      'Codici di esenzione': codiceEsenzione,
-      'Reti di patologie': retiPatologieAssistito,
+      'Altezza': altezza,
+      'Peso': peso,
+      'BMI': bmi,
+      'Gruppo sanguigno': gruppoSanguigno + getFattoreRH(),
+      'Pressione arteriosa': pressioneArteriosa,
+      'Donazione organi': donazioneOrgani,
+      'Gravidanze e parti': gravidanzeParti,
+      'Vaccinazioni': vaccinazioni,
+    };
+  }
+
+  //contatti
+  Map<String, String> toMapPSSSectionTwo() {
+    return {
+      "Contatto di emergenza 1": contatto1 + " - " + telefono1,
+      "Contatto di emergenza 2": contatto2 + " - " + telefono2,
+      "Contatto caregiver": contattoCareGiver + " - " + telefonoCareGiver,
+      'Vive solo': viveSolo,
+    };
+  }
+
+  //allergie
+  Map<String, String> toMapPSSSectionThree() {
+    return {
+      'Allergie cutanee, respiratorie e sistemiche':
+          allergieCutaneeRespiratorieSistemiche,
+      'Allergie a veleno di imenotteri': allergieVelenoImenotteri,
+      'Reazioni avverse a farmaci e alimenti': reazioniAvverseFarmaciAlimenti,
+    };
+  }
+
+  //patologie e terapie
+  Map<String, String> toMapPSSSectionFour() {
+    return {
+      'Patologie croniche rilevanti':
+          fromListToString(patologieCronicheRilevanti),
+      'Patologie in atto': fromListToString(patologieInAtto),
+      'Terapie farmacologiche croniche': terapieFarmacologicheCroniche,
+      'Terapie farmacologiche': terapieFarmacologiche,
+      "Anamnesi Famigliari": anamnesiFamigliari,
+      'Fattori di rischio': fattoriRischio,
       'Capacità motoria': capacitaMotoriaAssistito,
-      'Attività lavorativa': attivitaLavorativa,
-      'Patologie croniche': fromListToString(patologieCronicheRilevanti),
+      'Ausili': ausili,
+      'Protesi': protesi,
       'Organi mancanti': organiMancanti,
       'Trapianti': trapianti,
       'Rilevanti malformazioni': rilevantiMalformazioni,
     };
   }
 
-  Map<String, String> toMapPSSSectionTwo() {
+  //rete sanitaria
+  Map<String, String> toMapPSSSectionFive() {
     return {
-      'Reazioni avverse a farmaci e/o alimenti': reazioniAvverseFarmaciAlimenti,
-      'Allergie cutanee, respiratorie e sistemiche':
-          allergieCutaneeRespiratorieSistemiche,
-      'Allergie a veleno di imenotteri': allergieVelenoImenotteri,
-      'Terapie farmacologiche croniche': terapieFarmacologicheCroniche,
-      'Anamnesi famigliari': anamnesiFamigliari,
-      'Terapie farmacologiche': terapieFarmacologiche,
-      'Fattori di rischio': fattoriRischio,
-      'Protesi': protesi,
-      'Ausili': ausili,
-      'Vaccinazioni': vaccinazioni,
-    };
-  }
-
-  Map<String, String> toMapPSSSectionThree() {
-    return {
-      'Contatto di emergenza 1': contatto1 + " - " + telefono1,
-      'Contatto di emergenza 2': contatto2 + " - " + telefono2,
-      'Contatto caregiver': contattoCareGiver + " - " + telefonoCareGiver,
-      'Donazione organi': donazioneOrgani,
-      'Gravidanze e parti': gravidanzeParti,
-      'Patologie croniche rilevanti':
-          fromListToString(patologieCronicheRilevanti),
-    };
-  }
-
-  Map<String, String> toMapPSSSectionFour() {
-    return {
-      'Altezza': altezza,
-      'Peso': peso,
-      'Pressione arteriosa': pressioneArteriosa,
-      'BMI': bmi,
-      'Assistenza domiciliare integrata (ADI)': adi,
-      'Assistenza domiciliare programmata (ADP)': adp,
-      'Gruppo sanguigno': gruppoSanguigno + getFattoreRH(),
+      'ADI': adi,
+      'ADP': adp,
+      'Area d\'utenza': areaUtenza,
       'Codice ATS': codiceATS,
-      'Area utenza': areaUtenza,
-      'Patologie in atto': fromListToString(patologieInAtto),
+      'Codici di esenzione': codiceEsenzione,
+      'Reti di patologie': retiPatologieAssistito,
       'Servizio o associazione': servizioAssociazione,
-      'viveSolo': viveSolo
     };
   }
 

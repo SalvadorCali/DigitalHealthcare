@@ -213,7 +213,7 @@ class _VolunteerScreenState extends State<VolunteerScreen> {
         UnicornButton(
           currentButton: FloatingActionButton(
             mini: true,
-            onPressed: generateMultipleSheet,
+            onPressed: generateMultipleData,
             child: icons[0],
           ),
         ),
@@ -248,7 +248,7 @@ class _VolunteerScreenState extends State<VolunteerScreen> {
         UnicornButton(
           currentButton: FloatingActionButton(
             mini: true,
-            onPressed: generateMultipleSheet,
+            onPressed: generateMultipleGreenPass,
             child: icons[5],
           ),
         ),
@@ -294,6 +294,28 @@ class _VolunteerScreenState extends State<VolunteerScreen> {
     await Future.delayed(Duration(seconds: 1), () {
       PDFHandler(citizens: citizens, timestampCitizens: timestampCitizens)
           .openMultipleSheet()
+          .whenComplete(() {
+        _resetData();
+      });
+    });
+  }
+
+  generateMultipleData() async {
+    _createData();
+    await Future.delayed(Duration(seconds: 1), () {
+      PDFHandler(citizens: citizens, timestampCitizens: timestampCitizens)
+          .openMultipleData()
+          .whenComplete(() {
+        _resetData();
+      });
+    });
+  }
+
+  generateMultipleGreenPass() async {
+    _createData();
+    await Future.delayed(Duration(seconds: 1), () {
+      PDFHandler(citizens: citizens, timestampCitizens: timestampCitizens)
+          .openMultipleGreenPass()
           .whenComplete(() {
         _resetData();
       });

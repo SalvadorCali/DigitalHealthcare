@@ -69,7 +69,7 @@ class _VolunteerCardState extends State<VolunteerCard> {
                 leading: icons[0],
                 title: Text(subtitles[0]),
                 trailing:
-                    FunctionButton(printSheet, Icon(Icons.print), "Stampa"),
+                    FunctionButton(printData, Icon(Icons.print), "Stampa"),
               ),
               ListTile(
                 leading: icons[1],
@@ -98,7 +98,7 @@ class _VolunteerCardState extends State<VolunteerCard> {
                 leading: icons[5],
                 title: Text(functionalities[5]),
                 trailing:
-                    FunctionButton(printBracelet, Icon(Icons.print), "Stampa"),
+                    FunctionButton(printGreenPass, Icon(Icons.print), "Stampa"),
               ),
             ],
           ),
@@ -134,6 +134,19 @@ class _VolunteerCardState extends State<VolunteerCard> {
         ],
       ),
     );
+  }
+
+  printData() async {
+    _showLoadingDialog();
+    await Future.delayed(Duration(seconds: 1), () {
+      PDFHandler(
+              citizen: widget.citizen,
+              timestampCitizen: widget.citizen.data[currentDate])
+          .printData()
+          .whenComplete(() {
+        Navigator.of(context).pop();
+      });
+    });
   }
 
   printBadge() async {
@@ -180,6 +193,19 @@ class _VolunteerCardState extends State<VolunteerCard> {
               citizen: widget.citizen,
               timestampCitizen: widget.citizen.data[currentDate])
           .printSheet()
+          .whenComplete(() {
+        Navigator.of(context).pop();
+      });
+    });
+  }
+
+  printGreenPass() async {
+    _showLoadingDialog();
+    await Future.delayed(Duration(seconds: 1), () {
+      PDFHandler(
+              citizen: widget.citizen,
+              timestampCitizen: widget.citizen.data[currentDate])
+          .printGreenPass()
           .whenComplete(() {
         Navigator.of(context).pop();
       });

@@ -81,6 +81,16 @@ class PDFHandler {
     }
   }
 
+  openMultipleGreenPass() async {
+    await _createMultipleGreenPass();
+    if (kIsWeb) {
+      await _openPDFWeb(greenPass);
+    } else {
+      await _savePDF(greenPass);
+      await _openPDF(greenPass);
+    }
+  }
+
   downloadGreenPass() async {
     await _createGreenPass();
     if (kIsWeb) {
@@ -100,9 +110,25 @@ class PDFHandler {
         pageFormat: PdfPageFormat.a4,
         margin: EdgeInsets.all(0),
         build: (Context context) {
-          return ListView(
-              children: [_greenPassOne(), _greenPassTwo(timestampCitizen)]);
+          return ListView(children: [
+            _greenPassOne(),
+            _greenPassTwo(timestampCitizen, citizen)
+          ]);
         }));
+  }
+
+  _createMultipleGreenPass() async {
+    for (int i = 0; i < timestampCitizens.length; i++) {
+      pdf.addPage(Page(
+          pageFormat: PdfPageFormat.a4,
+          margin: EdgeInsets.all(0),
+          build: (Context context) {
+            return ListView(children: [
+              _greenPassOne(),
+              _greenPassTwo(timestampCitizens[i], citizens[i])
+            ]);
+          }));
+    }
   }
 
   Widget _greenPassOne() {
@@ -115,7 +141,7 @@ class PDFHandler {
             ])));
   }
 
-  Widget _greenPassTwo(TimestampCitizen tsCitizen) {
+  Widget _greenPassTwo(TimestampCitizen tsCitizen, Citizen c) {
     return Padding(
         padding: EdgeInsets.symmetric(horizontal: 16),
         child: Container(
@@ -124,7 +150,7 @@ class PDFHandler {
             child: Column(children: [
               _partOneGP(tsCitizen),
               Divider(color: PdfColors.black),
-              _partTwoGP(tsCitizen),
+              _partTwoGP(tsCitizen, c),
             ])));
   }
 
@@ -178,7 +204,7 @@ class PDFHandler {
             ])));
   }
 
-  Widget _partTwoGP(TimestampCitizen tsCitizen) {
+  Widget _partTwoGP(TimestampCitizen tsCitizen, Citizen c) {
     return Padding(
         padding: EdgeInsets.symmetric(vertical: 16),
         child: Padding(
@@ -194,7 +220,7 @@ class PDFHandler {
                   child: Column(
                       mainAxisAlignment: MainAxisAlignment.start,
                       crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [..._createValuesGreenPass(citizen.covid)]),
+                      children: [..._createValuesGreenPass(c.covid)]),
                 ),
               ])
             ])));
@@ -210,6 +236,16 @@ class PDFHandler {
 
   openData() async {
     await _createData();
+    if (kIsWeb) {
+      await _openPDFWeb(data);
+    } else {
+      await _savePDF(data);
+      await _openPDF(data);
+    }
+  }
+
+  openMultipleData() async {
+    await _createMultipleData();
     if (kIsWeb) {
       await _openPDFWeb(data);
     } else {
@@ -250,17 +286,48 @@ class PDFHandler {
               Text("Profilo sanitario sintetico".toUpperCase(),
                   style: TextStyle(fontWeight: FontWeight.bold, fontSize: 18)),
               Text(aCapo),
-              ..._createPSS(),
+              ..._createPSS(timestampCitizen),
             ])
           ];
         }));
   }
 
-  List<Widget> _createPSS() {
+  _createMultipleData() {
+    for (int i = 0; i < timestampCitizens.length; i++) {
+      pdf.addPage(MultiPage(
+          pageFormat: PdfPageFormat.a4,
+          build: (Context context) => [
+                Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
+                  Text("Profilo sanitario sintetico".toUpperCase(),
+                      style:
+                          TextStyle(fontWeight: FontWeight.bold, fontSize: 18)),
+                  Text(aCapo),
+                  ..._createPSS(timestampCitizens[i]),
+                ])
+              ]));
+    }
+  }
+
+  List<Widget> _createPSS(TimestampCitizen tc) {
     List<Widget> widgets = [];
     widgets.add(
+        Text("DATI ANAGRAFICI", style: TextStyle(fontWeight: FontWeight.bold)));
+    tc.toMapPSSSectionZero().forEach((key, value) {
+      widgets.add(RichText(
+          text: TextSpan(
+              text: "$key: ",
+              style: TextStyle(fontWeight: FontWeight.bold),
+              children: <TextSpan>[
+            TextSpan(
+              text: (value != "") ? "$value" : "-",
+              style: TextStyle(fontWeight: FontWeight.normal),
+            )
+          ])));
+    });
+    widgets.add(Text(aCapo));
+    widgets.add(
         Text("DATI PERSONALI", style: TextStyle(fontWeight: FontWeight.bold)));
-    timestampCitizen.toMapPSSSectionZero().forEach((key, value) {
+    tc.toMapPSSSectionOne().forEach((key, value) {
       widgets.add(RichText(
           text: TextSpan(
               text: "$key: ",
@@ -273,9 +340,9 @@ class PDFHandler {
           ])));
     });
     widgets.add(Text(aCapo));
-    widgets.add(Text("ESENZIONI, RETI DI PATOLOGIE E STATO PAZIENTE",
-        style: TextStyle(fontWeight: FontWeight.bold)));
-    timestampCitizen.toMapPSSSectionOne().forEach((key, value) {
+    widgets
+        .add(Text("CONTATTI", style: TextStyle(fontWeight: FontWeight.bold)));
+    tc.toMapPSSSectionTwo().forEach((key, value) {
       widgets.add(RichText(
           text: TextSpan(
               text: "$key: ",
@@ -288,9 +355,9 @@ class PDFHandler {
           ])));
     });
     widgets.add(Text(aCapo));
-    widgets.add(Text("ALLERGIE E TERAPIE",
-        style: TextStyle(fontWeight: FontWeight.bold)));
-    timestampCitizen.toMapPSSSectionTwo().forEach((key, value) {
+    widgets
+        .add(Text("ALLERGIE", style: TextStyle(fontWeight: FontWeight.bold)));
+    tc.toMapPSSSectionThree().forEach((key, value) {
       widgets.add(RichText(
           text: TextSpan(
               text: "$key: ",
@@ -303,9 +370,9 @@ class PDFHandler {
           ])));
     });
     widgets.add(Text(aCapo));
-    widgets.add(Text("CAREGIVE, PATOLOGIE E GRAVIDANZE",
+    widgets.add(Text("PATOLOGIE E TERAPIE",
         style: TextStyle(fontWeight: FontWeight.bold)));
-    timestampCitizen.toMapPSSSectionThree().forEach((key, value) {
+    tc.toMapPSSSectionFour().forEach((key, value) {
       widgets.add(RichText(
           text: TextSpan(
               text: "$key: ",
@@ -318,9 +385,9 @@ class PDFHandler {
           ])));
     });
     widgets.add(Text(aCapo));
-    widgets.add(Text("PARAMETRI DI MONITORAGGIO E INFORMAZIONI",
-        style: TextStyle(fontWeight: FontWeight.bold)));
-    timestampCitizen.toMapPSSSectionFour().forEach((key, value) {
+    widgets.add(
+        Text("RETE SANITARIA", style: TextStyle(fontWeight: FontWeight.bold)));
+    tc.toMapPSSSectionFive().forEach((key, value) {
       widgets.add(RichText(
           text: TextSpan(
               text: "$key: ",
